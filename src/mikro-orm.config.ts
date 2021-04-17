@@ -1,7 +1,7 @@
 import { __prod__ } from "./constants";
 import { MikroORM } from "@mikro-orm/core";
 import path from "path";
-import { People } from "./entities/People";
+import { User } from "./entities/User";
 
 export default {
   user: process.env.USER,
@@ -10,7 +10,7 @@ export default {
     path: path.join(__dirname, "./migrations"), // path to the folder with migrations
     pattern: /^[\w-]+\d+\.ts$/, // reg
   },
-  entities: [People],
+  entities: [User],
   dbName: "cosmos",
   type: "postgresql",
   debug: !__prod__,

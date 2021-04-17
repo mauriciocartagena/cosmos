@@ -9,14 +9,6 @@ export class People {
   id!: number;
 
   @Field(() => String)
-  @Property({ type: "date" })
-  createdAt: Date = new Date();
-
-  @Field(() => String)
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
-
-  @Field(() => String)
   @Property()
   name!: string;
 
@@ -39,4 +31,12 @@ export class People {
   @Field(() => String)
   @Property()
   email!: string;
+
+  @Field(() => String)
+  @Property({ type: "date" })
+  createdAt: Date = new Date();
+
+  @Field(() => String)
+  @Property({ onUpdate: () => new Date() })
+  updatedAt: Date = new Date();
 }
