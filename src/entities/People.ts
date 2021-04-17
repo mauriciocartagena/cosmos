@@ -16,27 +16,27 @@ export class People {
   @Property({ onUpdate: () => new Date() })
   updatedAt: Date = new Date();
 
-  @Field()
+  @Field(() => String)
   @Property()
   name!: string;
 
-  @Field()
+  @Field(() => String)
   @Property()
   first_last_name!: string;
 
-  @Field()
+  @Field(() => String)
   @Property()
   second_last_name!: string;
 
-  @Field()
+  @Field(() => Number)
   @Property()
   phone!: number;
 
-  @Field()
+  @Field(() => String)
   @Property()
   direction!: string;
 
-  @Field()
+  @Field(() => String)
   @Property()
   email!: string;
 }
