@@ -1,0 +1,27 @@
+ req.session!.userId = user.id;
+
+ {userId: 1}-> send that to redis 
+
+
+ 1
+ sess:qweqweqweqe ->{ userId: 1 }
+
+
+ 2
+ express-session null set a acookie on my browser asdqweqeasdasdasdasd
+
+ 3
+ when user makes a request
+ qweqweqweqwe123qwe132 -> sent to the server
+ 
+ 
+ 4
+ decrypt the cookie
+ qweqweqweqwe123qwe132 -> sess: qweyqweyqewrer
+
+
+ 5
+ make a request to redis
+ sess:qewqweqweqeqe ->{ userId: 1 }
+
+req.session = { userId: 1 }

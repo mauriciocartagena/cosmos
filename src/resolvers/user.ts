@@ -68,6 +68,20 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req, em }: MyContext) {
+    console.log("session:", req.session);
+
+    //you are not logged in
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const user = await em.findOne(User, { id: req.session!.userId });
+
+    return user;
+  }
+
   @Query(() => [User])
   users(@Ctx() { em }: MyContext): Promise<User[]> {
     return em.find(User, {});
@@ -183,7 +197,7 @@ export class UserResolver {
       };
     }
 
-    req.session!.userId = user.id;
+    req.session.userId = user.id;
 
     return {
       user,
