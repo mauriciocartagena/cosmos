@@ -35,3 +35,4 @@ export { default as MacMinimizeIcon } from "./MacMinimizeIcon";
 export { default as MacCloseIcon } from "./MacCloseIcon";
 export { default as SolidChatBubble } from "./SolidChatBubble";
 export { default as SolidInstagram } from "./SolidInstagram";
+export { default as SvgSolidFacebook } from "./SolidFacebook";

@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import React, { useCallback } from "react";
 import { LgLogo } from "../../icons";
 import SvgSolidBug from "../../icons/SolidBug";
-import SvgSolidDiscord from "../../icons/SolidDiscord";
-import SvgSolidGitHub from "../../icons/SolidGitHub";
-import SvgSolidTwitter from "../../icons/SolidTwitter";
+import SvgSolidFacebook from "../../icons/SolidFacebook";
+import SvgSolidUser from "../../icons/SolidUser";
+import SvgSolidInstagram from "../../icons/SolidInstagram";
 import { Button } from "../../ui/Button";
 import { HeaderController } from "../display/HeaderController";
 
@@ -38,7 +38,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 
   return (
     <Button
-      className="justify-center text-base py-3 mt-2"
+      className="justify-center text-base py-3"
       color={dev ? "primary" : "secondary"}
       onClick={oauthUrl ? clickHandler : onClick}
     >
@@ -58,126 +58,95 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 
 export const LoginPage: React.FC = () => {
   return (
-    <>
-      <div className="flex"></div>
-      <div
-        className="grid w-full h-full"
-        style={{
-          gridTemplateRows: "1fr auto 1fr",
-        }}
-      >
-        <HeaderController embed={{}} title="Login" />
-        <div className="hidden sm:flex" />
-        <div className="flex justify-self-center self-center sm:hidden">
+    <div
+      className="grid w-full h-full"
+      style={{
+        gridTemplateRows: "1fr auto 1fr",
+      }}
+    >
+      <HeaderController embed={{}} title="Login" />
+      <div className="hidden sm:flex" />
+      <div className="justify-self-center self-center sm:hidden">
+        <LgLogo />
+      </div>
+      <div className="m-auto flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
+        <div className="gap-2 flex-col">
+          <span className="text-3xl text-primary-100 font-bold">Welcome</span>
+          <p className="text-primary-100 flex-wrap">
+            By logging in you accept our&nbsp;
+            <a
+              href="https://youtu.be/dQw4w9WgXcQ"
+              className="text-accent hover:underline"
+            >
+              Privacy Policy
+            </a>
+            &nbsp;and&nbsp;
+            <a
+              href="https://youtu.be/dQw4w9WgXcQ"
+              className="text-accent hover:underline"
+            >
+              Terms of Service
+            </a>
+            .
+          </p>
+        </div>
+        <div className="flex-col gap-4">
+          <LoginButton
+          // oauthUrl={`${apiBaseUrl}/auth/github/web`}
+          >
+            <SvgSolidUser width={20} height={20} />
+            Login
+          </LoginButton>
+
+          <LoginButton dev onClick={() => {}}>
+            <SvgSolidBug width={20} height={20} />
+            Login Invite
+          </LoginButton>
+        </div>
+      </div>
+      <div className="absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
+        <div className="hidden sm:flex">
           <LgLogo />
         </div>
-        <div className="flex m-auto flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
-          <div className="flex gap-2 flex-col">
-            <span className="text-3xl text-primary-100 font-bold">Welcome</span>
-            <p className="text-primary-100 flex-wrap">
-              By logging in you accept our&nbsp;
-              <a
-                href="/privacy-policy.html"
-                className="text-accent hover:underline"
-              >
-                Privacy Policy
-              </a>
-              &nbsp;and&nbsp;
-              <a href="/terms.html" className="text-accent hover:underline">
-                Terms of Service
-              </a>
-              .
-            </p>
-          </div>
-          <div className="flex flex-col gap-4">
-            <LoginButton
-
-            // oauthUrl={`${apiBaseUrl}/auth/github/web`}
+        <div className="gap-6 text-primary-300">
+          <a
+            href="https://youtu.be/dQw4w9WgXcQ"
+            className="hover:text-primary-200"
+          >
+            Privacy policy
+          </a>
+          <a
+            href="https://www.youtube.com/watch?v=Soa3gO7tL-c&list=RDSoa3gO7tL-c&start_radio=1"
+            className="hover:text-primary-200"
+          >
+            Report a bug
+          </a>
+          <div className="gap-6 sm:gap-4">
+            <a
+              href="https://github.com/mauriciocartagena"
+              target="_blank"
+              rel="noreferrer"
             >
-              <SvgSolidGitHub width={20} height={20} />
-              Log in with GitHub
-            </LoginButton>
-            <LoginButton
-            // oauthUrl={`${apiBaseUrl}/auth/twitter/web`}
-            >
-              <SvgSolidTwitter width={20} height={20} />
-              Log in with Twitter
-            </LoginButton>
-            {/* <LoginButton oauthUrl={`${apiBaseUrl}/auth/discord/web`}>
-            <SvgSolidDiscord width={20} height={20} />
-            Log in with Discord
-          </LoginButton> */}
-            {/* {!__prod__ ? ( */}
-            <LoginButton
-              dev
-              onClick={async () => {
-                // eslint-disable-next-line no-alert
-                // const name = window.prompt("username");
-                // if (!name) {
-                //   return;
-                // }
-                // const r = await fetch(
-                //   `${apiBaseUrl}/dev/test-info?username=` + name
-                // );
-                // const d = await r.json();
-                // useTokenStore.getState().setTokens({
-                //   accessToken: d.accessToken,
-                //   refreshToken: d.refreshToken,
-                // });
-                // push("/dash");
-              }}
-            >
-              <SvgSolidBug width={20} height={20} />
-              Create a test user
-            </LoginButton>
-            {/* ) : null} */}
-          </div>
-          {/* <div className="flex flex-col gap-3 items-center">
-          <span className="text-primary-100">Download the app</span>
-          <span className="text-primary-300">unavailable lol</span>
-        </div> */}
-        </div>
-        <div className="flex flex-row absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
-          <div className="hidden sm:flex">
-            <LgLogo />
-          </div>
-          <div className="flex flex-row gap-6 text-primary-300">
-            <a href="/privacy-policy.html" className="hover:text-primary-200">
-              Privacy policy
+              <SvgSolidFacebook
+                width={20}
+                height={20}
+                className="cursor-pointer hover:text-primary-200"
+              />
             </a>
             <a
-              href="https://github.com/benawad/dogehouse/issues"
-              className="ml-2 hover:text-primary-200"
+              href="https://github.com/mauriciocartagena"
+              target="_blank"
+              rel="noreferrer"
             >
-              Report a bug
+              <SvgSolidInstagram
+                width={20}
+                height={20}
+                className="hover:text-primary-200"
+              />
             </a>
-            <div className="flex flex-row gap-6 sm:gap-4">
-              <a
-                href="https://github.com/benawad/dogehouse"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <SvgSolidGitHub
-                  width={20}
-                  height={20}
-                  className="ml-2 cursor-pointer hover:text-primary-200"
-                />
-              </a>
-              <a
-                href="https://discord.gg/wCbKBZF9cV"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <SvgSolidDiscord
-                  width={20}
-                  height={20}
-                  className="ml-2 hover:text-primary-200"
-                />
-              </a>
-            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
