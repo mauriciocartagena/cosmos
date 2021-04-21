@@ -1,12 +1,16 @@
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
-import { LgLogo } from "../../icons";
+// import { LgLogo } from "../../icons";
+
+import SvgSolidLogo from "../../img/SvgSolidLogo";
+
 import SvgSolidBug from "../../icons/SolidBug";
 import SvgSolidFacebook from "../../icons/SolidFacebook";
 import SvgSolidUser from "../../icons/SolidUser";
 import SvgSolidInstagram from "../../icons/SolidInstagram";
 import { Button } from "../../ui/Button";
 import { HeaderController } from "../display/HeaderController";
+import { baseUrl } from "../../lib/constants";
 
 /*
 i know this code is kinda garbage but that's because the mockup is garbage and doesn't use the design system
@@ -56,6 +60,8 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   );
 };
 
+console.log(baseUrl);
+
 export const LoginPage: React.FC = () => {
   return (
     <div
@@ -67,7 +73,8 @@ export const LoginPage: React.FC = () => {
       <HeaderController embed={{}} title="Login" />
       <div className="hidden sm:flex" />
       <div className="justify-self-center self-center sm:hidden">
-        <LgLogo />
+        {/* <LgLogo /> */}
+        <SvgSolidLogo />
       </div>
       <div className="m-auto flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
         <div className="gap-2 flex-col">
@@ -106,7 +113,7 @@ export const LoginPage: React.FC = () => {
       </div>
       <div className="absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
         <div className="hidden sm:flex">
-          <LgLogo />
+          <SvgSolidLogo />
         </div>
         <div className="gap-6 text-primary-300">
           <a
