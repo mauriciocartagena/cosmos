@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import React, { useCallback } from "react";
 // import { LgLogo } from "../../icons";
 
@@ -10,7 +10,6 @@ import SvgSolidUser from "../../icons/SolidUser";
 import SvgSolidInstagram from "../../icons/SolidInstagram";
 import { Button } from "../../ui/Button";
 import { HeaderController } from "../display/HeaderController";
-import { baseUrl } from "../../lib/constants";
 
 /*
 i know this code is kinda garbage but that's because the mockup is garbage and doesn't use the design system
@@ -60,8 +59,6 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   );
 };
 
-console.log(baseUrl);
-
 export const LoginPage: React.FC = () => {
   return (
     <div
@@ -99,7 +96,9 @@ export const LoginPage: React.FC = () => {
         </div>
         <div className="flex-col gap-4">
           <LoginButton
-          // oauthUrl={`${apiBaseUrl}/auth/github/web`}
+            onClick={() => {
+              router.push("/login");
+            }}
           >
             <SvgSolidUser width={20} height={20} />
             Login
