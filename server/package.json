@@ -39,7 +39,7 @@
     "@mikro-orm/core": "^4.5.3",
     "@mikro-orm/migrations": "^4.5.3",
     "@mikro-orm/postgresql": "^4.5.3",
-    "@types/express-session": "^1.17.0",
+    "@types/express-session": "^1.17.3",
     "apollo-server-express": "^2.23.0",
     "connect-redis": "^5.1.0",
     "cors": "^2.8.5",
