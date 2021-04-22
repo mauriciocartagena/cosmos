@@ -2,7 +2,7 @@ import router, { useRouter } from "next/router";
 import React, { useCallback } from "react";
 // import { LgLogo } from "../../icons";
 
-import SvgSolidLogo from "../../img/SvgSolidLogo";
+import SvgSolidLogo from "../../icons/SvgSolidLogo";
 
 import SvgSolidBug from "../../icons/SolidBug";
 import SvgSolidFacebook from "../../icons/SolidFacebook";

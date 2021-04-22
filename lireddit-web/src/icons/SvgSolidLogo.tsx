@@ -13,6 +13,7 @@ function LgLogo(props: React.SVGProps<SVGSVGElement>) {
       version="1.1"
       viewBox="0 0 168 40"
       xmlSpace="preserve"
+      {...props}
     >
       <switch>
         <g>

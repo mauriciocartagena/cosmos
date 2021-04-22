@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { Button } from "../form-fields/Button";
 import SvgSolidInstagram from "../icons/SolidInstagram";
 import { SvgSolidFacebook } from "../icons";
-import SvgSolidLogo from "../img/SvgSolidLogo";
+import SvgSolidLogo from "../icons/SvgSolidLogo";
 import { HeaderController } from "../modules/display/HeaderController";
 
 interface registerProps {}
