@@ -12,34 +12,40 @@ export interface HeaderControllerProps {
 
 export const HeaderController: NextPage<HeaderControllerProps> = ({
   title,
-  description = "Dogehouse is taking voice conversations to the moon 🚀",
+  description = "MentesMaestras is taking voice conversations to the moon 🚀",
   owner,
   additionalKeywords = [],
   embed,
 }) => {
   return (
     <Header>
-      {title ? <title>{title} | DogeHouse</title> : <title>DogeHouse</title>}
+      {title ? (
+        <title>{title} | MentesMaestras</title>
+      ) : (
+        <title>MentesMaestras</title>
+      )}
       <meta name="description" content={description} />
       {owner ? <meta name="author" content={owner} /> : ""}
       <meta
         name="keywords"
-        content={`DogeHouse, Doge${additionalKeywords?.map((k) => `, ${k}`)}`}
+        content={`MentesMaestras, Doge${additionalKeywords?.map(
+          (k) => `, ${k}`
+        )}`}
       />
       <meta name="theme-color" content={embed?.hexColor || "#EFE7DD"} />
       {embed ? (
         <>
-          <meta name="og:title" content={title || "DogeHouse"} />
+          <meta name="og:title" content={title || "MentesMaestras"} />
           <meta
             name="og:type"
             content={owner ? "music.radio_station" : "website"}
           />
           {owner ? <meta name="music:creator" content={owner} /> : ""}
           <meta name="og:description" content={description} />
-          <meta name="og:site_name" content="DogeHouse" />
+          <meta name="og:site_name" content="" />
           <meta
             name="og:image"
-            // content={`${baseUrl || "https://next.dogehouse.tv"}/img/doge.png`}
+            // content={`${baseUrl || "https://next.MentesMaestras.tv"}/img/doge.png`}
           />
         </>
       ) : (

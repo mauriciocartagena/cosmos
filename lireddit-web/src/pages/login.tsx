@@ -8,6 +8,7 @@ import { Button } from "../form-fields/Button";
 import SvgSolidInstagram from "../icons/SolidInstagram";
 import { SvgSolidFacebook } from "../icons";
 import SvgSolidLogo from "../img/SvgSolidLogo";
+import { HeaderController } from "../modules/display/HeaderController";
 
 interface registerProps {}
 
@@ -23,6 +24,7 @@ const Login: React.FC<registerProps> = ({}) => {
         gridTemplateRows: "1fr auto 1fr",
       }}
     >
+      <HeaderController embed={{}} title="Login" />
       <div className="hidden sm:flex" />
       <div className="justify-self-center self-center sm:hidden">
         <SvgSolidLogo />
@@ -43,7 +45,7 @@ const Login: React.FC<registerProps> = ({}) => {
                   setErrors(toErrorMap(response.data.login.errors));
                 } else if (response.data?.login.user) {
                   // worked
-                  router.push("/");
+                  router.push("/dasboard");
                 }
               }}
             >

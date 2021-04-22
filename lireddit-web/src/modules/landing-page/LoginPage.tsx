@@ -67,7 +67,7 @@ export const LoginPage: React.FC = () => {
         gridTemplateRows: "1fr auto 1fr",
       }}
     >
-      <HeaderController embed={{}} title="Login" />
+      <HeaderController embed={{}} title="Welcome" />
       <div className="hidden sm:flex" />
       <div className="justify-self-center self-center sm:hidden">
         {/* <LgLogo /> */}
