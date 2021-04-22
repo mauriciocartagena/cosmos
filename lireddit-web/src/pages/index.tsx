@@ -1,3 +1,3 @@
-const Index = () => <div>Hello World</div>;
-
-export default Index;
+import { LoginPage } from "../modules/landing-page/LoginPage";
+//
+export default LoginPage;

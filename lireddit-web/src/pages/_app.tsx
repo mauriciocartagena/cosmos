@@ -1,5 +1,8 @@
-import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
-import theme from "../theme";
+// import theme from "../theme";
+import Head from "next/head";
+
+import "../styles/globals.css";
+import "../styles/add-to-calendar-button.css";
 
 import { createClient, Provider } from "urql";
 
@@ -13,15 +16,13 @@ const client = createClient({
 function MyApp({ Component, pageProps }: any) {
   return (
     <Provider value={client}>
-      <ChakraProvider resetCSS theme={theme}>
-        <ColorModeProvider
-          options={{
-            useSystemColorMode: true,
-          }}
-        >
-          <Component {...pageProps} />
-        </ColorModeProvider>
-      </ChakraProvider>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no, user-scalable=0"
+        />
+      </Head>
+      <Component {...pageProps} />
     </Provider>
   );
 }

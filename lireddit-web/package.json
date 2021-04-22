@@ -9,15 +9,22 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.0",
-    "@chakra-ui/react": "^1.4.2",
-    "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
+    "@chakra-ui/react": "^1.5.2",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@tailwindcss/line-clamp": "^0.2.0",
     "formik": "^2.2.6",
-    "framer-motion": "^4.0.3",
+    "framer-motion": "^4",
     "graphql": "^15.5.0",
+    "is-electron": "^2.2.0",
     "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "style-loader": "^2.0.0",
+    "stylelint": "^13.12.0",
+    "stylelint-config-standard": "^21.0.0",
+    "tailwind-scrollbar": "^1.2.4",
+    "tailwindcss": "^2.1.1",
     "urql": "^2.0.2"
   },
   "license": "MIT",
@@ -26,6 +33,9 @@
     "@graphql-codegen/typescript": "1.21.1",
     "@graphql-codegen/typescript-operations": "1.17.15",
     "@graphql-codegen/typescript-urql": "^2.0.5",
+    "autoprefixer": "^10.2.5",
+    "postcss": "^8.2.10",
+    "tailwindcss": "^2.1.1",
     "typescript": "^4.2.4"
   }
 }
