@@ -25,9 +25,7 @@ mutation CreateUser(
       message
     }
     user {
-      id
-      username
-      name
+      ...RegularUser
     }
   }
 }

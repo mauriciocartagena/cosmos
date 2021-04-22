@@ -17,12 +17,14 @@ import React from "react";
 import NextLink from "next/link";
 import SvgIcon from "../icons/LogoIcon";
 import { Button } from "../form-fields/Button";
-import { useMeQuery } from "../generated/graphql";
+import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import SvgSolidBug from "../icons/SolidBug";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
+  const [_, logout] = useLogoutMutation();
+
   const [{ data, fetching }] = useMeQuery();
 
   let body = null;
@@ -84,7 +86,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     body = (
       <Flex>
         <Box ml={"auto"}>{data.me.username}</Box>
-        <Button type="submit" className={`mr-3`}>
+        <Button
+          type="submit"
+          className={`mr-3`}
+          onClick={() => {
+            logout();
+          }}
+        >
           <SvgSolidBug width={20} height={20} /> &nbsp; &nbsp; Logout
         </Button>
       </Flex>

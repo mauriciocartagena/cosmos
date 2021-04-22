@@ -6,7 +6,13 @@ import "../styles/add-to-calendar-button.css";
 
 import { createClient, dedupExchange, fetchExchange, Provider } from "urql";
 import { cacheExchange, Cache, QueryInput } from "@urql/exchange-graphcache";
-import { LoginMutation, MeDocument, MeQuery } from "../generated/graphql";
+import { LogoutMutation } from "../generated/graphql";
+import {
+  LoginMutation,
+  MeDocument,
+  MeQuery,
+  CreateUserMutation,
+} from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
   cache: Cache,
@@ -27,6 +33,16 @@ const client = createClient({
     cacheExchange({
       updates: {
         Mutation: {
+          logout: (_result, args, cache, info) => {
+            betterUpdateQuery<LogoutMutation, MeQuery>(
+              cache,
+              {
+                query: MeDocument,
+              },
+              _result,
+              () => ({ me: null })
+            );
+          },
           login: (_result, args, cache, info) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,
@@ -40,6 +56,24 @@ const client = createClient({
                 } else {
                   return {
                     me: result.login.user,
+                  };
+                }
+              }
+            );
+          },
+          register: (_result, args, cache, info) => {
+            betterUpdateQuery<CreateUserMutation, MeQuery>(
+              cache,
+              {
+                query: MeDocument,
+              },
+              _result,
+              (result, query) => {
+                if (result.createUser.errors) {
+                  return query;
+                } else {
+                  return {
+                    me: result.createUser.user,
                   };
                 }
               }
