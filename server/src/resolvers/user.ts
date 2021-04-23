@@ -12,7 +12,6 @@ import { User } from "../entities/User";
 import argon2 from "argon2";
 import { ObjectType } from "type-graphql";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { resolve } from "node:path";
 import { COOKIE_NAME } from "../constants";
 
 @InputType()
