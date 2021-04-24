@@ -160,8 +160,6 @@ export class UserResolver {
         })
         .returning("*");
 
-      console.log(result);
-
       user = result[0];
     } catch (err) {
       console.log(err);

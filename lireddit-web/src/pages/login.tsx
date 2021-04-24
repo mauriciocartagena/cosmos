@@ -9,6 +9,8 @@ import SvgSolidInstagram from "../icons/SolidInstagram";
 import { SvgSolidFacebook } from "../icons";
 import SvgSolidLogo from "../icons/SvgSolidLogo";
 import { HeaderController } from "../modules/display/HeaderController";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { withUrqlClient } from "next-urql";
 
 interface registerProps {}
 
@@ -127,4 +129,4 @@ const Login: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Login;
+export default withUrqlClient(createUrqlClient)(Login);

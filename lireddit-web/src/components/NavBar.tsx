@@ -15,15 +15,16 @@ import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import { SingleUser } from "../ui/UserAvatar/SingleUser";
 import { SolidBug, SolidUser } from "../icons";
-import router from "next/router";
+import { isServer } from "../utils/isServer";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [_, logout] = useLogoutMutation();
 
-  const [{ data, fetching }] = useMeQuery();
-
+  const [{ data, fetching }] = useMeQuery({
+    pause: isServer(),
+  });
   let body = null;
 
   // data is loading
@@ -32,7 +33,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
     // user not logged in
   } else if (!data?.me) {
-    router.push("/");
+    <div>Loading...</div>;
     //user is logged in
   } else {
     body = (

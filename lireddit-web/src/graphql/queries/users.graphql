@@ -1,0 +1,9 @@
+query Users {
+  users {
+    id
+    createdAt
+    username
+    first_last_name
+    name
+  }
+}
