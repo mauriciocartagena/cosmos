@@ -1,5 +1,5 @@
-import router, { useRouter } from "next/router";
-import React, { useCallback } from "react";
+import router from "next/router";
+import React from "react";
 // import { LgLogo } from "../../icons";
 
 import SvgSolidLogo from "../../icons/SvgSolidLogo";
@@ -8,56 +8,19 @@ import SvgSolidBug from "../../icons/SolidBug";
 import SvgSolidFacebook from "../../icons/SolidFacebook";
 import SvgSolidUser from "../../icons/SolidUser";
 import SvgSolidInstagram from "../../icons/SolidInstagram";
-import { Button } from "../../ui/Button";
 import { HeaderController } from "../display/HeaderController";
+import { LoginButton } from "../../utils/LoginButton";
 
 /*
 i know this code is kinda garbage but that's because the mockup is garbage and doesn't use the design system
  */
 
-interface LoginButtonProps {
+export interface LoginButtonProps {
   children: [React.ReactNode, React.ReactNode];
   dev?: true;
   onClick?: () => void;
   oauthUrl?: string; // React.FC didn't like & ({ onClick: () => void } | { oauthUrl: string }) so yeah
 }
-
-const LoginButton: React.FC<LoginButtonProps> = ({
-  children,
-  onClick,
-  oauthUrl,
-  dev,
-}) => {
-  const { query } = useRouter();
-  const clickHandler = useCallback(() => {
-    if (typeof query.next === "string" && query.next) {
-      try {
-        localStorage.setItem("ss", query.next);
-      } catch {}
-    }
-
-    window.location.href = oauthUrl as string;
-  }, [query, oauthUrl]);
-
-  return (
-    <Button
-      className="justify-center text-base py-3"
-      color={dev ? "primary" : "secondary"}
-      onClick={oauthUrl ? clickHandler : onClick}
-    >
-      <div
-        className="grid gap-4"
-        style={{
-          gridTemplateColumns: "1fr auto 1fr",
-        }}
-      >
-        {children[0]}
-        {children[1]}
-        <div />
-      </div>
-    </Button>
-  );
-};
 
 export const LoginPage: React.FC = () => {
   return (

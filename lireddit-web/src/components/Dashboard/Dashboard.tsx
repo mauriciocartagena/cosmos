@@ -2,8 +2,8 @@ import React from "react";
 import { NavBar } from "../NavBar";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useUsersQuery } from "../../generated/graphql";
+import { createUrqlClient } from "../../utils/createUrqlClient";
 
 interface DashboardProps {}
 

@@ -8,7 +8,7 @@ import {
   Link,
   Heading,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import NextLink from "next/link";
 import SvgIcon from "../icons/LogoIcon";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
@@ -16,11 +16,16 @@ import { SettingsIcon } from "../ui/SettingsIcon";
 import { SingleUser } from "../ui/UserAvatar/SingleUser";
 import { SolidBug, SolidUser } from "../icons";
 import { isServer } from "../utils/isServer";
+import { LoginButton } from "../utils/LoginButton";
+import SvgSolidNew from "../icons/SolidNew";
+import router from "next/router";
+import { CreatePartnerModal } from "../modules/dashboard/CreatePartnerModal";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [_, logout] = useLogoutMutation();
+  const [roomModal, setRoomModal] = useState(false);
 
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
@@ -45,6 +50,23 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             </Heading>
           </Link>
         </NextLink>
+        <div className="flex-1 justify-center w-full">
+          <div className="ml-4">
+            <div
+              className={`w-full bg-primary-700 text-primary-300 focus-within:text-primary-100 rounded-lg `}
+            >
+              {/* <div className="h-full mx-4 flex items-center pointer-events-none"> */}
+              <LoginButton
+                onClick={() => {
+                  setRoomModal(true);
+                }}
+              >
+                <SvgSolidNew width={20} height={20} />
+                Crear nuevo socio
+              </LoginButton>
+            </div>
+          </div>
+        </div>
         <Flex ml={"auto"}>
           <Menu>
             <MenuButton justifyContent="center">
@@ -93,6 +115,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             </MenuList>
           </Menu>
         </Flex>
+
+        {roomModal && (
+          <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
+        )}
       </>
     );
   }
