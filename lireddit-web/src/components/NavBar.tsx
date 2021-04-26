@@ -18,14 +18,16 @@ import { SolidBug, SolidUser } from "../icons";
 import { isServer } from "../utils/isServer";
 import { LoginButton } from "../utils/LoginButton";
 import SvgSolidNew from "../icons/SolidNew";
-import router from "next/router";
 import { CreatePartnerModal } from "../modules/dashboard/CreatePartnerModal";
+import SvgSolidSettings from "../icons/SolidSettings";
+import { EditAccountModal } from "../ui/user/EditAccountModal";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [_, logout] = useLogoutMutation();
   const [roomModal, setRoomModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
 
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
@@ -90,6 +92,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                 >
                   <SettingsIcon icon={<SolidUser />} label={"Perfil"} />
                 </a>
+
+                <SettingsIcon
+                  icon={<SvgSolidSettings />}
+                  label={"Editar cuenta"}
+                  onClick={() => {
+                    setEditModal(true);
+                  }}
+                />
                 <a
                   href="https://github.com/mauriciocartagena"
                   target="_blank"
@@ -118,6 +128,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
         {roomModal && (
           <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
+        )}
+
+        {editModal && (
+          <EditAccountModal onRequestClose={() => setEditModal(false)} />
         )}
       </>
     );

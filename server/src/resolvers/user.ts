@@ -6,6 +6,7 @@ import {
   Query,
   Resolver,
   Field,
+  Int,
 } from "type-graphql";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
@@ -176,6 +177,53 @@ export class UserResolver {
     }
     return { user };
   }
+
+  @Query(() => User, { nullable: true })
+  user(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { em }: MyContext
+  ): Promise<User | null> {
+    return em.findOne(User, { id });
+  }
+  @Mutation(() => User, { nullable: true })
+  async updateUser(
+    @Arg("id") id: number,
+    @Arg("name", () => String, { nullable: false }) name: string,
+    @Arg("first_last_name", () => String, { nullable: false })
+    first_last_name: string,
+    @Arg("second_last_name", () => String, { nullable: true })
+    second_last_name: string,
+    @Arg("phone", () => Number, { nullable: true }) phone: number,
+    @Arg("direction", () => String, { nullable: true }) direction: string,
+    @Arg("email", () => String, { nullable: true }) email: string,
+    @Ctx() { em }: MyContext
+  ): Promise<User | null> {
+    const user = await em.findOne(User, { id });
+
+    if (!user) {
+      return null;
+    }
+    if (typeof name !== "undefined" && typeof first_last_name !== "undefined") {
+      user.name = name;
+      user.first_last_name = first_last_name;
+      user.second_last_name = second_last_name;
+      user.phone = phone;
+      user.direction = direction;
+      user.email = email;
+
+      await em.persistAndFlush(user);
+    }
+    return user;
+  }
+
+  // @Mutation(() => Boolean)
+  // async deletePost(
+  //   @Arg("id") id: number,
+  //   @Ctx() { em }: MyContext
+  // ): Promise<boolean> {
+  //   await em.nativeDelete(Post, { id });
+  //   return true;
+  // }
 
   @Mutation(() => UserResponse)
   async login(

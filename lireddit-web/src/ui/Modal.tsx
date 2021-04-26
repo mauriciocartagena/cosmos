@@ -66,6 +66,7 @@ export const Modal: React.FC<
       shouldFocusAfterRender
       style={customStyles[variant]}
       {...props}
+      ariaHideApp={false}
     >
       <div className={`flex-col w-full`}>
         <div className={`justify-end absolute right-3 top-3`}>
