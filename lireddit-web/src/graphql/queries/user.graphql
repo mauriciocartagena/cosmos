@@ -1,5 +1,5 @@
 query User($id: Int!) {
   user(id: $id) {
-    ...UserFindOneUser
+    ...RegularUserFindOneUser
   }
 }
