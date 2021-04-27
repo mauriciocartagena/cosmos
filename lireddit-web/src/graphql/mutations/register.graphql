@@ -1,25 +1,5 @@
-mutation CreateUser(
-  $username: String!
-  $password: String!
-  $name: String!
-  $first_last_name: String!
-  $second_last_name: String!
-  $phone: Float!
-  $direction: String!
-  $email: String!
-) {
-  createUser(
-    options: {
-      username: $username
-      password: $password
-      name: $name
-      first_last_name: $first_last_name
-      second_last_name: $second_last_name
-      phone: $phone
-      direction: $direction
-      email: $email
-    }
-  ) {
+mutation CreateUser($options: UsernamePasswordInput!) {
+  createUser(options: $options) {
     errors {
       field
       message

@@ -22,15 +22,15 @@ export class User {
 
   @Field(() => String)
   @Property()
-  password!: string;
+  password: string;
 
   @Field(() => String)
   @Property()
-  name!: string;
+  name: string;
 
   @Field(() => String)
   @Property()
-  first_last_name!: string;
+  first_last_name: string;
 
   @Field(() => String)
   @Property()
@@ -45,6 +45,6 @@ export class User {
   direction!: string;
 
   @Field(() => String)
-  @Property()
+  @Property({ type: "text", unique: true, nullable: true })
   email!: string;
 }

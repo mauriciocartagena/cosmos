@@ -6,6 +6,7 @@ import {
   MeDocument,
   LoginMutation,
   CreateUserMutation,
+  User,
 } from "../generated/graphql";
 
 import { betterUpdateQuery } from "./betterUpdateQuery";

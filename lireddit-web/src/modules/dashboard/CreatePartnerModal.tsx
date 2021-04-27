@@ -30,7 +30,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           email: "",
         }}
         onSubmit={async (values, { setErrors }) => {
-          const response = await register(values);
+          const response = await register({ options: values });
 
           if (response.data?.createUser.errors) {
             setErrors(toErrorMap(response.data.createUser.errors));

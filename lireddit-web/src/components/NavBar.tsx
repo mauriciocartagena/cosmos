@@ -11,7 +11,11 @@ import {
 import React, { useState } from "react";
 import NextLink from "next/link";
 import SvgIcon from "../icons/LogoIcon";
-import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import {
+  useMeQuery,
+  useLogoutMutation,
+  useUserQuery,
+} from "../generated/graphql";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import { SingleUser } from "../ui/UserAvatar/SingleUser";
 import { SolidBug, SolidUser } from "../icons";
@@ -32,6 +36,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
+
   let body = null;
 
   // data is loading

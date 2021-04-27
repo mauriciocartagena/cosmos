@@ -37,11 +37,11 @@ const Login: React.FC<registerProps> = ({}) => {
           <div className="flex-col gap-4">
             <Formik
               initialValues={{
-                username: "",
+                usernameOrEmail: "",
                 password: "",
               }}
               onSubmit={async (values, { setErrors }) => {
-                const response = await login({ options: values });
+                const response = await login(values);
 
                 if (response.data?.login.errors) {
                   setErrors(toErrorMap(response.data.login.errors));
@@ -55,9 +55,9 @@ const Login: React.FC<registerProps> = ({}) => {
                 <Form className={`flex-col w-full`}>
                   <InputField
                     className={`mb-4`}
-                    name="username"
-                    placeholder="username"
-                    label="username"
+                    name="usernameOrEmail"
+                    placeholder="username or email"
+                    label="username or Email"
                   />
                   <InputField
                     className={`mb-4`}
