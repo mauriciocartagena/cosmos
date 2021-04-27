@@ -1,0 +1,8 @@
+fragment UserFindOneUser on User {
+  name
+  first_last_name
+  second_last_name
+  phone
+  direction
+  email
+}
