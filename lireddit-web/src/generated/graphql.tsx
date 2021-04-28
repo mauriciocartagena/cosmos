@@ -24,6 +24,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
+  fetchUser: User;
   createUser: UserResponse;
   updateUser?: Maybe<User>;
   login: UserResponse;
@@ -39,6 +40,11 @@ export type MutationChangePasswordArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationFetchUserArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -68,12 +74,6 @@ export type Query = {
   hello: Scalars['String'];
   me?: Maybe<User>;
   users: Array<User>;
-  user?: Maybe<User>;
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['Int'];
 };
 
 export type User = {
@@ -193,6 +193,38 @@ export type CreateUserMutation = (
   ) }
 );
 
+export type UpdateUserMutationVariables = Exact<{
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  first_last_name: Scalars['String'];
+  second_last_name: Scalars['String'];
+  phone: Scalars['Float'];
+  direction: Scalars['String'];
+  email: Scalars['String'];
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser?: Maybe<(
+    { __typename?: 'User' }
+    & RegularUserFindOneUserFragment
+  )> }
+);
+
+export type FetchUserMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FetchUserMutation = (
+  { __typename?: 'Mutation' }
+  & { fetchUser: (
+    { __typename?: 'User' }
+    & RegularUserFindOneUserFragment
+  ) }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -201,19 +233,6 @@ export type MeQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & RegularUserFragment
-  )> }
-);
-
-export type UserQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type UserQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & RegularUserFindOneUserFragment
   )> }
 );
 
@@ -312,6 +331,36 @@ export const CreateUserDocument = gql`
 export function useCreateUserMutation() {
   return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
 };
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($id: Float!, $name: String!, $first_last_name: String!, $second_last_name: String!, $phone: Float!, $direction: String!, $email: String!) {
+  updateUser(
+    id: $id
+    name: $name
+    first_last_name: $first_last_name
+    second_last_name: $second_last_name
+    phone: $phone
+    direction: $direction
+    email: $email
+  ) {
+    ...RegularUserFindOneUser
+  }
+}
+    ${RegularUserFindOneUserFragmentDoc}`;
+
+export function useUpdateUserMutation() {
+  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
+};
+export const FetchUserDocument = gql`
+    mutation FetchUser($id: String!) {
+  fetchUser(id: $id) {
+    ...RegularUserFindOneUser
+  }
+}
+    ${RegularUserFindOneUserFragmentDoc}`;
+
+export function useFetchUserMutation() {
+  return Urql.useMutation<FetchUserMutation, FetchUserMutationVariables>(FetchUserDocument);
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -322,17 +371,6 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
-};
-export const UserDocument = gql`
-    query User($id: Int!) {
-  user(id: $id) {
-    ...RegularUserFindOneUser
-  }
-}
-    ${RegularUserFindOneUserFragmentDoc}`;
-
-export function useUserQuery(options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<UserQuery>({ query: UserDocument, ...options });
 };
 export const UsersDocument = gql`
     query Users {

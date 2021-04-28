@@ -1,0 +1,5 @@
+mutation FetchUser($id: String!) {
+  fetchUser(id: $id) {
+    ...RegularUserFindOneUser
+  }
+}

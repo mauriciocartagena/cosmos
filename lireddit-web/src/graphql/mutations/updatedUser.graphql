@@ -1,0 +1,21 @@
+mutation UpdateUser(
+  $id: Float!
+  $name: String!
+  $first_last_name: String!
+  $second_last_name: String!
+  $phone: Float!
+  $direction: String!
+  $email: String!
+) {
+  updateUser(
+    id: $id
+    name: $name
+    first_last_name: $first_last_name
+    second_last_name: $second_last_name
+    phone: $phone
+    direction: $direction
+    email: $email
+  ) {
+    ...RegularUserFindOneUser
+  }
+}

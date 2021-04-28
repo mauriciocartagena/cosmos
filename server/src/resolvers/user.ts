@@ -113,6 +113,21 @@ export class UserResolver {
 
     return true;
   }
+
+  @Mutation(() => User)
+  async fetchUser(
+    @Arg("id") id: string,
+    @Ctx() { em }: MyContext
+  ): Promise<User | null> {
+    const user = await em.findOne(User, { id: parseInt(id) });
+
+    if (!user) {
+      // the email is not in the db
+      return null;
+    }
+
+    return user;
+  }
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, em }: MyContext) {
     //you are not logged in
@@ -181,13 +196,6 @@ export class UserResolver {
     return { user };
   }
 
-  @Query(() => User, { nullable: true })
-  user(
-    @Arg("id", () => Int) id: number,
-    @Ctx() { em }: MyContext
-  ): Promise<User | null> {
-    return em.findOne(User, { id });
-  }
   @Mutation(() => User, { nullable: true })
   async updateUser(
     @Arg("id") id: number,

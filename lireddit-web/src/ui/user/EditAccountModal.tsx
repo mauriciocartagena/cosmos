@@ -5,36 +5,47 @@ import { Button } from "../Button";
 import { ButtonLink } from "../ButtonLink";
 import { Modal } from "../Modal";
 import { toErrorMap } from "../../utils/toErrorMap";
-import { useCreateUserMutation } from "../../generated/graphql";
+import { useUpdateUserMutation } from "../../generated/graphql";
 import router from "next/router";
 
 interface EditAccountModal {
   onRequestClose: () => void;
+  id: number;
+  direction: string;
+  email: string;
+  first_last_name: string;
+  name: string;
+  phone: number;
+  second_last_name: string;
 }
 
 export const EditAccountModal: React.FC<EditAccountModal> = ({
   onRequestClose,
+  id,
+  name,
+  direction,
+  email,
+  first_last_name,
+  phone,
+  second_last_name,
 }) => {
-  const [, editar] = useCreateUserMutation();
+  const [, updatedUser] = useUpdateUserMutation();
+
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
         initialValues={{
-          name: "",
-          first_last_name: "",
-          second_last_name: "",
-          phone: 87,
-          direction: "",
-          email: "",
+          id: id,
+          name: name,
+          first_last_name: first_last_name,
+          second_last_name: second_last_name,
+          phone: phone,
+          direction: direction,
+          email: email,
         }}
         onSubmit={async (values, { setErrors }) => {
-          // const response = await editar(values);
-          // if (response.data?.createUser.errors) {
-          //   setErrors(toErrorMap(response.data.createUser.errors));
-          // } else if (response.data?.createUser.user) {
-          //   // worked
-          //   router.push("/");
-          // }
+          const response = await updatedUser(values);
+          console.log(response);
         }}
       >
         <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>
@@ -79,6 +90,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
               name="phone"
               placeholder="Celular"
               maxLength={60}
+              type="number"
             />
             &nbsp;
             <InputField
@@ -94,7 +106,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           <div className={`col-span-3 bg-primary-700 rounded-8`}>
             <InputField
               className={`px-3 h-11 col-span-3 w-full`}
-              name="direccion"
+              name="direction"
               placeholder="Dirección"
               rows={3}
               maxLength={500}

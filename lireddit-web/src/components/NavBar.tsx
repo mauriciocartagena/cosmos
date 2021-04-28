@@ -11,7 +11,11 @@ import {
 import React, { useState } from "react";
 import NextLink from "next/link";
 import SvgIcon from "../icons/LogoIcon";
-import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import {
+  useMeQuery,
+  useLogoutMutation,
+  useFetchUserMutation,
+} from "../generated/graphql";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import { SingleUser } from "../ui/UserAvatar/SingleUser";
 import { SolidBug, SolidUser } from "../icons";
@@ -32,6 +36,23 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
+
+  type State = {
+    scheduleRoomToEdit: ScheduledRoom;
+  };
+
+  interface ScheduledRoom {
+    direction: string;
+    email: string;
+    first_last_name: string;
+    name: string;
+    phone: number;
+    second_last_name: string;
+  }
+
+  const [onEdit, setScheduleRoomToEdit] = useState<State | null>(null);
+
+  const [{ data: user }, fetchUser] = useFetchUserMutation();
 
   let body = null;
 
@@ -99,8 +120,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                 <SettingsIcon
                   icon={<SvgSolidSettings />}
                   label={"Editar Pefil"}
-                  onClick={() => {
-                    setEditModal(true);
+                  onClick={async () => {
+                    await fetchUser({
+                      id: !data?.me ? "" : data.me.id.toString(),
+                    }),
+                      setEditModal(true);
                   }}
                 />
                 <a
@@ -134,7 +158,16 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         )}
 
         {editModal && (
-          <EditAccountModal onRequestClose={() => setEditModal(false)} />
+          <EditAccountModal
+            id={data.me.id}
+            direction={!user ? "" : user.fetchUser.direction}
+            email={!user ? "" : user.fetchUser.email}
+            first_last_name={!user ? "" : user.fetchUser.first_last_name}
+            name={!user ? "" : user.fetchUser.name}
+            phone={!user ? 0 : user.fetchUser.phone}
+            second_last_name={!user ? "" : user.fetchUser.second_last_name}
+            onRequestClose={() => setEditModal(false)}
+          />
         )}
       </>
     );

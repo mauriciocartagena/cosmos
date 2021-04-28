@@ -12,7 +12,7 @@ import { HeaderController } from "../modules/display/HeaderController";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import { Link, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
 interface registerProps {}
 
