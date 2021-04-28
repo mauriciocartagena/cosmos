@@ -20,8 +20,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
         initialValues={{
-          username: "",
-          password: "",
           name: "",
           first_last_name: "",
           second_last_name: "",
@@ -30,41 +28,21 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           email: "",
         }}
         onSubmit={async (values, { setErrors }) => {
-          const response = await editar(values);
-
-          if (response.data?.createUser.errors) {
-            setErrors(toErrorMap(response.data.createUser.errors));
-          } else if (response.data?.createUser.user) {
-            // worked
-            router.push("/");
-          }
+          // const response = await editar(values);
+          // if (response.data?.createUser.errors) {
+          //   setErrors(toErrorMap(response.data.createUser.errors));
+          // } else if (response.data?.createUser.user) {
+          //   // worked
+          //   router.push("/");
+          // }
         }}
       >
         <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>
           <div className={`col-span-3 block`}>
-            <h4 className={`mb-2 text-primary-100`}>Editar Cuenta</h4>
+            <h4 className={`mb-2 text-primary-100`}>Editar Perfil</h4>
             <p className={`text-primary-300`}>Use datos reales.</p>
           </div>
-          <div className={`h-full w-full col-span-3`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
-              name="username"
-              maxLength={60}
-              placeholder={"Username"}
-              autoFocus
-              autoComplete="off"
-            />
-            &nbsp;
-            <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
-              name="password"
-              type="password"
-              maxLength={60}
-              placeholder={"Password"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
+
           <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`rounded-8 bg-primary-700 px-4 h-6`}
@@ -100,8 +78,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="phone"
               placeholder="Celular"
-              maxLength={500}
-              textarea
+              maxLength={60}
             />
             &nbsp;
             <InputField

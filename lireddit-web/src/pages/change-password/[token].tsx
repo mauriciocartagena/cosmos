@@ -10,7 +10,7 @@ import SvgSolidLogo from "../../icons/SvgSolidLogo";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { Button } from "../../form-fields/Button";
 import { useChangePasswordMutation } from "../../generated/graphql";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
@@ -19,8 +19,6 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
   const [, changePassword] = useChangePasswordMutation();
 
   const [tokenError, setTokenError] = useState("");
-
-  console.log(token);
 
   return (
     <div
@@ -75,17 +73,41 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
                     type="password"
                   />
                   {tokenError ? (
-                    <Box style={{ color: "red" }}>{tokenError}</Box>
+                    <>
+                      <Flex>
+                        <Box
+                          mr={"auto"}
+                          className={` text-primary-100 text-base font-bold border-b-2 border-primary-900 transition hover:border-accent focus:outline-no-chrome border-accent text-accent`}
+                        >
+                          {tokenError}
+                        </Box>
+                      </Flex>
+                    </>
                   ) : null}
-                  <div className={`flex pt-2 items-center`}>
-                    <Button
-                      loading={isSubmitting}
-                      type="submit"
-                      className={`mr-3`}
-                    >
-                      Cambiar contraseña
-                    </Button>
-                  </div>
+
+                  {tokenError ? (
+                    <div className={`flex pt-2 items-center`}>
+                      <Button
+                        loading={isSubmitting}
+                        onClick={() => router.push("/forgot-password")}
+                        type="submit"
+                        className={`mr-8`}
+                      >
+                        Volver a enviar
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className={`flex pt-2 items-center`}>
+                      <Button
+                        loading={isSubmitting}
+                        onClick={() => {}}
+                        type="submit"
+                        className={`mr-8`}
+                      >
+                        Cambiar contraseña
+                      </Button>
+                    </div>
+                  )}
                 </Form>
               )}
             </Formik>

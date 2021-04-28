@@ -52,7 +52,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="username"
               maxLength={60}
-              placeholder={"Username"}
+              placeholder={"Usuario"}
               autoFocus
               autoComplete="off"
             />
@@ -62,7 +62,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               name="password"
               type="password"
               maxLength={60}
-              placeholder={"Password"}
+              placeholder={"Contraseña"}
               autoFocus
               autoComplete="off"
             />
@@ -102,8 +102,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="phone"
               placeholder="Celular"
-              maxLength={500}
-              textarea
+              maxLength={60}
             />
             &nbsp;
             <InputField
@@ -119,7 +118,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           <div className={`col-span-3 bg-primary-700 rounded-8`}>
             <InputField
               className={`px-3 h-11 col-span-3 w-full`}
-              name="direccion"
+              name="direction"
               placeholder="Dirección"
               rows={3}
               maxLength={500}

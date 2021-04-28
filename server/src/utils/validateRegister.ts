@@ -5,7 +5,7 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     return [
       {
         field: "username",
-        message: "length must be greater than 2",
+        message: "Introducir más de 2 caracteres",
       },
     ];
   }
@@ -14,7 +14,7 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     return [
       {
         field: "username",
-        message: "cannot include an @",
+        message: "No debe de incluir @",
       },
     ];
   }
@@ -23,7 +23,7 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     return [
       {
         field: "password",
-        message: "length must be greater than 2",
+        message: "Introducir más de 2 caracteres",
       },
     ];
   }
@@ -32,16 +32,7 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     return [
       {
         field: "name",
-        message: "length must be greater than 2",
-      },
-    ];
-  }
-
-  if (!options.email.includes("@")) {
-    return [
-      {
-        field: "email",
-        message: "invalid email",
+        message: "Introducir más de 2 caracteres",
       },
     ];
   }
@@ -50,9 +41,19 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     return [
       {
         field: "first_last_name",
-        message: "length must be greater than 2",
+        message: "Introducir más de 2 caracteres",
       },
     ];
   }
+
+  if (!options.email.includes("@")) {
+    return [
+      {
+        field: "email",
+        message: "Email invalido",
+      },
+    ];
+  }
+
   return null;
 };

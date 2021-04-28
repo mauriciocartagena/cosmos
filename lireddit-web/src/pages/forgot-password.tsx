@@ -1,25 +1,20 @@
-import React from "react";
-import { Form, Formik } from "formik";
+import { Box } from "@chakra-ui/react";
+import { Formik, Form } from "formik";
+import React, { useState } from "react";
 import { InputField } from "../form-fields/InputField";
-import { useLoginMutation } from "../generated/graphql";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from "next/router";
 import { Button } from "../form-fields/Button";
-import SvgSolidInstagram from "../icons/SolidInstagram";
 import { SvgSolidFacebook } from "../icons";
+import SvgSolidInstagram from "../icons/SolidInstagram";
 import SvgSolidLogo from "../icons/SvgSolidLogo";
 import { HeaderController } from "../modules/display/HeaderController";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
-import NextLink from "next/link";
-import { Link, Flex } from "@chakra-ui/react";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { useForgotPasswordMutation } from "../generated/graphql";
+import router from "next/router";
 
-interface registerProps {}
-
-const Login: React.FC<registerProps> = ({}) => {
-  const router = useRouter();
-
-  const [, login] = useLoginMutation();
+const ForgotPassword: React.FC<{}> = ({}) => {
+  const [complete, setComplete] = useState(false);
+  const [, forgotPassword] = useForgotPasswordMutation();
 
   return (
     <div
@@ -28,7 +23,7 @@ const Login: React.FC<registerProps> = ({}) => {
         gridTemplateRows: "1fr auto 1fr",
       }}
     >
-      <HeaderController embed={{}} title="Login" />
+      <HeaderController embed={{}} title="Change password" />
       <div className="hidden sm:flex" />
       <div className="justify-self-center self-center sm:hidden">
         <SvgSolidLogo />
@@ -36,57 +31,58 @@ const Login: React.FC<registerProps> = ({}) => {
       <div className="m-auto flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
         <div className="gap-2 flex-col">
           <span className="text-3xl text-primary-100 font-bold">
-            Bienvenido
+            {!complete ? "Cambiar contraseña" : null}
           </span>
           <div className="flex-col gap-4">
             <Formik
               initialValues={{
-                usernameOrEmail: "",
-                password: "",
+                email: "",
               }}
-              onSubmit={async (values, { setErrors }) => {
-                const response = await login(values);
-
-                if (response.data?.login.errors) {
-                  setErrors(toErrorMap(response.data.login.errors));
-                } else if (response.data?.login.user) {
-                  // worked
-                  router.push("/dasboard");
-                }
+              onSubmit={async (values) => {
+                await forgotPassword(values);
+                setComplete(true);
               }}
             >
-              {({ isSubmitting }) => (
-                <Form className={`flex-col w-full`}>
-                  <InputField
-                    className={`mb-4`}
-                    name="usernameOrEmail"
-                    placeholder="Usuario o email"
-                    label="Usuario o email"
-                  />
-                  <InputField
-                    className={`mb-4`}
-                    name="password"
-                    placeholder="Contraseña"
-                    label="Contraseña"
-                    type="password"
-                  />
-                  <Flex ml="auto" className="mb-2 text-primary-300">
-                    <NextLink href="/forgot-password">
-                      Olvidaste tu contraseña?
-                    </NextLink>
-                  </Flex>
+              {({ isSubmitting }) =>
+                complete ? (
+                  <>
+                    <Box className="mb-2 text-primary-300">
+                      Si existe una cuenta con ese correo electrónico, le
+                      enviamos un correo electrónico
+                    </Box>
+                    <div className={`flex pt-2 items-center`}>
+                      <Button
+                        onClick={() => router.push("/")}
+                        loading={isSubmitting}
+                        type="submit"
+                        className={`mr-3`}
+                      >
+                        Volver
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <Form className={`flex-col w-full`}>
+                    <InputField
+                      className={`mb-4`}
+                      name="email"
+                      placeholder="email"
+                      type="email"
+                      label="Email"
+                    />
 
-                  <div className={`flex pt-2 items-center`}>
-                    <Button
-                      loading={isSubmitting}
-                      type="submit"
-                      className={`mr-3`}
-                    >
-                      Inicia sesión
-                    </Button>
-                  </div>
-                </Form>
-              )}
+                    <div className={`flex pt-2 items-center`}>
+                      <Button
+                        loading={isSubmitting}
+                        type="submit"
+                        className={`mr-3`}
+                      >
+                        Enviar a mi email
+                      </Button>
+                    </div>
+                  </Form>
+                )
+              }
             </Formik>
           </div>
         </div>
@@ -138,4 +134,4 @@ const Login: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default withUrqlClient(createUrqlClient)(ForgotPassword);

@@ -38,7 +38,9 @@ export const LoginPage: React.FC = () => {
       </div>
       <div className="m-auto flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
         <div className="gap-2 flex-col">
-          <span className="text-3xl text-primary-100 font-bold">Welcome</span>
+          <span className="text-3xl text-primary-100 font-bold">
+            Bienvenido
+          </span>
           <p className="text-primary-100 flex-wrap">
             By logging in you accept our&nbsp;
             <a

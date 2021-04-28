@@ -76,7 +76,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               <Wrap>
                 <WrapItem>
                   <SingleUser
-                    src={"https://i.redd.it/q9cov32d2bq51.jpg"}
+                    src={
+                      "https://media.discordapp.net/attachments/832768364719505419/835574672636641330/WhatsApp_Image_2021-04-24_at_11.37.03.jpeg?width=514&height=686"
+                    }
                     size="md"
                   />
                 </WrapItem>
@@ -91,12 +93,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                   href="https://www.youtube.com/watch?v=FGBhQbmPwH8"
                   rel="noreferrer"
                 >
-                  <SettingsIcon icon={<SolidUser />} label={"Perfil"} />
+                  <SettingsIcon icon={<SolidUser />} label={"Cuenta"} />
                 </a>
 
                 <SettingsIcon
                   icon={<SvgSolidSettings />}
-                  label={"Editar cuenta"}
+                  label={"Editar Pefil"}
                   onClick={() => {
                     setEditModal(true);
                   }}

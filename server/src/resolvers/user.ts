@@ -41,7 +41,7 @@ export class UserResolver {
         errors: [
           {
             field: "newPassword",
-            message: "length must be greater than 2",
+            message: "Introducir más de 2 caracteres",
           },
         ],
       };
@@ -56,7 +56,7 @@ export class UserResolver {
         errors: [
           {
             field: "token",
-            message: "token expired",
+            message: "El token ha expirado",
           },
         ],
       };
@@ -68,7 +68,7 @@ export class UserResolver {
         errors: [
           {
             field: "token",
-            message: "user no longer exists",
+            message: "El usuario no existe :(",
           },
         ],
       };
@@ -76,10 +76,7 @@ export class UserResolver {
 
     user.password = await argon2.hash(newPassword);
 
-    await redis
-      .del(key)
-      .then((succ) => console.log("success:", succ))
-      .catch((err) => console.log("erro:", err));
+    await redis.del(key);
 
     await em.persistAndFlush(user);
 
@@ -175,7 +172,7 @@ export class UserResolver {
           errors: [
             {
               field: "username",
-              message: "username already taken",
+              message: "El usuario ya existe",
             },
           ],
         };
@@ -249,7 +246,7 @@ export class UserResolver {
         errors: [
           {
             field: "usernameOrEmail",
-            message: "that username doesn't exist",
+            message: "El usuario no existe ",
           },
         ],
       };
@@ -262,7 +259,7 @@ export class UserResolver {
         errors: [
           {
             field: "password",
-            message: "incorrect password",
+            message: "Contraseña incorrecta",
           },
         ],
       };
