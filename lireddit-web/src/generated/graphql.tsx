@@ -26,7 +26,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   fetchUser: User;
   createUser: UserResponse;
-  updateUser?: Maybe<User>;
+  updatedUser?: Maybe<UserOne>;
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
@@ -53,14 +53,14 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationUpdateUserArgs = {
-  email?: Maybe<Scalars['String']>;
-  direction?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['Float']>;
-  second_last_name?: Maybe<Scalars['String']>;
+export type MutationUpdatedUserArgs = {
+  email: Scalars['String'];
+  direction: Scalars['String'];
+  phone: Scalars['Int'];
+  second_last_name: Scalars['String'];
   first_last_name: Scalars['String'];
   name: Scalars['String'];
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
@@ -83,6 +83,19 @@ export type User = {
   updatedAt: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
+  name: Scalars['String'];
+  first_last_name: Scalars['String'];
+  second_last_name: Scalars['String'];
+  phone: Scalars['Float'];
+  direction: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type UserOne = {
+  __typename?: 'UserOne';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
   name: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
@@ -194,11 +207,11 @@ export type CreateUserMutation = (
 );
 
 export type UpdateUserMutationVariables = Exact<{
-  id: Scalars['Float'];
+  id: Scalars['Int'];
   name: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
-  phone: Scalars['Float'];
+  phone: Scalars['Int'];
   direction: Scalars['String'];
   email: Scalars['String'];
 }>;
@@ -206,9 +219,9 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
-  & { updateUser?: Maybe<(
-    { __typename?: 'User' }
-    & RegularUserFindOneUserFragment
+  & { updatedUser?: Maybe<(
+    { __typename?: 'UserOne' }
+    & Pick<UserOne, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
   )> }
 );
 
@@ -332,8 +345,8 @@ export function useCreateUserMutation() {
   return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
 };
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($id: Float!, $name: String!, $first_last_name: String!, $second_last_name: String!, $phone: Float!, $direction: String!, $email: String!) {
-  updateUser(
+    mutation UpdateUser($id: Int!, $name: String!, $first_last_name: String!, $second_last_name: String!, $phone: Int!, $direction: String!, $email: String!) {
+  updatedUser(
     id: $id
     name: $name
     first_last_name: $first_last_name
@@ -342,10 +355,16 @@ export const UpdateUserDocument = gql`
     direction: $direction
     email: $email
   ) {
-    ...RegularUserFindOneUser
+    id
+    name
+    first_last_name
+    second_last_name
+    phone
+    direction
+    email
   }
 }
-    ${RegularUserFindOneUserFragmentDoc}`;
+    `;
 
 export function useUpdateUserMutation() {
   return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);

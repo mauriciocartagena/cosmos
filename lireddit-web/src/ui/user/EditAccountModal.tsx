@@ -4,7 +4,6 @@ import { InputField } from "../../form-fields/InputField";
 import { Button } from "../Button";
 import { ButtonLink } from "../ButtonLink";
 import { Modal } from "../Modal";
-import { toErrorMap } from "../../utils/toErrorMap";
 import { useUpdateUserMutation } from "../../generated/graphql";
 import router from "next/router";
 
@@ -35,7 +34,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
         initialValues={{
-          id: id,
           name: name,
           first_last_name: first_last_name,
           second_last_name: second_last_name,
@@ -43,9 +41,18 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           direction: direction,
           email: email,
         }}
-        onSubmit={async (values, { setErrors }) => {
-          const response = await updatedUser(values);
-          console.log(response);
+        onSubmit={async (values) => {
+          try {
+            const response = await updatedUser({
+              id: id,
+              ...values,
+            });
+            console.log("response:", response);
+          } catch (error) {
+            console.log(error);
+          }
+
+          router.push("/dasboard");
         }}
       >
         <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>

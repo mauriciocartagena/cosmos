@@ -1,16 +1,17 @@
 import { ObjectType, Field } from "type-graphql";
+
 import {
-  Column,
-  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
 } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class UserOne extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -21,15 +22,7 @@ export class User extends BaseEntity {
 
   @Field(() => String)
   @UpdateDateColumn()
-  updatedAt: Date = new Date();
-
-  @Field()
-  @Column({ unique: true })
-  username!: string;
-
-  @Field(() => String)
-  @Column()
-  password: string;
+  updatedAt: Date;
 
   @Field(() => String)
   @Column()
@@ -52,6 +45,6 @@ export class User extends BaseEntity {
   direction!: string;
 
   @Field(() => String)
-  @Column({ unique: true, nullable: true })
+  @Column({ type: "text", unique: true, nullable: true })
   email!: string;
 }

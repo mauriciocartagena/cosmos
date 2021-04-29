@@ -37,21 +37,6 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     pause: isServer(),
   });
 
-  type State = {
-    scheduleRoomToEdit: ScheduledRoom;
-  };
-
-  interface ScheduledRoom {
-    direction: string;
-    email: string;
-    first_last_name: string;
-    name: string;
-    phone: number;
-    second_last_name: string;
-  }
-
-  const [onEdit, setScheduleRoomToEdit] = useState<State | null>(null);
-
   const [{ data: user }, fetchUser] = useFetchUserMutation();
 
   let body = null;

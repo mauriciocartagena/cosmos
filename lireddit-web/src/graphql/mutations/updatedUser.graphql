@@ -1,13 +1,13 @@
 mutation UpdateUser(
-  $id: Float!
+  $id: Int!
   $name: String!
   $first_last_name: String!
   $second_last_name: String!
-  $phone: Float!
+  $phone: Int!
   $direction: String!
   $email: String!
 ) {
-  updateUser(
+  updatedUser(
     id: $id
     name: $name
     first_last_name: $first_last_name
@@ -16,6 +16,12 @@ mutation UpdateUser(
     direction: $direction
     email: $email
   ) {
-    ...RegularUserFindOneUser
+    id
+    name
+    first_last_name
+    second_last_name
+    phone
+    direction
+    email
   }
 }

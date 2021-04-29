@@ -103,6 +103,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               name="phone"
               placeholder="Celular"
               maxLength={60}
+              type="number"
             />
             &nbsp;
             <InputField

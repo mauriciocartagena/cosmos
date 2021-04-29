@@ -1,14 +1,24 @@
-import { Arg, Ctx, Mutation, Query, Resolver, Field, Int } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  Field,
+  Int,
+  UseMiddleware,
+} from "type-graphql";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { ObjectType } from "type-graphql";
-import { EntityManager } from "@mikro-orm/postgresql";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { validateRegister } from "../utils/validateRegister";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
+import { isAuth } from "../middleware/isAuth";
+import { getConnection } from "typeorm";
 
 @ObjectType()
 class FieldError {
@@ -34,7 +44,7 @@ export class UserResolver {
   async changePassword(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
-    @Ctx() { redis, em, req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<UserResponse> {
     if (newPassword.length <= 2) {
       return {
@@ -61,7 +71,10 @@ export class UserResolver {
         ],
       };
     }
-    const user = await em.findOne(User, { id: parseInt(userId) });
+
+    const userIdNum = parseInt(userId);
+
+    const user = await User.findOne(userIdNum);
 
     if (!user) {
       return {
@@ -73,12 +86,16 @@ export class UserResolver {
         ],
       };
     }
-
     user.password = await argon2.hash(newPassword);
 
-    await redis.del(key);
+    await User.update(
+      { id: userIdNum },
+      {
+        password: await argon2.hash(newPassword),
+      }
+    );
 
-    await em.persistAndFlush(user);
+    await redis.del(key);
 
     req.session.userId = user.id;
 
@@ -88,9 +105,9 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
-    @Ctx() { em, redis }: MyContext
+    @Ctx() { redis }: MyContext
   ) {
-    const user = await em.findOne(User, { email });
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
       // the email is not in the db
@@ -115,11 +132,8 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async fetchUser(
-    @Arg("id") id: string,
-    @Ctx() { em }: MyContext
-  ): Promise<User | null> {
-    const user = await em.findOne(User, { id: parseInt(id) });
+  async fetchUser(@Arg("id") id: string): Promise<User | null> {
+    const user = await User.findOne(parseInt(id));
 
     if (!user) {
       // the email is not in the db
@@ -129,20 +143,18 @@ export class UserResolver {
     return user;
   }
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req, em }: MyContext) {
+  async me(@Ctx() { req }: MyContext) {
     //you are not logged in
     if (!req.session.userId) {
       return null;
     }
 
-    const user = await em.findOne(User, { id: req.session!.userId });
-
-    return user;
+    return User.findOne(req.session.userId);
   }
 
   @Query(() => [User])
-  users(@Ctx() { em }: MyContext): Promise<User[]> {
-    return em.find(User, {});
+  users(): Promise<User[]> {
+    return User.find();
   }
 
   @Mutation(() => UserResponse)
@@ -150,7 +162,7 @@ export class UserResolver {
     @Arg("options")
     options: UsernamePasswordInput,
     @Ctx()
-    { em }: MyContext
+    { req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
     if (errors) {
@@ -162,10 +174,13 @@ export class UserResolver {
     let user;
 
     try {
-      const result = await (em as EntityManager)
-        .createQueryBuilder(User)
-        .getKnexQuery()
-        .insert({
+      // User.create({}).save()
+
+      const result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
           username: options.username,
           password: hashedPassword,
           name: options.name,
@@ -174,14 +189,12 @@ export class UserResolver {
           phone: options.phone,
           direction: options.direction,
           email: options.email,
-          created_at: new Date(),
-          updated_at: new Date(),
         })
-        .returning("*");
+        .returning("*")
+        .execute();
 
-      user = result[0];
+      user = result.raw[0];
     } catch (err) {
-      console.log(err);
       if (err.code === "23505") {
         return {
           errors: [
@@ -193,38 +206,38 @@ export class UserResolver {
         };
       }
     }
+
+    // req.session.userId = user.id;
     return { user };
   }
 
-  @Mutation(() => User, { nullable: true })
-  async updateUser(
-    @Arg("id") id: number,
-    @Arg("name", () => String, { nullable: false }) name: string,
-    @Arg("first_last_name", () => String, { nullable: false })
-    first_last_name: string,
-    @Arg("second_last_name", () => String, { nullable: true })
-    second_last_name: string,
-    @Arg("phone", () => Number, { nullable: true }) phone: number,
-    @Arg("direction", () => String, { nullable: true }) direction: string,
-    @Arg("email", () => String, { nullable: true }) email: string,
-    @Ctx() { em }: MyContext
-  ): Promise<User | null> {
-    const user = await em.findOne(User, { id });
+  @Mutation(() => User)
+  @UseMiddleware(isAuth)
+  async updatedUser(
+    @Arg("id", () => Int) id: number,
+    @Arg("name") name: string,
+    @Arg("first_last_name") first_last_name: string,
+    @Arg("second_last_name") second_last_name: string,
+    @Arg("phone", () => Int) phone: number,
+    @Arg("direction") direction: string,
+    @Arg("email") email: string
+  ) {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        name: name,
+        first_last_name: first_last_name,
+        second_last_name: second_last_name,
+        phone: phone,
+        direction: direction,
+        email: email,
+      })
+      .where("id = :id", { id: id })
+      .returning("*")
+      .execute();
 
-    if (!user) {
-      return null;
-    }
-    if (typeof name !== "undefined" && typeof first_last_name !== "undefined") {
-      user.name = name;
-      user.first_last_name = first_last_name;
-      user.second_last_name = second_last_name;
-      user.phone = phone;
-      user.direction = direction;
-      user.email = email;
-
-      await em.persistAndFlush(user);
-    }
-    return user;
+    return result.raw[0];
   }
 
   // @Mutation(() => Boolean)
@@ -240,13 +253,12 @@ export class UserResolver {
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
-    @Ctx() { em, req }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(
-      User,
+    const user = await User.findOne(
       usernameOrEmail.includes("@")
-        ? { email: usernameOrEmail }
-        : { username: usernameOrEmail }
+        ? { where: { email: usernameOrEmail } }
+        : { where: { username: usernameOrEmail } }
     );
 
     if (!user) {
