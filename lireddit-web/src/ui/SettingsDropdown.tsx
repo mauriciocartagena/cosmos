@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  OutlineGlobe,
-  SolidBug,
-  SolidCaretRight,
-  SolidUser,
-  SolidVolume,
-} from "../icons";
-import SvgSolidDiscord from "../icons/SolidDiscord";
+import { SolidBug, SolidUser } from "../icons";
 import { BaseOverlay } from "../ui/BaseOverlay";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import SvgSolidSettings from "../icons/SolidSettings";
@@ -15,7 +8,6 @@ export const SettingsDropdown: React.FC<{
   onCloseDropdown: () => void;
   onActionButtonClicked: () => void;
 }> = ({ onCloseDropdown, onActionButtonClicked }) => {
-  console.log(onCloseDropdown, onActionButtonClicked);
   return (
     <div
       className="flex whitespace-nowrap overflow-ellipsis"

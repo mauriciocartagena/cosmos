@@ -2,6 +2,7 @@ import React from "react";
 import { SettingsDropdown } from "../SettingsDropdown";
 import { DropdownController } from "../DropdownController";
 import { SingleUser } from "../UserAvatar/SingleUser";
+import { useLogoutMutation } from "../../generated/graphql";
 
 export interface RightHeaderProps {
   onAnnouncementsClick?: (
@@ -17,6 +18,7 @@ export interface RightHeaderProps {
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({}) => {
+  const [_, logout] = useLogoutMutation();
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
       <DropdownController
@@ -27,18 +29,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
         overlay={(close) => (
           <SettingsDropdown
             onActionButtonClicked={() => {
-              // modalConfirm(
-              //   t("components.settingsDropdown.logOut.modalSubtitle"),
-              //   () => {
-              //     conn.close();
-              //     closeVoiceConnections(null);
-              //     useCurrentRoomIdStore.getState().setCurrentRoomId(null);
-              //     useTokenStore
-              //       .getState()
-              //       .setTokens({ accessToken: "", refreshToken: "" });
-              //     push("/logout");
-              //   }
-              // );
+              logout();
             }}
             onCloseDropdown={close}
           />
