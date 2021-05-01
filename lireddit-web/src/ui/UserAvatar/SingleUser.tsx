@@ -83,7 +83,7 @@ export const SingleUser: React.FC<AvatarProps> = ({
           boxShadow: activeSpeaker ? "0 0 0 2px var(--color-accent)" : "",
         }}
         className="rounded-full w-full h-full object-cover"
-        onError={() => setError(true)}
+        onError={(error) => console.log(error)}
         src={
           isError
             ? `https://ui-avatars.com/api/${

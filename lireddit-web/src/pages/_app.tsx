@@ -1,6 +1,8 @@
 import Head from "next/head";
 import "../styles/add-to-calendar-button.css";
 import "../styles/globals.css";
+import "../styles/electron-header.css";
+import "../styles/banner-button.css";
 
 function MyApp({ Component, pageProps }: any) {
   return (

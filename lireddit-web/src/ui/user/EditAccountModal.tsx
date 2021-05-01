@@ -43,11 +43,11 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
         }}
         onSubmit={async (values) => {
           try {
-            const response = await updatedUser({
+            await updatedUser({
               id: id,
               ...values,
             });
-            console.log("response:", response);
+            onRequestClose();
           } catch (error) {
             console.log(error);
           }

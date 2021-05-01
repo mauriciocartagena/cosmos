@@ -35,6 +35,7 @@ p.bold {
   --color-accent: #fd4d4d;
   --color-accent-hover: #fd6868;
   --color-accent-disabled: #f5bfbf;
+  --screen-height-reduction: 0px;
 }
 
 h1 {
@@ -62,10 +63,26 @@ p.small {
   font-size: 0.85rem;
 }
 
-html
-  *:not(head *, script, style, .MuiDialog-root, .MuiDialog-root
-    *, .block, .inline-block, .inline, .inline-flex, .table, .table-caption, .table-cell, .table-column, .table-column-group, .table-footer-group, .table-header-group, .table-row-group, .table-row, .flow-root, .grid, .inline-grid, .contents, .hidden, .sm\:hidden, .sm\:flex, #__next) {
-  display: flex;
+/* for firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-700) rgba(0, 0, 0, 0);
+}
+
+/* for non-firefox */
+::-webkit-scrollbar {
+  overflow: overlay;
+  width: 8px;
+  /* shouldnt hardcode width, pls find way to make it dynamic, thin wasn't working for me...*/
+}
+
+::-webkit-scrollbar-track {
+  display: initial;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-700);
+  border-radius: 5px;
 }
 
 html,
@@ -74,9 +91,7 @@ body,
   background-color: var(--color-primary-900);
   height: 100%;
   width: 100%;
-}
-.text2246 {
-  --color-primary-600: #323d4d;
+  display: flex;
 }
 
 audio {
@@ -106,4 +121,12 @@ img.emoji {
   width: 1em;
   margin: 0 0.05em 0 0.1em;
   vertical-align: -0.1em;
+}
+
+.h-screen {
+  height: calc(100vh - var(--screen-height-reduction));
+}
+
+button:focus {
+  outline: none;
 }
