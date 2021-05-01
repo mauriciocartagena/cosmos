@@ -9,6 +9,7 @@ import {
 import SvgSolidDiscord from "../icons/SolidDiscord";
 import { BaseOverlay } from "../ui/BaseOverlay";
 import { SettingsIcon } from "../ui/SettingsIcon";
+import SvgSolidSettings from "../icons/SolidSettings";
 
 export const SettingsDropdown: React.FC<{
   onCloseDropdown: () => void;
@@ -22,55 +23,30 @@ export const SettingsDropdown: React.FC<{
     >
       <BaseOverlay
         onActionButtonClicked={onActionButtonClicked}
-        actionButton={"components.settingsDropdown.logOut.button"}
+        actionButton={"Log out"}
       >
         <div className="flex flex-col">
           <SettingsIcon
             onClick={onCloseDropdown}
             icon={<SolidUser />}
-            label={"components.settingsDropdown.profile"}
+            label={"Cuenta"}
           />
 
-          {/* <SettingsIcon icon={<SolidSettings />} label={"Settings"} />
-        <SettingsIcon icon={<SolidDogenitro />} label={"Wallet"} /> */}
           <SettingsIcon
-            icon={<OutlineGlobe />}
-            label={"components.settingsDropdown.language"}
-            trailingIcon={<SolidCaretRight />}
+            icon={<SvgSolidSettings />}
+            label={"Editar Pefil"}
             onClick={() => {}}
           />
-          {/* <SettingsIcon icon={<SolidHelp />} label={"Help"} /> */}
+
           <a
-            href="https://github.com/benawad/dogehouse/issues"
+            href="https://github.com/mauriciocartagena"
             target="_blank"
             rel="noreferrer"
           >
             <SettingsIcon
               onClick={onCloseDropdown}
               icon={<SolidBug />}
-              label={"components.settingsDropdown.reportABug"}
-              // transition
-            />
-          </a>
-          <SettingsIcon
-            label={
-              // !debugAudio
-              "components.settingsDropdown.debugAudio.debugAudio"
-              // : "components.settingsDropdown.debugAudio.stopDebugger"
-            }
-            icon={<SolidVolume />}
-            // transition
-            onClick={() => {}}
-          />
-          <a
-            href="https://discord.gg/wCbKBZF9cV"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <SettingsIcon
-              onClick={onCloseDropdown}
-              icon={<SvgSolidDiscord />}
-              label={"Discord"}
+              label={"Report a bug"}
               // transition
             />
           </a>
