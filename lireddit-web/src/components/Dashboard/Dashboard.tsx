@@ -1,23 +1,31 @@
-import React from "react";
-import { NavBar } from "../NavBar";
-import { HeaderController } from "../../modules/display/HeaderController";
 import { withUrqlClient } from "next-urql";
-import { useUsersQuery } from "../../generated/graphql";
+import React from "react";
+import { HeaderController } from "../../modules/display/HeaderController";
+import { MiddlePanel } from "../../modules/GridPanels";
+import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
+import { FeedHeader } from "../../ui/FeedHeader";
+import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
+import { useState } from "react";
 
 interface DashboardProps {}
 
 const Dashboard: React.FC<DashboardProps> = ({}) => {
-  const [{ data }] = useUsersQuery();
-
+  const [roomModal, setRoomModal] = useState(false);
   return (
     <>
       <HeaderController embed={{}} title="Dasboard" />
-      <NavBar />;
-      {!data ? (
-        <div>Loading...</div>
-      ) : (
-        data.users.map((p) => <div key={p.id}>{p.name}</div>)
+      <DefaultDesktopLayout>
+        <MiddlePanel>
+          <FeedHeader
+            actionTitle={"New socio"}
+            onActionClicked={() => setRoomModal(true)}
+            title={"Socios"}
+          />
+        </MiddlePanel>
+      </DefaultDesktopLayout>
+      {roomModal && (
+        <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
       )}
     </>
   );
