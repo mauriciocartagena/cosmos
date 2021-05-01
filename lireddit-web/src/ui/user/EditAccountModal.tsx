@@ -55,9 +55,10 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
         <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>
           <div className={`col-span-3 block`}>
             <h4 className={`mb-2 text-primary-100`}>Editar Perfil</h4>
-            <p className={`text-primary-300`}>Use datos reales.</p>
+            <div className={`text-primary-300`}>
+              Por favor usar información verdadera
+            </div>
           </div>
-
           <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`rounded-8 bg-primary-700 px-4 h-6`}
@@ -77,7 +78,8 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
               autoFocus
               autoComplete="off"
             />
-            &nbsp;
+          </div>
+          <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="second_last_name"
@@ -86,7 +88,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
               autoFocus
               autoComplete="off"
             />
-            &nbsp;
           </div>
           <div className={`h-full w-full col-span-3`}>
             <InputField
@@ -96,7 +97,8 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
               maxLength={60}
               type="number"
             />
-            &nbsp;
+          </div>
+          <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="email"
