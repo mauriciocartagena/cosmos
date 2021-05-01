@@ -3,6 +3,7 @@ import { SolidBug, SolidUser } from "../icons";
 import { BaseOverlay } from "../ui/BaseOverlay";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import SvgSolidSettings from "../icons/SolidSettings";
+import router from "next/router";
 
 export const SettingsDropdown: React.FC<{
   onCloseDropdown: () => void;
@@ -19,17 +20,18 @@ export const SettingsDropdown: React.FC<{
         actionButton={"Log out"}
       >
         <div className="flex flex-col">
-          <SettingsIcon
-            onClick={onCloseDropdown}
-            icon={<SolidUser />}
-            label={"Cuenta"}
-            transition
-          />
-
+          <div onClick={() => router.push("/account")}>
+            <SettingsIcon
+              onClick={onCloseDropdown}
+              icon={<SolidUser />}
+              label={"Cuenta"}
+              transition
+            />
+          </div>
           <SettingsIcon
             icon={<SvgSolidSettings />}
             label={"Editar Pefil"}
-            onClick={() => {}}
+            onClick={onCloseDropdown}
             transition
           />
 
