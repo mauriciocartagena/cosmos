@@ -5,7 +5,6 @@ import { Button } from "../Button";
 import { ButtonLink } from "../ButtonLink";
 import { Modal } from "../Modal";
 import { useUpdateUserMutation } from "../../generated/graphql";
-import router from "next/router";
 
 interface EditAccountModal {
   onRequestClose: () => void;
@@ -51,8 +50,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           } catch (error) {
             console.log(error);
           }
-
-          router.push("/dasboard");
         }}
       >
         <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>

@@ -7,48 +7,50 @@ import router from "next/router";
 
 export const SettingsDropdown: React.FC<{
   onCloseDropdown: () => void;
-
+  onActionToFetch: () => void;
   onActionButtonClicked: () => void;
-}> = ({ onCloseDropdown, onActionButtonClicked }) => {
+}> = ({ onActionToFetch, onCloseDropdown, onActionButtonClicked }) => {
   return (
-    <div
-      className="flex whitespace-nowrap overflow-ellipsis"
-      style={{ width: 200 }}
-    >
-      <BaseOverlay
-        onActionButtonClicked={onActionButtonClicked}
-        actionButton={"Log out"}
+    <>
+      <div
+        className="flex whitespace-nowrap overflow-ellipsis"
+        style={{ width: 200 }}
       >
-        <div className="flex flex-col">
-          <div onClick={() => router.push("/account")}>
+        <BaseOverlay
+          onActionButtonClicked={onActionButtonClicked}
+          actionButton={"Log out"}
+        >
+          <div className="flex flex-col">
+            <div onClick={() => router.push("/account")}>
+              <SettingsIcon
+                onClick={onCloseDropdown}
+                icon={<SolidUser />}
+                label={"Cuenta"}
+                transition
+              />
+            </div>
             <SettingsIcon
-              onClick={onCloseDropdown}
-              icon={<SolidUser />}
-              label={"Cuenta"}
+              icon={<SvgSolidSettings />}
+              label={"Editar Pefil"}
+              onClick={onActionToFetch}
               transition
             />
-          </div>
-          <SettingsIcon
-            icon={<SvgSolidSettings />}
-            label={"Editar Pefil"}
-            onClick={onCloseDropdown}
-            transition
-          />
 
-          <a
-            href="https://github.com/mauriciocartagena"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <SettingsIcon
-              onClick={onCloseDropdown}
-              icon={<SolidBug />}
-              label={"Report a bug"}
-              transition
-            />
-          </a>
-        </div>
-      </BaseOverlay>
-    </div>
+            <a
+              href="https://github.com/mauriciocartagena"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <SettingsIcon
+                onClick={onCloseDropdown}
+                icon={<SolidBug />}
+                label={"Report a bug"}
+                transition
+              />
+            </a>
+          </div>
+        </BaseOverlay>
+      </div>
+    </>
   );
 };
