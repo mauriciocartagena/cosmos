@@ -6,7 +6,7 @@ import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useCreateUserMutation } from "../../generated/graphql";
-import router from "next/router";
+import { useState } from "react";
 
 interface CreatePartnerModal {
   onRequestClose: () => void;
@@ -16,6 +16,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
   onRequestClose,
 }) => {
   const [, register] = useCreateUserMutation();
+  const [loading, setLoading] = useState(false);
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
@@ -30,35 +31,40 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           email: "",
         }}
         onSubmit={async (values, { setErrors }) => {
+          setLoading(true);
+
           const response = await register({ options: values });
 
           if (response.data?.createUser.errors) {
             setErrors(toErrorMap(response.data.createUser.errors));
+            setLoading(false);
           } else if (response.data?.createUser.user) {
             // worked
-            router.push("/");
+            onRequestClose();
+            setLoading(false);
           }
         }}
       >
-        <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>
+        <Form className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}>
           <div className={`col-span-3 block`}>
             <h4 className={`mb-2 text-primary-100`}>Registrar Socio</h4>
             <p className={`text-primary-300`}>
               Por favor llene cuidadosamente los datos
             </p>
           </div>
-          <div className={`h-full w-full col-span-3`}>
+          <div className={`h-full w-full col-span-2`}>
             <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
+              className={`rounded-8 bg-primary-700 h-6`}
               name="username"
               maxLength={60}
               placeholder={"Usuario"}
               autoFocus
               autoComplete="off"
             />
-            &nbsp;
+          </div>
+          <div className={`grid items-start grid-cols-1 h-6`}>
             <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
+              className={` w-full  rounded-8 bg-primary-700 h-6`}
               name="password"
               type="password"
               maxLength={60}
@@ -77,7 +83,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               autoComplete="off"
             />
           </div>
-          <div className={`h-full w-full col-span-3`}>
+          <div className={`flex h-full w-full col-span-2`}>
             <InputField
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="first_last_name"
@@ -86,7 +92,8 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               autoFocus
               autoComplete="off"
             />
-            &nbsp;
+          </div>
+          <div className={`grid items-start grid-cols-1 h-6`}>
             <InputField
               className={`rounded-8 bg-primary-700 px-4 h-6`}
               name="second_last_name"
@@ -95,19 +102,19 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               autoFocus
               autoComplete="off"
             />
-            &nbsp;
           </div>
-          <div className={`h-full w-full col-span-3`}>
+          <div className={`flex h-full w-full col-span-2`}>
             <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
+              className={`rounded-8 bg-primary-700 h-6`}
               name="phone"
               placeholder="Celular"
               maxLength={60}
-              type="number"
+              type="tel"
             />
-            &nbsp;
+          </div>
+          <div className={`grid items-start grid-cols-1 h-6`}>
             <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
+              className={`rounded-8 bg-primary-700 h-6`}
               name="email"
               type="email"
               maxLength={60}
@@ -116,9 +123,9 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               autoComplete="off"
             />
           </div>
-          <div className={`col-span-3 bg-primary-700 rounded-8`}>
+          <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
             <InputField
-              className={`px-3 h-11 col-span-3 w-full`}
+              className={`h-11 col-span-3 w-full`}
               name="direction"
               placeholder="Dirección"
               rows={3}
@@ -128,7 +135,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           </div>
 
           <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-            <Button type="submit" className={`mr-3`}>
+            <Button loading={loading} type="submit" className={`mr-3`}>
               Registrar
             </Button>
             <ButtonLink type="button" onClick={onRequestClose}>
