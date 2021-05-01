@@ -6,6 +6,7 @@ import SvgSolidSettings from "../icons/SolidSettings";
 
 export const SettingsDropdown: React.FC<{
   onCloseDropdown: () => void;
+
   onActionButtonClicked: () => void;
 }> = ({ onCloseDropdown, onActionButtonClicked }) => {
   return (
@@ -22,12 +23,14 @@ export const SettingsDropdown: React.FC<{
             onClick={onCloseDropdown}
             icon={<SolidUser />}
             label={"Cuenta"}
+            transition
           />
 
           <SettingsIcon
             icon={<SvgSolidSettings />}
             label={"Editar Pefil"}
             onClick={() => {}}
+            transition
           />
 
           <a
@@ -39,7 +42,7 @@ export const SettingsDropdown: React.FC<{
               onClick={onCloseDropdown}
               icon={<SolidBug />}
               label={"Report a bug"}
-              // transition
+              transition
             />
           </a>
         </div>
