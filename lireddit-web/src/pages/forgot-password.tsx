@@ -11,6 +11,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useForgotPasswordMutation } from "../generated/graphql";
 import router from "next/router";
+import { FooterController } from "../modules/display/FooterController";
 
 const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
@@ -87,49 +88,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
-        <div className="hidden sm:flex">
-          <SvgSolidLogo />
-        </div>
-        <div className="gap-6 text-primary-300">
-          <a
-            href="https://youtu.be/dQw4w9WgXcQ"
-            className="hover:text-primary-200"
-          >
-            Privacy policy
-          </a>
-          <a
-            href="https://www.youtube.com/watch?v=Soa3gO7tL-c&list=RDSoa3gO7tL-c&start_radio=1"
-            className="hover:text-primary-200"
-          >
-            Report a bug
-          </a>
-          <div className="gap-6 sm:gap-4">
-            <a
-              href="https://github.com/mauriciocartagena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <SvgSolidFacebook
-                width={20}
-                height={20}
-                className="cursor-pointer hover:text-primary-200"
-              />
-            </a>
-            <a
-              href="https://github.com/mauriciocartagena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <SvgSolidInstagram
-                width={20}
-                height={20}
-                className="hover:text-primary-200"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
+      <FooterController />
     </div>
   );
 };

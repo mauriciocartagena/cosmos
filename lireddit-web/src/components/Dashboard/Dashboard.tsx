@@ -18,7 +18,7 @@ const Dashboard: React.FC<DashboardProps> = ({}) => {
       <DefaultDesktopLayout>
         <MiddlePanel>
           <FeedHeader
-            actionTitle={"New socio"}
+            actionTitle={"Nuevo socio"}
             onActionClicked={() => setRoomModal(true)}
             title={"Socios"}
           />

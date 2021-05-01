@@ -1,18 +1,17 @@
-import React from "react";
+import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { InputField } from "../form-fields/InputField";
-import { useLoginMutation } from "../generated/graphql";
-import { toErrorMap } from "../utils/toErrorMap";
-import { useRouter } from "next/router";
-import { Button } from "../form-fields/Button";
-import SvgSolidInstagram from "../icons/SolidInstagram";
-import { SvgSolidFacebook } from "../icons";
-import SvgSolidLogo from "../icons/SvgSolidLogo";
-import { HeaderController } from "../modules/display/HeaderController";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import { Flex } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import React from "react";
+import { Button } from "../form-fields/Button";
+import { InputField } from "../form-fields/InputField";
+import { useLoginMutation } from "../generated/graphql";
+import SvgSolidLogo from "../icons/SvgSolidLogo";
+import { FooterController } from "../modules/display/FooterController";
+import { HeaderController } from "../modules/display/HeaderController";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { toErrorMap } from "../utils/toErrorMap";
 
 interface registerProps {}
 
@@ -91,49 +90,7 @@ const Login: React.FC<registerProps> = ({}) => {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
-        <div className="hidden sm:flex">
-          <SvgSolidLogo />
-        </div>
-        <div className="gap-6 text-primary-300">
-          <a
-            href="https://youtu.be/dQw4w9WgXcQ"
-            className="hover:text-primary-200"
-          >
-            Privacy policy
-          </a>
-          <a
-            href="https://www.youtube.com/watch?v=Soa3gO7tL-c&list=RDSoa3gO7tL-c&start_radio=1"
-            className="hover:text-primary-200"
-          >
-            Report a bug
-          </a>
-          <div className="gap-6 sm:gap-4">
-            <a
-              href="https://github.com/mauriciocartagena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <SvgSolidFacebook
-                width={20}
-                height={20}
-                className="cursor-pointer hover:text-primary-200"
-              />
-            </a>
-            <a
-              href="https://github.com/mauriciocartagena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <SvgSolidInstagram
-                width={20}
-                height={20}
-                className="hover:text-primary-200"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
+      <FooterController />
     </div>
   );
 };
