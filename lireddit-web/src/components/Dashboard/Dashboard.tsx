@@ -7,16 +7,16 @@ import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
+import { useIsAuth } from "../../modules/auth/useIsAuth";
 
-interface DashboardProps {}
-const Dashboard: React.FC<DashboardProps> = () => {
+const Dashboard: React.FC<{}> = ({}) => {
+  useIsAuth();
   const [roomModal, setRoomModal] = useState(false);
 
   const [{ data }] = useUsersQuery();
 
   return (
-    <WaitForWsAndAuth>
+    <>
       <HeaderController embed={{}} title="Dasboard" />
       <DefaultDesktopLayout>
         <MiddlePanel
@@ -102,8 +102,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
       {roomModal && (
         <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
       )}
-    </WaitForWsAndAuth>
+    </>
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Dashboard);
+export default withUrqlClient(createUrqlClient)(Dashboard as any);

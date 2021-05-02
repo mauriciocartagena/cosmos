@@ -12,19 +12,11 @@ import { FooterController } from "../modules/display/FooterController";
 import { HeaderController } from "../modules/display/HeaderController";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
+
 interface LoginButtonProps {}
 
 const Login: React.FC<LoginButtonProps> = ({}) => {
-  // const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
-
   const [, login] = useLoginMutation();
-  // const { push } = useRouter();
-
-  // useEffect(() => {
-  //   if (hasTokens) {
-  //     push("/dasboard");
-  //   }
-  // }, [hasTokens, push]);
 
   return (
     <div
@@ -56,19 +48,6 @@ const Login: React.FC<LoginButtonProps> = ({}) => {
                   setErrors(toErrorMap(response.data.login.errors));
                 } else if (response.data?.login.user) {
                   // worked
-                  // const name = window.prompt("username");
-                  // if (!name) {
-                  //   return;
-                  // }
-                  // const r = await fetch(
-                  //   `https://doge-staging.stripcode.dev/dev/test-info?username=` +
-                  //     name
-                  // );
-                  // const d = await r.json();
-                  // useTokenStore.getState().setTokens({
-                  //   accessToken: d.accessToken,
-                  //   refreshToken: d.refreshToken,
-                  // });
                   router.push("/dasboard");
                 }
               }}

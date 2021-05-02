@@ -45,8 +45,10 @@
     "express-session": "^1.17.1",
     "graphql": "^15.5.0",
     "ioredis": "^4.27.1",
+    "mediasoup-client": "^3.6.30",
     "nodemailer": "^6.5.0",
     "pg": "^8.6.0",
+    "reconnecting-websocket": "^4.4.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.32",
     "uuid": "^8.3.2"

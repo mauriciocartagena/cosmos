@@ -8,9 +8,11 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { Button } from "../Button";
 import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
 import { SingleUser } from "../UserAvatar/SingleUser";
+import { useIsAuth } from "../../modules/auth/useIsAuth";
 
 export interface AccountProps {}
 const Account: React.FC<AccountProps> = () => {
+  useIsAuth();
   return (
     <>
       <HeaderController embed={{}} title="Account" />
