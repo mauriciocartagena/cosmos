@@ -26,7 +26,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   fetchUser: User;
   createUser: UserResponse;
-  updatedUser?: Maybe<UserOne>;
+  updatedUser: User;
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
@@ -83,19 +83,6 @@ export type User = {
   updatedAt: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
-  name: Scalars['String'];
-  first_last_name: Scalars['String'];
-  second_last_name: Scalars['String'];
-  phone: Scalars['Float'];
-  direction: Scalars['String'];
-  email: Scalars['String'];
-};
-
-export type UserOne = {
-  __typename?: 'UserOne';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
   name: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
@@ -219,10 +206,10 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
-  & { updatedUser?: Maybe<(
-    { __typename?: 'UserOne' }
-    & Pick<UserOne, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
-  )> }
+  & { updatedUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+  ) }
 );
 
 export type FetchUserMutationVariables = Exact<{
@@ -256,7 +243,7 @@ export type UsersQuery = (
   { __typename?: 'Query' }
   & { users: Array<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'createdAt' | 'username' | 'first_last_name' | 'name'>
+    & Pick<User, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'email' | 'direction' | 'phone'>
   )> }
 );
 
@@ -395,10 +382,12 @@ export const UsersDocument = gql`
     query Users {
   users {
     id
-    createdAt
-    username
-    first_last_name
     name
+    first_last_name
+    second_last_name
+    email
+    direction
+    phone
   }
 }
     `;

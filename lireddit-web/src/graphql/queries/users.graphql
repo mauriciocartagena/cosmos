@@ -1,9 +1,11 @@
 query Users {
   users {
     id
-    createdAt
-    username
-    first_last_name
     name
+    first_last_name
+    second_last_name
+    email
+    direction
+    phone
   }
 }

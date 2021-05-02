@@ -1,17 +1,15 @@
 import { Box } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
-import React, { useState } from "react";
-import { InputField } from "../form-fields/InputField";
-import { Button } from "../form-fields/Button";
-import { SvgSolidFacebook } from "../icons";
-import SvgSolidInstagram from "../icons/SolidInstagram";
-import SvgSolidLogo from "../icons/SvgSolidLogo";
-import { HeaderController } from "../modules/display/HeaderController";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import { useForgotPasswordMutation } from "../generated/graphql";
 import router from "next/router";
+import React, { useState } from "react";
+import { Button } from "../form-fields/Button";
+import { InputField } from "../form-fields/InputField";
+import { useForgotPasswordMutation } from "../generated/graphql";
+import SvgSolidLogo from "../icons/SvgSolidLogo";
 import { FooterController } from "../modules/display/FooterController";
+import { HeaderController } from "../modules/display/HeaderController";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
