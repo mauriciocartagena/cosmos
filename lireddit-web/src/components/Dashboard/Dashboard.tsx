@@ -1,22 +1,22 @@
 import { withUrqlClient } from "next-urql";
-import React from "react";
+import React, { useState } from "react";
+import { useUsersQuery } from "../../generated/graphql";
+import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { FeedHeader } from "../../ui/FeedHeader";
-import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
-import { useState } from "react";
-import { useUsersQuery } from "../../generated/graphql";
+import { createUrqlClient } from "../../utils/createUrqlClient";
+import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 
 interface DashboardProps {}
-
-const Dashboard: React.FC<DashboardProps> = ({}) => {
+const Dashboard: React.FC<DashboardProps> = () => {
   const [roomModal, setRoomModal] = useState(false);
 
   const [{ data }] = useUsersQuery();
+
   return (
-    <>
+    <WaitForWsAndAuth>
       <HeaderController embed={{}} title="Dasboard" />
       <DefaultDesktopLayout>
         <MiddlePanel
@@ -102,7 +102,7 @@ const Dashboard: React.FC<DashboardProps> = ({}) => {
       {roomModal && (
         <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
       )}
-    </>
+    </WaitForWsAndAuth>
   );
 };
 

@@ -1,16 +1,12 @@
 import router from "next/router";
 import React from "react";
-// import { LgLogo } from "../../icons";
-
-import SvgSolidLogo from "../../icons/SvgSolidLogo";
-
 import SvgSolidBug from "../../icons/SolidBug";
-import SvgSolidFacebook from "../../icons/SolidFacebook";
 import SvgSolidUser from "../../icons/SolidUser";
-import SvgSolidInstagram from "../../icons/SolidInstagram";
-import { HeaderController } from "../display/HeaderController";
+// import { LgLogo } from "../../icons";
+import SvgSolidLogo from "../../icons/SvgSolidLogo";
 import { LoginButton } from "../../utils/LoginButton";
 import { FooterController } from "../display/FooterController";
+import { HeaderController } from "../display/HeaderController";
 
 /*
 i know this code is kinda garbage but that's because the mockup is garbage and doesn't use the design system

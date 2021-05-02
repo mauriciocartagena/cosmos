@@ -1,6 +1,6 @@
-import React from "react";
 import { useMeQuery } from "../../generated/graphql";
 import { isServer } from "../../utils/isServer";
+
 interface WaitForWsAndAuthProps {}
 
 export const WaitForWsAndAuth: React.FC<WaitForWsAndAuthProps> = ({
@@ -10,8 +10,11 @@ export const WaitForWsAndAuth: React.FC<WaitForWsAndAuthProps> = ({
     pause: isServer(),
   });
 
+  // if (!useVerifyLoggedIn()) {
+  //   return null;
+  // }
+
   if (!data) {
-    // @todo make this better
     return <div className="flex">loading...</div>;
   }
 

@@ -1,63 +1,13 @@
 import { withUrqlClient } from "next-urql";
 import React from "react";
-import { NavBar } from "../../components/NavBar";
-import { HeaderController } from "../../modules/display/HeaderController";
-import { createUrqlClient } from "../../utils/createUrqlClient";
-import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
-import { SingleUser } from "../UserAvatar/SingleUser";
-import { Button } from "../Button";
 import SolidCompass from "../../icons/SolidCompass";
-import { MiddleHeader } from "../header/MiddleHeader";
-import LeftHeader from "../header/LeftHeader";
-import RightHeader from "../header/RightHeader";
-import { query } from "@urql/exchange-graphcache";
+import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
-
-// export const onlineIndicatorStyleMap = {
-//   default: {
-//     width: "15px",
-//     height: "15px",
-//     right: "2px",
-//     bottom: "-4px",
-//     borderWidth: "4px",
-//   },
-//   lg: {
-//     width: "12px",
-//     height: "12px",
-//     right: "2px",
-//     bottom: "-2px",
-//     borderWidth: "2px",
-//   },
-//   md: {
-//     width: "10px",
-//     height: "10px",
-//     right: "2px",
-//     bottom: "-2px",
-//     borderWidth: "2px",
-//   },
-//   sm: {
-//     width: "8px",
-//     height: "8px",
-//     right: "2px",
-//     bottom: "-2px",
-//     borderWidth: "2px",
-//   },
-//   xs: {
-//     width: "4px",
-//     height: "4px",
-//     right: "0px",
-//     bottom: "-1px",
-//     borderWidth: "1px",
-//   },
-//   xxs: {
-//     width: "6px",
-//     height: "6px",
-//     right: "1px",
-//     bottom: "-1px",
-//     borderWidth: "1px",
-//   },
-// };
+import { createUrqlClient } from "../../utils/createUrqlClient";
+import { Button } from "../Button";
+import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
+import { SingleUser } from "../UserAvatar/SingleUser";
 
 export interface AccountProps {}
 const Account: React.FC<AccountProps> = () => {

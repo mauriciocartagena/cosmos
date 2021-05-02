@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import { useRouter } from "next/router";
+import router from "next/router";
 import React from "react";
 import { Button } from "../form-fields/Button";
 import { InputField } from "../form-fields/InputField";
@@ -12,13 +12,19 @@ import { FooterController } from "../modules/display/FooterController";
 import { HeaderController } from "../modules/display/HeaderController";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
+interface LoginButtonProps {}
 
-interface registerProps {}
-
-const Login: React.FC<registerProps> = ({}) => {
-  const router = useRouter();
+const Login: React.FC<LoginButtonProps> = ({}) => {
+  // const hasTokens = useTokenStore((s) => !!(s.accessToken && s.refreshToken));
 
   const [, login] = useLoginMutation();
+  // const { push } = useRouter();
+
+  // useEffect(() => {
+  //   if (hasTokens) {
+  //     push("/dasboard");
+  //   }
+  // }, [hasTokens, push]);
 
   return (
     <div
@@ -50,6 +56,19 @@ const Login: React.FC<registerProps> = ({}) => {
                   setErrors(toErrorMap(response.data.login.errors));
                 } else if (response.data?.login.user) {
                   // worked
+                  // const name = window.prompt("username");
+                  // if (!name) {
+                  //   return;
+                  // }
+                  // const r = await fetch(
+                  //   `https://doge-staging.stripcode.dev/dev/test-info?username=` +
+                  //     name
+                  // );
+                  // const d = await r.json();
+                  // useTokenStore.getState().setTokens({
+                  //   accessToken: d.accessToken,
+                  //   refreshToken: d.refreshToken,
+                  // });
                   router.push("/dasboard");
                 }
               }}
@@ -94,5 +113,4 @@ const Login: React.FC<registerProps> = ({}) => {
     </div>
   );
 };
-
 export default withUrqlClient(createUrqlClient)(Login);
