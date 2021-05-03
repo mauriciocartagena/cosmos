@@ -35,8 +35,8 @@ const Dashboard: React.FC<{}> = ({}) => {
             <div className="flex flex-1 flex-col mb-7" data-testid="feed">
               <div className="flex flex-col space-y-4">
                 {data ? (
-                  data.users.map((user) => (
-                    <div className="flex">
+                  data.users.map((user, key) => (
+                    <div className="flex" key={key}>
                       <div
                         className={`p-4 w-full text-base bg-primary-800 rounded-lg flex flex-col text-primary-100`}
                       >
@@ -115,4 +115,6 @@ const Dashboard: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Dashboard as any);
+export default withUrqlClient(createUrqlClient, { ssr: false })(
+  Dashboard as any
+);

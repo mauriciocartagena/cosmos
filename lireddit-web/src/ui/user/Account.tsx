@@ -17,7 +17,7 @@ const Account: React.FC<{}> = () => {
   const [data, setData] = useState(false);
   setTimeout(() => {
     setData(true);
-  }, 1000);
+  }, 100);
 
   return (
     <>
