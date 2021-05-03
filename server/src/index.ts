@@ -13,6 +13,7 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 import { User } from "./entities/User";
 import { Post } from "./entities/Post";
+import { PostResolver } from "./resolvers/post";
 
 const main = async () => {
   const conn = await createConnection({
@@ -61,7 +62,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver],
+      resolvers: [HelloResolver, UserResolver, PostResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),
