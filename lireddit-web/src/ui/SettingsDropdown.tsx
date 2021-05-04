@@ -4,6 +4,7 @@ import { BaseOverlay } from "../ui/BaseOverlay";
 import { SettingsIcon } from "../ui/SettingsIcon";
 import SvgSolidSettings from "../icons/SolidSettings";
 import router from "next/router";
+import SvgOutlineGlobe from "../icons/OutlineGlobe";
 
 export const SettingsDropdown: React.FC<{
   onCloseDropdown: () => void;
@@ -26,6 +27,14 @@ export const SettingsDropdown: React.FC<{
                 onClick={onCloseDropdown}
                 icon={<SolidUser />}
                 label={"Cuenta"}
+                transition
+              />
+            </div>
+            <div onClick={() => router.push("/post")}>
+              <SettingsIcon
+                onClick={onCloseDropdown}
+                icon={<SvgOutlineGlobe />}
+                label={"Administrar Post"}
                 transition
               />
             </div>
