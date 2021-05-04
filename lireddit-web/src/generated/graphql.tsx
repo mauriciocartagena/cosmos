@@ -29,6 +29,7 @@ export type Mutation = {
   updatedUser: User;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createPost: Post;
 };
 
 
@@ -69,11 +70,40 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
+
+export type MutationCreatePostArgs = {
+  input: PostInput;
+};
+
+export type Post = {
+  __typename?: 'Post';
+  id: Scalars['Float'];
+  title: Scalars['String'];
+  creatorId: Scalars['Float'];
+  subtitle: Scalars['String'];
+  description: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type PostInput = {
+  title: Scalars['String'];
+  subtitle: Scalars['String'];
+  description: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   me?: Maybe<User>;
   users: Array<User>;
+  posts: Array<Post>;
+  post?: Maybe<Post>;
+};
+
+
+export type QueryPostArgs = {
+  id: Scalars['Float'];
 };
 
 export type User = {
@@ -236,6 +266,17 @@ export type MeQuery = (
   )> }
 );
 
+export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PostsQuery = (
+  { __typename?: 'Query' }
+  & { posts: Array<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'subtitle' | 'description' | 'title' | 'url'>
+  )> }
+);
+
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -377,6 +418,20 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const PostsDocument = gql`
+    query Posts {
+  posts {
+    subtitle
+    description
+    title
+    url
+  }
+}
+    `;
+
+export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });
 };
 export const UsersDocument = gql`
     query Users {

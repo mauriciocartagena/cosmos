@@ -1,3 +1,3 @@
-import { Post } from "../components/Post/Post";
+import Post from "../components/Post/Post";
 
 export default Post;
