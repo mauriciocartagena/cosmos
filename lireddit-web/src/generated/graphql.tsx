@@ -75,6 +75,12 @@ export type MutationCreatePostArgs = {
   input: PostInput;
 };
 
+export type PaginatedPosts = {
+  __typename?: 'PaginatedPosts';
+  posts: Array<Post>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type Post = {
   __typename?: 'Post';
   id: Scalars['Float'];
@@ -101,7 +107,7 @@ export type Query = {
   hello: Scalars['String'];
   me?: Maybe<User>;
   users: Array<User>;
-  posts: Array<Post>;
+  posts: Array<PaginatedPosts>;
   post?: Maybe<Post>;
 };
 
@@ -298,8 +304,12 @@ export type PostsQueryVariables = Exact<{
 export type PostsQuery = (
   { __typename?: 'Query' }
   & { posts: Array<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'subtitle' | 'description' | 'title' | 'url' | 'createdAt'>
+    { __typename?: 'PaginatedPosts' }
+    & Pick<PaginatedPosts, 'hasMore'>
+    & { posts: Array<(
+      { __typename?: 'Post' }
+      & Pick<Post, 'subtitle' | 'description' | 'title' | 'url' | 'createdAt'>
+    )> }
   )> }
 );
 
@@ -466,11 +476,14 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: String) {
   posts(limit: $limit, cursor: $cursor) {
-    subtitle
-    description
-    title
-    url
-    createdAt
+    hasMore
+    posts {
+      subtitle
+      description
+      title
+      url
+      createdAt
+    }
   }
 }
     `;

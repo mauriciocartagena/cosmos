@@ -67,10 +67,10 @@ const Post: React.FC<PostProps> = ({}) => {
                   {!data && fetching ? (
                     <div>cargando ...</div>
                   ) : (
-                    data!.posts.map((post, key) => (
+                    data?.posts.posts.map((post, key) => (
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
-                          src={post.url}
+                          src={post.posts}
                           defaultValue="https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg"
                           loading="lazy"
                           unloader={<Img src={IMAGE_DEFAULT} />}
