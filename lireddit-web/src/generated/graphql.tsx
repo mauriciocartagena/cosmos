@@ -81,9 +81,11 @@ export type Post = {
   title: Scalars['String'];
   creatorId: Scalars['Float'];
   subtitle: Scalars['String'];
-  description: Scalars['String'];
   type: Scalars['String'];
+  description: Scalars['String'];
   url: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type PostInput = {
@@ -101,6 +103,12 @@ export type Query = {
   users: Array<User>;
   posts: Array<Post>;
   post?: Maybe<Post>;
+};
+
+
+export type QueryPostsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -281,14 +289,17 @@ export type MeQuery = (
   )> }
 );
 
-export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type PostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type PostsQuery = (
   { __typename?: 'Query' }
   & { posts: Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'subtitle' | 'description' | 'title' | 'url'>
+    & Pick<Post, 'subtitle' | 'description' | 'title' | 'url' | 'createdAt'>
   )> }
 );
 
@@ -453,12 +464,13 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const PostsDocument = gql`
-    query Posts {
-  posts {
+    query Posts($limit: Int!, $cursor: String) {
+  posts(limit: $limit, cursor: $cursor) {
     subtitle
     description
     title
     url
+    createdAt
   }
 }
     `;

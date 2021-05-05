@@ -1,4 +1,4 @@
-import { Box, Grid } from "@chakra-ui/react";
+import { Box, Grid, Flex } from "@chakra-ui/react";
 import React from "react";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
@@ -13,6 +13,7 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../utils/useIsAuth";
 import { useState } from "react";
 import ModalCreatePost from "./ModalCreatePost";
+import { Button } from "../../ui/Button";
 
 interface PostProps {}
 
@@ -20,7 +21,14 @@ const Post: React.FC<PostProps> = ({}) => {
   useIsAuth();
   const screenType = useScreenType();
 
-  const [{ data, fetching }] = usePostsQuery();
+  const [variables, setVariables] = useState({
+    limit: 10,
+    cursor: null as null | string,
+  });
+
+  const [{ data, fetching }] = usePostsQuery({
+    variables,
+  });
 
   const [createModal, setCreateModal] = useState(false);
 
@@ -28,6 +36,9 @@ const Post: React.FC<PostProps> = ({}) => {
   const IMAGE_DEFAULT_LOADING =
     "https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif";
 
+  if (!fetching && !data) {
+    return <div>tienes una consulta fallida por alguna razón</div>;
+  }
   if (fetching) {
     return null;
   }
@@ -53,8 +64,10 @@ const Post: React.FC<PostProps> = ({}) => {
                   templateColumns={"repeat(2, 1fr)"}
                   gap={20}
                 >
-                  {data &&
-                    data.posts.map((post, key) => (
+                  {!data && fetching ? (
+                    <div>cargando ...</div>
+                  ) : (
+                    data!.posts.map((post, key) => (
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
                           src={post.url}
@@ -88,7 +101,8 @@ const Post: React.FC<PostProps> = ({}) => {
                           </div>
                         </div>
                       </Box>
-                    ))}
+                    ))
+                  )}
                 </Grid>
               ) : (
                 <Grid
@@ -96,8 +110,10 @@ const Post: React.FC<PostProps> = ({}) => {
                   templateColumns={"repeat(3, 1fr)"}
                   gap={20}
                 >
-                  {data &&
-                    data.posts.map((post, key) => (
+                  {!data && fetching ? (
+                    <div>cargando ...</div>
+                  ) : (
+                    data!.posts.map((post, key) => (
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
                           src={post.url}
@@ -132,18 +148,31 @@ const Post: React.FC<PostProps> = ({}) => {
                           </div>
                         </div>
                       </Box>
-                    ))}
+                    ))
+                  )}
                 </Grid>
               )}
+
+              {data ? (
+                <Flex m="auto" my={4}>
+                  <Button
+                    loading={fetching}
+                    data-testid="feed-action-button"
+                    transition
+                    onClick={() => {
+                      setVariables({
+                        limit: variables.limit,
+                        cursor: data.posts[data.posts.length - 1].createdAt,
+                      });
+                    }}
+                  >
+                    cargar mas
+                  </Button>
+                </Flex>
+              ) : null}
             </div>
             {createModal && (
               <ModalCreatePost
-                id={22}
-                title="Hola"
-                subtitle="hola como"
-                description="Mi description"
-                tipo={1}
-                url=""
                 pageProps={() => setCreateModal(false)}
                 onRequestClose={() => setCreateModal(false)}
               />
