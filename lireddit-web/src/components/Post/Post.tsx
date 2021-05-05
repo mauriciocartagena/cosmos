@@ -67,10 +67,10 @@ const Post: React.FC<PostProps> = ({}) => {
                   {!data && fetching ? (
                     <div>cargando ...</div>
                   ) : (
-                    data?.posts.posts.map((post, key) => (
+                    data!.posts.posts.map((post, key) => (
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
-                          src={post.posts}
+                          src={post.url}
                           defaultValue="https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg"
                           loading="lazy"
                           unloader={<Img src={IMAGE_DEFAULT} />}
@@ -113,7 +113,7 @@ const Post: React.FC<PostProps> = ({}) => {
                   {!data && fetching ? (
                     <div>cargando ...</div>
                   ) : (
-                    data!.posts.map((post, key) => (
+                    data!.posts.posts.map((post, key) => (
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
                           src={post.url}
@@ -153,7 +153,7 @@ const Post: React.FC<PostProps> = ({}) => {
                 </Grid>
               )}
 
-              {data ? (
+              {data && data.posts.hasMore ? (
                 <Flex m="auto" my={4}>
                   <Button
                     loading={fetching}
@@ -162,7 +162,9 @@ const Post: React.FC<PostProps> = ({}) => {
                     onClick={() => {
                       setVariables({
                         limit: variables.limit,
-                        cursor: data.posts[data.posts.length - 1].createdAt,
+                        cursor:
+                          data.posts.posts[data.posts.posts.length - 1]
+                            .createdAt,
                       });
                     }}
                   >

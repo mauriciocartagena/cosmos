@@ -1,3 +1,4 @@
+import { type } from "node:os";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -25,6 +26,7 @@ export class Post extends BaseEntity {
   @Column()
   creatorId: number;
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
   creator: User;
 

@@ -23,7 +23,7 @@ const errorExchange: Exchange = ({ forward }) => (ops$) => {
 };
 
 import { stringifyVariables } from "@urql/core";
-import { Query } from "../generated/graphql";
+import { Query, PaginatedPosts } from "../generated/graphql";
 
 export type MergeMode = "before" | "after";
 
@@ -48,17 +48,32 @@ const cursorPagination = (): Resolver => {
     }
 
     const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)}`;
-    const isItInTheCache = cache.resolveFieldByKey(entityKey, fieldKey);
+    const isItInTheCache = cache.resolve(
+      cache.resolveFieldByKey(entityKey, fieldKey) as string,
+      "posts"
+    );
     info.partial = !isItInTheCache;
 
-    // console.log("partial:", )
+    let hasMore = true;
+
     const results: string[] = [];
     fieldInfos.forEach((fi) => {
-      const data = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string[];
+      const key = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string;
+      const data = cache.resolve(key, "posts") as string[];
+      const _hasMore = cache.resolve(key, "hasMore");
+
+      if (!_hasMore) {
+        hasMore = _hasMore as boolean;
+      }
+
       results.push(...data);
     });
 
-    return results;
+    return {
+      __typename: "PaginatedPosts",
+      hasMore,
+      posts: results,
+    };
   };
 };
 
@@ -70,6 +85,9 @@ export const createUrqlClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      keys: {
+        PaginatedPosts: () => null,
+      },
       resolvers: {
         Query: {
           posts: cursorPagination(),
@@ -78,14 +96,9 @@ export const createUrqlClient = (ssrExchange: any) => ({
       updates: {
         Mutation: {
           CreateUser: (_result, args, cache, info) => {
-            console.log("start");
-            console.log(cache.inspectFields("Query"));
             cache.invalidate("Query", "users", {
               limit: 5,
             });
-            console.log("end");
-
-            console.log(cache.inspectFields("Query"));
           },
           logout: (_result, args, cache, info) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(

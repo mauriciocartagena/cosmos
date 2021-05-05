@@ -49,6 +49,9 @@ export class User extends BaseEntity {
   @Column()
   phone!: number;
 
+  @OneToMany(() => Post, (post) => post.creator)
+  posts: Post[];
+
   @Field(() => String)
   @Column()
   direction!: string;
@@ -56,7 +59,4 @@ export class User extends BaseEntity {
   @Field(() => String)
   @Column({ unique: true, nullable: true })
   email!: string;
-
-  @OneToMany(() => Post, (post) => post.creator)
-  posts: Post[];
 }
