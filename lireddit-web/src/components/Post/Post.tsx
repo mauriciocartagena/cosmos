@@ -11,6 +11,8 @@ import { usePostsQuery } from "../../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../utils/useIsAuth";
+import { useState } from "react";
+import { ModalCreatePost } from "./ModalCreatePost";
 
 interface PostProps {}
 
@@ -19,6 +21,8 @@ const Post: React.FC<PostProps> = ({}) => {
   const screenType = useScreenType();
 
   const [{ data, fetching }] = usePostsQuery();
+
+  const [createModal, setCreateModal] = useState(false);
 
   const IMAGE_DEFAULT = "https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg";
   const IMAGE_DEFAULT_LOADING =
@@ -36,7 +40,7 @@ const Post: React.FC<PostProps> = ({}) => {
           stickyChildren={
             <FeedHeader
               actionTitle={"Nuevo post"}
-              onActionClicked={() => true}
+              onActionClicked={() => setCreateModal(true)}
               title={"Post"}
             />
           }
@@ -132,6 +136,17 @@ const Post: React.FC<PostProps> = ({}) => {
                 </Grid>
               )}
             </div>
+            {createModal && (
+              <ModalCreatePost
+                id={22}
+                title="Hola"
+                subtitle="hola como"
+                description="Mi description"
+                tipo={1}
+                url="https://phone.jpg"
+                onRequestClose={() => setCreateModal(false)}
+              />
+            )}
           </div>
         </MiddlePanel>
       </DefaultDesktopLayout>
