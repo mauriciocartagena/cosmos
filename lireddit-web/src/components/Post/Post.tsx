@@ -143,7 +143,7 @@ const Post: React.FC<PostProps> = ({}) => {
                 subtitle="hola como"
                 description="Mi description"
                 tipo={1}
-                url="https://phone.jpg"
+                url=""
                 onRequestClose={() => setCreateModal(false)}
               />
             )}
