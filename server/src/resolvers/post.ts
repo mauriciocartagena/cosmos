@@ -25,6 +25,9 @@ class PostInput {
 
   @Field()
   url: string;
+
+  @Field()
+  type: string;
 }
 
 @Resolver()

@@ -16,8 +16,8 @@ export class Post extends BaseEntity {
   id!: number;
 
   @Field(() => String)
-  @Column()
-  title!: string;
+  @Column({ nullable: false })
+  title: string;
 
   @Field()
   @Column()
@@ -27,8 +27,12 @@ export class Post extends BaseEntity {
   creator: User;
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: false })
   subtitle: string;
+
+  @Field(() => String)
+  @Column({ nullable: false })
+  type: string;
 
   @Field(() => String)
   @Column({ nullable: true })

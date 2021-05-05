@@ -111,7 +111,10 @@
     <column id="COL28" populated="true" UUID="f5d8079d-3452-4afa-b76f-802d752942c2" autoIncrement="false" autoIncrementSequenceName="post_Description_seq" defaultValue="" name="Description" nullable="0" physicalName="Description" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL29" populated="true" UUID="74686358-bb01-4d75-bc63-e0874989b517" autoIncrement="false" autoIncrementSequenceName="post_url_seq" defaultValue="" name="url" nullable="0" physicalName="url" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+    <column id="COL29" populated="true" UUID="ee942572-fd02-46b5-ae91-9030d62a1a61" autoIncrement="false" autoIncrementSequenceName="post_tipo_seq" defaultValue="" name="tipo" nullable="0" physicalName="tipo" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
+     <remarks></remarks>
+    </column>
+    <column id="COL30" populated="true" UUID="74686358-bb01-4d75-bc63-e0874989b517" autoIncrement="false" autoIncrementSequenceName="post_url_seq" defaultValue="" name="url" nullable="0" physicalName="url" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     </folder>
@@ -120,23 +123,23 @@
     <folder id="FOLTAB252" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2">
     </folder>
     <folder id="FOLTAB254" populated="true" name="Indices" physicalName="Indices" type="4">
-    <index id="IDX30" populated="true" UUID="58f4cceb-62ec-4094-abe0-6879866fbc0c" clustered="false" name="post_pk" physicalName="post_pk" primaryKeyIndex="true" unique="false" >
+    <index id="IDX31" populated="true" UUID="58f4cceb-62ec-4094-abe0-6879866fbc0c" clustered="false" name="post_pk" physicalName="post_pk" primaryKeyIndex="true" unique="false" >
     </index>
    </folder>
   </table>
-  <table id="TAB31" populated="true" UUID="430e7a85-c622-4359-8d6b-0bd31b2b4200" name="updoot" objectType="TABLE" physicalName="id_updoot" >
+  <table id="TAB32" populated="true" UUID="430e7a85-c622-4359-8d6b-0bd31b2b4200" name="updoot" objectType="TABLE" physicalName="id_updoot" >
    <remarks></remarks>
-   <folder id="FOLTAB311" populated="true" name="Columns" physicalName="Columns" type="1">
-    <index id="IDX32" populated="true" UUID="557294f2-5a34-40ea-9440-c51a176f2899" clustered="false" name="id_updoot_pk" physicalName="id_updoot_pk" primaryKeyIndex="true" unique="false" >
+   <folder id="FOLTAB321" populated="true" name="Columns" physicalName="Columns" type="1">
+    <index id="IDX33" populated="true" UUID="557294f2-5a34-40ea-9440-c51a176f2899" clustered="false" name="id_updoot_pk" physicalName="id_updoot_pk" primaryKeyIndex="true" unique="false" >
     </index>
    </folder>
   </table>
   <relationships>
-   <relationship id="REL33" populated="true" UUID="cbb2696f-e980-47d9-ba95-1f7a3827530b" deferrability="7" deleteRule="3" fk-table-ref="TAB13" fkCardinality="7" identifying="true" name="persona_users_fk" physicalName="persona_users_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP34" populated="true" UUID="15c19731-a8d4-4b6e-b671-ea059b714b8e" fk-column-ref="COL14" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
+   <relationship id="REL34" populated="true" UUID="cbb2696f-e980-47d9-ba95-1f7a3827530b" deferrability="7" deleteRule="3" fk-table-ref="TAB13" fkCardinality="7" identifying="true" name="persona_users_fk" physicalName="persona_users_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP35" populated="true" UUID="15c19731-a8d4-4b6e-b671-ea059b714b8e" fk-column-ref="COL14" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
    </relationship>
-   <relationship id="REL35" populated="true" UUID="0d65d863-eadc-467e-b7da-9b9ed527aaa0" deferrability="7" deleteRule="3" fk-table-ref="TAB22" fkCardinality="7" identifying="false" name="persona_socios_fk" physicalName="persona_socios_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
-    <column-mapping id="CMP36" populated="true" UUID="09940f65-cb53-4225-ba24-10b7a5cd2c50" fk-column-ref="COL23" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
+   <relationship id="REL36" populated="true" UUID="0d65d863-eadc-467e-b7da-9b9ed527aaa0" deferrability="7" deleteRule="3" fk-table-ref="TAB22" fkCardinality="7" identifying="false" name="persona_socios_fk" physicalName="persona_socios_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="3" >
+    <column-mapping id="CMP37" populated="true" UUID="09940f65-cb53-4225-ba24-10b7a5cd2c50" fk-column-ref="COL23" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL2" />
    </relationship>
   </relationships>
  </target-database>
@@ -145,12 +148,12 @@
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
  <play-pen zoom="1.0" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB1" x="922" y="368" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB13" x="436" y="417" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB22" x="949" y="183" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB25" x="461" y="768" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-pane table-ref="TAB31" x="710" y="632" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
-  <table-link relationship-ref="REL33" pkConnection="0.8571428571428571" fkConnection="0.07874015748031496" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
-  <table-link relationship-ref="REL35" pkConnection="0.45018450184501846" fkConnection="0.5129533678756477" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
+  <table-pane table-ref="TAB13" x="355" y="429" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB22" x="945" y="166" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB25" x="362" y="702" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-pane table-ref="TAB32" x="478" y="620" bgColor="0xeeeeee" fgColor="0x000000" rounded="false" dashed="false"/>
+  <table-link relationship-ref="REL34" pkConnection="0.8571428571428571" fkConnection="0.07874015748031496" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="18"/>
+  <table-link relationship-ref="REL36" pkConnection="0.45018450184501846" fkConnection="0.5129533678756477" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="72"/>
  </play-pen>
  <critic-manager>
   <critic-grouping platformType="Generic" enabled="true">

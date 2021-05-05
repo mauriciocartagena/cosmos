@@ -12,7 +12,7 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../utils/useIsAuth";
 import { useState } from "react";
-import { ModalCreatePost } from "./ModalCreatePost";
+import ModalCreatePost from "./ModalCreatePost";
 
 interface PostProps {}
 
@@ -144,6 +144,7 @@ const Post: React.FC<PostProps> = ({}) => {
                 description="Mi description"
                 tipo={1}
                 url=""
+                pageProps={() => setCreateModal(false)}
                 onRequestClose={() => setCreateModal(false)}
               />
             )}
