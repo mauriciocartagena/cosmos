@@ -1,6 +1,7 @@
 import { withUrqlClient } from "next-urql";
-import React from "react";
+import React, { useState } from "react";
 import SolidCompass from "../../icons/SolidCompass";
+import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
@@ -8,8 +9,6 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { Button } from "../Button";
 import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
 import { SingleUser } from "../UserAvatar/SingleUser";
-import { useIsAuth } from "../../modules/auth/useIsAuth";
-import { useState } from "react";
 
 const Account: React.FC<{}> = () => {
   useIsAuth();

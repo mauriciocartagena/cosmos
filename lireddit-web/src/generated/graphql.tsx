@@ -150,7 +150,7 @@ export type RegularUserFragment = (
 
 export type RegularUserFindOneUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+  & Pick<User, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email' | 'username'>
 );
 
 export type RegularUserResponseFragment = (
@@ -296,6 +296,7 @@ export const RegularUserFindOneUserFragmentDoc = gql`
   phone
   direction
   email
+  username
 }
     `;
 export const RegularErrorFragmentDoc = gql`

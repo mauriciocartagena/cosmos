@@ -5,4 +5,5 @@ fragment RegularUserFindOneUser on User {
   phone
   direction
   email
+  username
 }
