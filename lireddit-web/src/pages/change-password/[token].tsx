@@ -1,20 +1,19 @@
-import React, { useState } from "react";
-import { NextPage } from "next";
-import { HeaderController } from "../../modules/display/HeaderController";
-import { Formik, Form } from "formik";
-import { useRouter } from "next/router";
-import { InputField } from "../../form-fields/InputField";
-import { SvgSolidFacebook } from "../../icons";
-import SvgSolidInstagram from "../../icons/SolidInstagram";
-import SvgSolidLogo from "../../icons/SvgSolidLogo";
-import { toErrorMap } from "../../utils/toErrorMap";
-import { Button } from "../../form-fields/Button";
-import { useChangePasswordMutation } from "../../generated/graphql";
 import { Box, Flex } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { Button } from "../../form-fields/Button";
+import { InputField } from "../../form-fields/InputField";
+import { useChangePasswordMutation } from "../../generated/graphql";
+import SvgSolidLogo from "../../icons/SvgSolidLogo";
+import { FooterController } from "../../modules/display/FooterController";
+import { HeaderController } from "../../modules/display/HeaderController";
 import { createUrqlClient } from "../../utils/createUrqlClient";
+import { toErrorMap } from "../../utils/toErrorMap";
 
-const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
+const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();
   const [, changePassword] = useChangePasswordMutation();
 
@@ -45,7 +44,10 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
               onSubmit={async (values, { setErrors }) => {
                 const response = await changePassword({
                   newPassword: values.newPassword,
-                  token,
+                  token:
+                    typeof router.query.token === "string"
+                      ? router.query.token
+                      : "",
                 });
                 if (response.data?.changePassword.errors) {
                   const errorMap = toErrorMap(
@@ -114,49 +116,7 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
-        <div className="hidden sm:flex">
-          <SvgSolidLogo />
-        </div>
-        <div className="gap-6 text-primary-300">
-          <a
-            href="https://youtu.be/dQw4w9WgXcQ"
-            className="hover:text-primary-200"
-          >
-            Privacy policy
-          </a>
-          <a
-            href="https://www.youtube.com/watch?v=Soa3gO7tL-c&list=RDSoa3gO7tL-c&start_radio=1"
-            className="hover:text-primary-200"
-          >
-            Report a bug
-          </a>
-          <div className="gap-6 sm:gap-4">
-            <a
-              href="https://github.com/mauriciocartagena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <SvgSolidFacebook
-                width={20}
-                height={20}
-                className="cursor-pointer hover:text-primary-200"
-              />
-            </a>
-            <a
-              href="https://github.com/mauriciocartagena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <SvgSolidInstagram
-                width={20}
-                height={20}
-                className="hover:text-primary-200"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
+      <FooterController />
     </div>
   );
 };
@@ -167,6 +127,4 @@ ChangePassword.getInitialProps = ({ query }) => {
   };
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(
-  ChangePassword as any
-);
+export default withUrqlClient(createUrqlClient)(ChangePassword as any);
