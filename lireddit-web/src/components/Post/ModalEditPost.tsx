@@ -14,7 +14,7 @@ interface ModalCreatePost {
   onRequestClose: () => void;
 }
 
-const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
+const ModalEditPost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
   useIsAuth();
   const [, createPost] = useCreatePostMutation();
 
@@ -38,7 +38,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
       >
         <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
           <div className={`col-span-3 block`}>
-            <h4 className={`mb-2 text-primary-100`}>Crear nuevo post</h4>
+            <h4 className={`mb-2 text-primary-100`}>Editar Post</h4>
             <div className={`text-primary-300`}>
               Por favor usar información verdadera
             </div>
@@ -104,7 +104,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
 
           <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
             <Button type="submit" className={`mr-3`}>
-              Crear
+              Editar
             </Button>
             <ButtonLink type="button" onClick={onRequestClose}>
               Cancelar
@@ -116,4 +116,4 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(ModalCreatePost as any);
+export default withUrqlClient(createUrqlClient)(ModalEditPost as any);

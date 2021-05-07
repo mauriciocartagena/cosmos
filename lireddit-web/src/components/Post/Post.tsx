@@ -1,19 +1,19 @@
-import { Box, Grid, Flex } from "@chakra-ui/react";
-import React from "react";
+import { Box, Flex, Grid } from "@chakra-ui/react";
+import { withUrqlClient } from "next-urql";
+import React, { useState } from "react";
+import { Img } from "react-image";
+import { usePostsQuery } from "../../generated/graphql";
+import SolidCompass from "../../icons/SolidCompass";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
 import { MiddlePanel } from "../../modules/layouts/GridPanels";
 import { useScreenType } from "../../shared-hooks/useScreenType";
+import { Button } from "../../ui/Button";
 import { FeedHeader } from "../../ui/FeedHeader";
-import { Img } from "react-image";
-
-import { usePostsQuery } from "../../generated/graphql";
-import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../utils/useIsAuth";
-import { useState } from "react";
 import ModalCreatePost from "./ModalCreatePost";
-import { Button } from "../../ui/Button";
+import ModalEditPost from "./ModalEditPost";
 
 interface PostProps {}
 
@@ -32,6 +32,7 @@ const Post: React.FC<PostProps> = ({}) => {
 
   const [createModal, setCreateModal] = useState(false);
 
+  const [editModal, setEditModal] = useState(false);
   const IMAGE_DEFAULT = "https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg";
   const IMAGE_DEFAULT_LOADING =
     "https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif";
@@ -73,6 +74,7 @@ const Post: React.FC<PostProps> = ({}) => {
                           src={post.url}
                           defaultValue="https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg"
                           loading="lazy"
+                          onClick={() => setEditModal(true)}
                           unloader={<Img src={IMAGE_DEFAULT} />}
                           loader={<Img src={IMAGE_DEFAULT_LOADING} />}
                           onError={(err) => console.log(err)}
@@ -84,6 +86,15 @@ const Post: React.FC<PostProps> = ({}) => {
                                 <span className="text-accent">
                                   {post.title}
                                 </span>
+                              </div>
+                              <div className="w-2/9">
+                                <Button
+                                  size="small"
+                                  color="secondary"
+                                  style={{ paddingRight: "0px" }}
+                                  icon={<SolidCompass />}
+                                  onClickCapture={() => setEditModal(true)}
+                                />
                               </div>
                             </div>
                           </div>
@@ -132,6 +143,15 @@ const Post: React.FC<PostProps> = ({}) => {
                                   {post.title}
                                 </span>
                               </div>
+                              <div className="w-2/9">
+                                <Button
+                                  size="small"
+                                  color="secondary"
+                                  style={{ paddingRight: "0px" }}
+                                  icon={<SolidCompass />}
+                                  onClickCapture={() => setEditModal(true)}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -177,6 +197,12 @@ const Post: React.FC<PostProps> = ({}) => {
               <ModalCreatePost
                 pageProps={() => setCreateModal(false)}
                 onRequestClose={() => setCreateModal(false)}
+              />
+            )}
+            {editModal && (
+              <ModalEditPost
+                pageProps={() => setEditModal(false)}
+                onRequestClose={() => setEditModal(false)}
               />
             )}
           </div>

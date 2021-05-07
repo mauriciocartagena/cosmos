@@ -39,8 +39,6 @@ const cursorPagination = (): Resolver => {
 
     const allFields = cache.inspectFields(entityKey);
 
-    console.log("allFields", allFields);
-
     const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
     const size = fieldInfos.length;
     if (size === 0) {
