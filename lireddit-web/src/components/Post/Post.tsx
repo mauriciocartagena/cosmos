@@ -105,7 +105,10 @@ const Post: React.FC<PostProps> = ({}) => {
                                   color="secondary"
                                   style={{ paddingRight: "0px" }}
                                   icon={<SolidCompass />}
-                                  onClickCapture={() => setEditModal(true)}
+                                  onClickCapture={() => {
+                                    setEditModal(true);
+                                    set_id(post.id);
+                                  }}
                                 />
                               </div>
                             </div>
@@ -225,9 +228,7 @@ const Post: React.FC<PostProps> = ({}) => {
                 type={post?.post?.type}
                 url={post?.post?.url}
               />
-            ) : (
-              <div>Cargando ...</div>
-            )}
+            ) : null}
           </div>
         </MiddlePanel>
       </DefaultDesktopLayout>
