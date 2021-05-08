@@ -2,8 +2,6 @@ import {
   Arg,
   Ctx,
   Field,
-  FieldResolver,
-  Info,
   InputType,
   Int,
   Mutation,
@@ -12,11 +10,10 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { Post } from "../entities/Post";
-import { MyContext } from "../types";
-import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
-import { info } from "node:console";
+import { Post } from "../entities/Post";
+import { isAuth } from "../middleware/isAuth";
+import { MyContext } from "../types";
 
 @InputType()
 class PostInput {

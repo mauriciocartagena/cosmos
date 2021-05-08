@@ -54,9 +54,6 @@ const Post: React.FC<PostProps> = ({}) => {
     return null;
   }
 
-  console.log("fetching any", fetchingPost);
-  console.log("fetching any !", !fetchingPost);
-
   return (
     <>
       <HeaderController embed={{}} title="Post" />

@@ -1,4 +1,5 @@
 import { ObjectType, Field } from "type-graphql";
+import { Partner } from "./Partner";
 import {
   Column,
   CreateDateColumn,
@@ -6,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
 } from "typeorm";
 
 @ObjectType()
@@ -30,6 +32,9 @@ export class People extends BaseEntity {
   @Field(() => String)
   @Column()
   first_last_name!: string;
+
+  @OneToMany(() => Partner, (partner) => partner.creator)
+  partner: Partner[];
 
   @Field(() => String)
   @Column()

@@ -14,6 +14,8 @@ import cors from "cors";
 import { User } from "./entities/User";
 import { Post } from "./entities/Post";
 import { PostResolver } from "./resolvers/post";
+import { Partner } from "./entities/Partner";
+import { People } from "./entities/People";
 
 const main = async () => {
   const conn = await createConnection({
@@ -23,7 +25,7 @@ const main = async () => {
     password: "password",
     logging: true,
     synchronize: true,
-    entities: [User, Post],
+    entities: [User, Post, Partner, People],
   });
 
   const app = express();

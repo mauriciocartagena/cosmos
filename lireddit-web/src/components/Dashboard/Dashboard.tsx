@@ -54,7 +54,6 @@ const Dashboard: React.FC<{}> = ({}) => {
                                 <span className="text-accent">
                                   {user.phone}
                                 </span>
-                                {/* </div> */}
                               </div>
                             </div>
                           </div>
@@ -62,7 +61,6 @@ const Dashboard: React.FC<{}> = ({}) => {
                         <div className={`flex justify-between`}>
                           <div className="flex flex-col">
                             <div className={`relative inline-flex mb-4`}>
-                              {/* <SingleUser size="xs" src={creator.avatarUrl} /> */}
                               <div
                                 style={{
                                   display: "-webkit-box",
@@ -79,7 +77,6 @@ const Dashboard: React.FC<{}> = ({}) => {
                               </div>
                             </div>
                             <div className={`relative inline-flex mb-4`}>
-                              {/* <SingleUser size="xs" src={creator.avatarUrl} /> */}
                               <div
                                 style={{
                                   display: "-webkit-box",
@@ -108,9 +105,7 @@ const Dashboard: React.FC<{}> = ({}) => {
             )}
           </MiddlePanel>
         </DefaultDesktopLayout>
-      ) : (
-        <div></div>
-      )}
+      ) : null}
     </>
   );
 };
