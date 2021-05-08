@@ -16,6 +16,7 @@ import { Post } from "./entities/Post";
 import { PostResolver } from "./resolvers/post";
 import { Partner } from "./entities/Partner";
 import { People } from "./entities/People";
+import { PartnerResolver } from "./resolvers/partner";
 
 const main = async () => {
   const conn = await createConnection({
@@ -64,7 +65,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver, PostResolver],
+      resolvers: [HelloResolver, UserResolver, PostResolver, PartnerResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),
