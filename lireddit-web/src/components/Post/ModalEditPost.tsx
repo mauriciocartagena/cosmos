@@ -11,12 +11,12 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 
 interface ModalEditPost {
   onRequestClose: () => void;
-  id: null;
-  title: "";
-  subtitle: "";
-  description: "";
-  type: "image";
-  url: "";
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  type: string;
+  url: string;
 }
 
 const ModalEditPost: React.FC<ModalEditPost> = ({

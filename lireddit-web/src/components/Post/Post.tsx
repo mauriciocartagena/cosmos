@@ -200,18 +200,19 @@ const Post: React.FC<PostProps> = ({}) => {
                 onRequestClose={() => setCreateModal(false)}
               />
             )}
-            {editModal && (
-              <ModalEditPost
-                pageProps={() => setEditModal(false)}
-                onRequestClose={() => setEditModal(false)}
-                id
-                title
-                subtitle
-                description
-                type
-                urli
-              />
-            )}
+            {
+              editModal && data?.posts.posts.filter(id === "2")
+              // <ModalEditPost
+              //   pageProps={() => setEditModal(false)}
+              //   onRequestClose={() => setEditModal(false)}
+              //   id=
+              //   title
+              //   subtitle
+              //   description
+              //   type
+              //   urli
+              // />
+            }
           </div>
         </MiddlePanel>
       </DefaultDesktopLayout>

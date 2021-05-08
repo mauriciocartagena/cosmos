@@ -29,6 +29,7 @@ export type Mutation = {
   updatedUser: User;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  updatePost?: Maybe<Post>;
   createPost: Post;
 };
 
@@ -71,6 +72,16 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationUpdatePostArgs = {
+  url: Scalars['String'];
+  description: Scalars['String'];
+  type: Scalars['String'];
+  subtitle: Scalars['String'];
+  title: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
 export type MutationCreatePostArgs = {
   input: PostInput;
 };
@@ -86,6 +97,7 @@ export type Post = {
   id: Scalars['Float'];
   title: Scalars['String'];
   creatorId: Scalars['Float'];
+  creator: User;
   subtitle: Scalars['String'];
   type: Scalars['String'];
   description: Scalars['String'];
@@ -252,6 +264,24 @@ export type CreateUserMutation = (
   ) }
 );
 
+export type UpdatePostMutationVariables = Exact<{
+  id: Scalars['Int'];
+  url: Scalars['String'];
+  description: Scalars['String'];
+  type: Scalars['String'];
+  subtitle: Scalars['String'];
+  title: Scalars['String'];
+}>;
+
+
+export type UpdatePostMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePost?: Maybe<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'title' | 'url' | 'description' | 'type' | 'subtitle'>
+  )> }
+);
+
 export type UpdateUserMutationVariables = Exact<{
   id: Scalars['Int'];
   name: Scalars['String'];
@@ -308,7 +338,7 @@ export type PostsQuery = (
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'subtitle' | 'description' | 'title' | 'url' | 'createdAt'>
+      & Pick<Post, 'id' | 'subtitle' | 'description' | 'title' | 'url' | 'createdAt'>
     )> }
   ) }
 );
@@ -426,6 +456,28 @@ export const CreateUserDocument = gql`
 export function useCreateUserMutation() {
   return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
 };
+export const UpdatePostDocument = gql`
+    mutation UpdatePost($id: Int!, $url: String!, $description: String!, $type: String!, $subtitle: String!, $title: String!) {
+  updatePost(
+    id: $id
+    url: $url
+    description: $description
+    type: $type
+    subtitle: $subtitle
+    title: $title
+  ) {
+    title
+    url
+    description
+    type
+    subtitle
+  }
+}
+    `;
+
+export function useUpdatePostMutation() {
+  return Urql.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument);
+};
 export const UpdateUserDocument = gql`
     mutation UpdateUser($id: Int!, $name: String!, $first_last_name: String!, $second_last_name: String!, $phone: Int!, $direction: String!, $email: String!) {
   updatedUser(
@@ -478,6 +530,7 @@ export const PostsDocument = gql`
   posts(limit: $limit, cursor: $cursor) {
     hasMore
     posts {
+      id
       subtitle
       description
       title
