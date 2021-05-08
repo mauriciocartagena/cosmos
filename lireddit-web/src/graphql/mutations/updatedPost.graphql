@@ -1,0 +1,23 @@
+mutation UpdatePost(
+  $id: Int!
+  $url: String!
+  $description: String!
+  $type: String!
+  $subtitle: String!
+  $title: String!
+) {
+  updatePost(
+    id: $id
+    url: $url
+    description: $description
+    type: $type
+    subtitle: $subtitle
+    title: $title
+  ) {
+    title
+    url
+    description
+    type
+    subtitle
+  }
+}

@@ -8,6 +8,7 @@ import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
 import { createUrqlClient } from "../../utils/createUrqlClient";
+import { useUpdatePostMutation } from "../../generated/graphql";
 
 interface ModalEditPost {
   onRequestClose: () => void;
@@ -30,6 +31,8 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
 }) => {
   useIsAuth();
 
+  const [, updatedPost] = useUpdatePostMutation();
+
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
@@ -40,14 +43,12 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
           type: type,
           url: url,
         }}
-        onSubmit={(values) => {
-          // const { error } = await createPost({ input: values });
-          console.log(id);
-          console.log("values", values);
+        onSubmit={async (values) => {
+          await updatedPost({
+            id: id,
+            ...values,
+          });
           onRequestClose();
-          // if (!error) {
-          //   onRequestClose();
-          // }
         }}
       >
         <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>

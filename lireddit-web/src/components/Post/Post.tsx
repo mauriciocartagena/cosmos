@@ -7,7 +7,7 @@ import { useScreenType } from "../../shared-hooks/useScreenType";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { Img } from "react-image";
 
-import { usePostsQuery } from "../../generated/graphql";
+import { usePostsQuery, usePostQuery } from "../../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../utils/useIsAuth";
@@ -24,6 +24,8 @@ const Post: React.FC<PostProps> = ({}) => {
   const screenType = useScreenType();
   const [editModal, setEditModal] = useState(false);
 
+  const [_id, set_id] = useState(0);
+
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
@@ -31,6 +33,12 @@ const Post: React.FC<PostProps> = ({}) => {
 
   const [{ data, fetching }] = usePostsQuery({
     variables,
+  });
+
+  const [{ data: post, fetching: fetchingPost }] = usePostQuery({
+    variables: {
+      id: _id,
+    },
   });
 
   const [createModal, setCreateModal] = useState(false);
@@ -45,6 +53,9 @@ const Post: React.FC<PostProps> = ({}) => {
   if (fetching) {
     return null;
   }
+
+  console.log("fetching any", fetchingPost);
+  console.log("fetching any !", !fetchingPost);
 
   return (
     <>
@@ -150,7 +161,10 @@ const Post: React.FC<PostProps> = ({}) => {
                                   color="secondary"
                                   style={{ paddingRight: "0px" }}
                                   icon={<SolidCompass />}
-                                  onClickCapture={() => setEditModal(true)}
+                                  onClickCapture={() => {
+                                    setEditModal(true);
+                                    set_id(post.id);
+                                  }}
                                 />
                               </div>
                             </div>
@@ -200,19 +214,20 @@ const Post: React.FC<PostProps> = ({}) => {
                 onRequestClose={() => setCreateModal(false)}
               />
             )}
-            {
-              editModal && data?.posts.posts.filter(id === "2")
-              // <ModalEditPost
-              //   pageProps={() => setEditModal(false)}
-              //   onRequestClose={() => setEditModal(false)}
-              //   id=
-              //   title
-              //   subtitle
-              //   description
-              //   type
-              //   urli
-              // />
-            }
+            {editModal && !fetchingPost ? (
+              <ModalEditPost
+                pageProps={() => setEditModal(false)}
+                onRequestClose={() => setEditModal(false)}
+                id={post?.post?.id}
+                title={post?.post?.title}
+                subtitle={post?.post?.subtitle}
+                description={post?.post?.description}
+                type={post?.post?.type}
+                url={post?.post?.url}
+              />
+            ) : (
+              <div>Cargando ...</div>
+            )}
           </div>
         </MiddlePanel>
       </DefaultDesktopLayout>
