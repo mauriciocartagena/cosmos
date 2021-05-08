@@ -3,37 +3,51 @@ import { withUrqlClient } from "next-urql";
 import React from "react";
 import { Button } from "../../form-fields/Button";
 import { InputField } from "../../form-fields/InputField";
-import { useCreatePostMutation } from "../../generated/graphql";
 import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
-interface ModalCreatePost {
+interface ModalEditPost {
   onRequestClose: () => void;
+  id: null;
+  title: "";
+  subtitle: "";
+  description: "";
+  type: "image";
+  url: "";
 }
 
-const ModalEditPost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
+const ModalEditPost: React.FC<ModalEditPost> = ({
+  onRequestClose,
+  id,
+  title,
+  subtitle,
+  description,
+  type,
+  url,
+}) => {
   useIsAuth();
-  const [, createPost] = useCreatePostMutation();
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
         initialValues={{
-          title: "",
-          subtitle: "",
-          description: "",
-          type: "image",
-          url: "",
+          title: title,
+          subtitle: subtitle,
+          description: description,
+          type: type,
+          url: url,
         }}
-        onSubmit={async (values) => {
-          const { error } = await createPost({ input: values });
-
-          if (!error) {
-            onRequestClose();
-          }
+        onSubmit={(values) => {
+          // const { error } = await createPost({ input: values });
+          console.log(id);
+          console.log("values", values);
+          onRequestClose();
+          // if (!error) {
+          //   onRequestClose();
+          // }
         }}
       >
         <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
