@@ -1,12 +1,15 @@
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../../form-fields/InputField";
+import { useUpdatedPartnerMutation } from "../../generated/graphql";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
+import { toErrorMapParnert } from "../../utils/toErrorMapParnert";
 
 interface EditPartnerModal {
   onRequestClose: () => void;
+  id: number;
   name: string;
   first_last_name: string;
   second_last_name: string;
@@ -17,6 +20,7 @@ interface EditPartnerModal {
 
 export const EditPartnerModal: React.FC<EditPartnerModal> = ({
   onRequestClose,
+  id,
   name,
   first_last_name,
   second_last_name,
@@ -24,6 +28,8 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
   direction,
   email,
 }) => {
+  const [, updatedPartner] = useUpdatedPartnerMutation();
+
   const [loading, setLoading] = useState(false);
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -37,20 +43,18 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
           email: email,
         }}
         onSubmit={async (values, { setErrors }) => {
-          // setLoading(true);
+          setLoading(true);
 
-          console.log("Hello edit socio");
-
-          // const response = await register({ input: values });
-          // response.data.createPartner.errors
-          // if (response.data?.createPartner.errors) {
-          //   setErrors(toErrorMapParnert(response.data.createPartner.errors));
-          //   setLoading(false);
-          // } else if (response.data?.createPartner.people) {
-          // worked
-          // onRequestClose();
-          // setLoading(false);
-          // }
+          const response = await updatedPartner({ id: id, input: values });
+          response.data?.updatedPartner.errors;
+          if (response.data?.updatedPartner.errors) {
+            setErrors(toErrorMapParnert(response.data?.updatedPartner.errors));
+            setLoading(false);
+          } else if (response.data?.updatedPartner.people) {
+            // worked;
+            onRequestClose();
+            setLoading(false);
+          }
         }}
       >
         <Form className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}>

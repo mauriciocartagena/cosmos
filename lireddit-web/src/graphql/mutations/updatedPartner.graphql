@@ -1,0 +1,16 @@
+mutation UpdatedPartner($id: Int!, $input: PartnerInput!) {
+  updatedPartner(input: $input, id: $id) {
+    errors {
+      field
+      message
+    }
+    people {
+      name
+      first_last_name
+      second_last_name
+      phone
+      direction
+      email
+    }
+  }
+}

@@ -165,6 +165,7 @@ const Dashboard: React.FC<{}> = ({}) => {
             {editModal && !fetchingPartner ? (
               <EditPartnerModal
                 onRequestClose={() => setEditModal(false)}
+                id={_id}
                 name={partner?.partner?.name!}
                 first_last_name={partner?.partner?.first_last_name!}
                 second_last_name={partner?.partner?.second_last_name!}

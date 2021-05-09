@@ -135,11 +135,12 @@ export class PartnerResolver {
 
   @Mutation(() => PartnerResponse)
   async updatedPartner(
+    @Arg("id", () => Int) id: number,
     @Arg("input")
     input: PartnerInput,
     @Ctx()
     { req }: MyContext
-  ): Promise<PartnerResponse> {
+  ): Promise<PartnerResponse | null> {
     const errors = validateRegisterPartner(input);
 
     if (errors) {
@@ -148,32 +149,17 @@ export class PartnerResolver {
 
     let people;
 
-    try {
-      const peopleNew = new People();
-      peopleNew.email = input.email;
-      peopleNew.name = input.name;
-      peopleNew.first_last_name = input.first_last_name;
-      peopleNew.second_last_name = input.second_last_name;
-      peopleNew.phone = input.phone;
-      peopleNew.direction = input.direction;
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(People)
+      .set(input)
+      .where("id = :id ", {
+        id,
+      })
+      .returning("*")
+      .execute();
 
-      const partner = new Partner();
-      partner.creator = peopleNew;
-
-      const response = await getConnection().manager.save(peopleNew);
-      people = response;
-
-      await getConnection().manager.save(partner);
-    } catch (error) {
-      return {
-        errors: [
-          {
-            field: "Error",
-            message: "Algo salio mal vuelva a intentarlo",
-          },
-        ],
-      };
-    }
+    people = result.raw[0];
 
     return { people };
   }

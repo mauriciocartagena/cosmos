@@ -103,6 +103,7 @@ export type MutationCreatePartnerArgs = {
 
 export type MutationUpdatedPartnerArgs = {
   input: PartnerInput;
+  id: Scalars['Int'];
 };
 
 
@@ -361,6 +362,26 @@ export type CreateUserMutation = (
   & { createUser: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type UpdatedPartnerMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: PartnerInput;
+}>;
+
+
+export type UpdatedPartnerMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedPartner: (
+    { __typename?: 'PartnerResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorParnet' }
+      & Pick<FieldErrorParnet, 'field' | 'message'>
+    )>>, people?: Maybe<(
+      { __typename?: 'People' }
+      & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+    )> }
   ) }
 );
 
@@ -634,6 +655,28 @@ export const CreateUserDocument = gql`
 
 export function useCreateUserMutation() {
   return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
+};
+export const UpdatedPartnerDocument = gql`
+    mutation UpdatedPartner($id: Int!, $input: PartnerInput!) {
+  updatedPartner(input: $input, id: $id) {
+    errors {
+      field
+      message
+    }
+    people {
+      name
+      first_last_name
+      second_last_name
+      phone
+      direction
+      email
+    }
+  }
+}
+    `;
+
+export function useUpdatedPartnerMutation() {
+  return Urql.useMutation<UpdatedPartnerMutation, UpdatedPartnerMutationVariables>(UpdatedPartnerDocument);
 };
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $url: String!, $description: String!, $type: String!, $subtitle: String!, $title: String!) {
