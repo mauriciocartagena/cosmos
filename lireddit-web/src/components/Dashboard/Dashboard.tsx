@@ -1,6 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
-import { useParnetsQuery } from "../../generated/graphql";
+import { useParnetsQuery, usePartnerQuery } from "../../generated/graphql";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
@@ -10,10 +10,21 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { Button } from "../../ui/Button";
 import { Flex } from "@chakra-ui/react";
+import { EditPartnerModal } from "../../modules/dashboard/EditPartnerModal";
 
 const Dashboard: React.FC<{}> = ({}) => {
   useIsAuth();
+
   const [roomModal, setRoomModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+
+  const [_id, set_id] = useState(0);
+
+  const [{ data: partner, fetching: fetchingPartner }] = usePartnerQuery({
+    variables: {
+      id: _id,
+    },
+  });
 
   const [variables, setVariables] = useState({
     limit: 10,
@@ -111,7 +122,9 @@ const Dashboard: React.FC<{}> = ({}) => {
                                 <Button
                                   style={{ marginRight: "0px" }}
                                   size="small"
-                                  onClick={() => {}}
+                                  onClick={() => (
+                                    setEditModal(true), set_id(user.id)
+                                  )}
                                 >
                                   Editar
                                 </Button>
@@ -137,6 +150,17 @@ const Dashboard: React.FC<{}> = ({}) => {
             {roomModal && (
               <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
             )}
+            {editModal && !fetchingPartner ? (
+              <EditPartnerModal
+                onRequestClose={() => setEditModal(false)}
+                name={partner?.partner?.creator.name!}
+                first_last_name={partner?.partner?.creator.first_last_name!}
+                second_last_name={partner?.partner?.creator.second_last_name!}
+                email={partner?.partner?.creator.email!}
+                phone={partner?.partner?.creator.phone!}
+                direction={partner?.partner?.creator.direction!}
+              />
+            ) : null}
             {data && data.parnets.hasMore ? (
               <Flex m="auto" my={4}>
                 <Button

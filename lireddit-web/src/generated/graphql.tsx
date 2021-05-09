@@ -38,6 +38,7 @@ export type Mutation = {
   updatePost?: Maybe<Post>;
   createPost: Post;
   createPartner: PartnerResponse;
+  updatedPartner: PartnerResponse;
 };
 
 
@@ -98,6 +99,11 @@ export type MutationCreatePartnerArgs = {
   input: PartnerInput;
 };
 
+
+export type MutationUpdatedPartnerArgs = {
+  input: PartnerInput;
+};
+
 export type PaginatedPartner = {
   __typename?: 'PaginatedPartner';
   people: Array<People>;
@@ -108,6 +114,11 @@ export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
   hasMore: Scalars['Boolean'];
+};
+
+export type Partner = {
+  __typename?: 'Partner';
+  creator: People;
 };
 
 export type PartnerInput = {
@@ -168,6 +179,7 @@ export type Query = {
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   parnets: PaginatedPartner;
+  partner?: Maybe<Partner>;
 };
 
 
@@ -185,6 +197,11 @@ export type QueryPostArgs = {
 export type QueryParnetsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
+};
+
+
+export type QueryPartnerArgs = {
+  id: Scalars['Int'];
 };
 
 export type User = {
@@ -394,6 +411,22 @@ export type MeQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & RegularUserFragment
+  )> }
+);
+
+export type PartnerQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type PartnerQuery = (
+  { __typename?: 'Query' }
+  & { partner?: Maybe<(
+    { __typename?: 'Partner' }
+    & { creator: (
+      { __typename?: 'People' }
+      & Pick<People, 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name' | 'email'>
+    ) }
   )> }
 );
 
@@ -653,6 +686,24 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const PartnerDocument = gql`
+    query Partner($id: Int!) {
+  partner(id: $id) {
+    creator {
+      direction
+      phone
+      name
+      second_last_name
+      first_last_name
+      email
+    }
+  }
+}
+    `;
+
+export function usePartnerQuery(options: Omit<Urql.UseQueryArgs<PartnerQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<PartnerQuery>({ query: PartnerDocument, ...options });
 };
 export const ParnetsDocument = gql`
     query Parnets($limit: Int!, $cursor: String) {

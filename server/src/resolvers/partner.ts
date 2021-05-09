@@ -130,4 +130,92 @@ export class PartnerResolver {
       hasMore: parnets.length === realLimitPlusOne,
     };
   }
+
+  @Mutation(() => PartnerResponse)
+  async updatedPartner(
+    @Arg("input")
+    input: PartnerInput,
+    @Ctx()
+    { req }: MyContext
+  ): Promise<PartnerResponse> {
+    const errors = validateRegisterPartner(input);
+
+    if (errors) {
+      return { errors };
+    }
+
+    let people;
+
+    try {
+      const peopleNew = new People();
+      peopleNew.email = input.email;
+      peopleNew.name = input.name;
+      peopleNew.first_last_name = input.first_last_name;
+      peopleNew.second_last_name = input.second_last_name;
+      peopleNew.phone = input.phone;
+      peopleNew.direction = input.direction;
+
+      const partner = new Partner();
+      partner.creator = peopleNew;
+
+      const response = await getConnection().manager.save(peopleNew);
+      people = response;
+
+      await getConnection().manager.save(partner);
+    } catch (error) {
+      return {
+        errors: [
+          {
+            field: "Error",
+            message: "Algo salio mal vuelva a intentarlo",
+          },
+        ],
+      };
+    }
+
+    return { people };
+  }
+  @Query(() => Partner, { nullable: true })
+  async partner(
+    @Arg("id", () => Int) id: number
+  ): Promise<Partner | undefined> {
+    const replacements: any[] = [id];
+
+    const partner = await getConnection().query(
+      `
+      select u.*, 
+      json_build_object(
+        'id', u.id,
+        'email', u.email,
+        'second_last_name',u.second_last_name,
+        'first_last_name', u.first_last_name,
+        'phone',u.phone,
+        'direction',u.direction,
+        'name',u.name
+        ) creator
+      from partner p
+      inner join public.people u on u.id = p."creatorId"
+      ${id ? ` where u."id" = $1` : ""}`,
+      replacements
+    );
+
+    // select u.*,
+    //   json_build_object(
+    //     'id', u.id,
+    //     'email', u.email,
+    //     'second_last_name',u.second_last_name,
+    //     'first_last_name', u.first_last_name,
+    //     'phone',u.phone,
+    //     'direction',u.direction,
+    //     'name',u.name
+    //     ) creator
+    //   from partner p
+    //   inner join public.people u on u.id = p."creatorId"
+    //   ${cursor ? ` where u."createdAt" < $2 ` : ""}
+    //   order by u."createdAt" DESC
+    //   limit $1
+
+    console.log(partner);
+    return partner[0];
+  }
 }
