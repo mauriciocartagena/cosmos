@@ -1,0 +1,14 @@
+query Parnets($limit: Int!, $cursor: String) {
+  parnets(cursor: $cursor, limit: $limit) {
+    hasMore
+    people {
+      id
+      second_last_name
+      name
+      email
+      first_last_name
+      phone
+      direction
+    }
+  }
+}

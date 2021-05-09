@@ -1,0 +1,16 @@
+mutation CreatePartner($input: PartnerInput!) {
+  createPartner(input: $input) {
+    errors {
+      field
+      message
+    }
+    people {
+      name
+      first_last_name
+      second_last_name
+      phone
+      direction
+      email
+    }
+  }
+}

@@ -98,6 +98,12 @@ export type MutationCreatePartnerArgs = {
   input: PartnerInput;
 };
 
+export type PaginatedPartner = {
+  __typename?: 'PaginatedPartner';
+  people: Array<People>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
@@ -161,6 +167,7 @@ export type Query = {
   users: Array<User>;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
+  parnets: PaginatedPartner;
 };
 
 
@@ -172,6 +179,12 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryParnetsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 export type User = {
@@ -382,6 +395,24 @@ export type MeQuery = (
     { __typename?: 'User' }
     & RegularUserFragment
   )> }
+);
+
+export type ParnetsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
+
+
+export type ParnetsQuery = (
+  { __typename?: 'Query' }
+  & { parnets: (
+    { __typename?: 'PaginatedPartner' }
+    & Pick<PaginatedPartner, 'hasMore'>
+    & { people: Array<(
+      { __typename?: 'People' }
+      & Pick<People, 'id' | 'second_last_name' | 'name' | 'email' | 'first_last_name' | 'phone' | 'direction'>
+    )> }
+  ) }
 );
 
 export type PostQueryVariables = Exact<{
@@ -622,6 +653,26 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const ParnetsDocument = gql`
+    query Parnets($limit: Int!, $cursor: String) {
+  parnets(cursor: $cursor, limit: $limit) {
+    hasMore
+    people {
+      id
+      second_last_name
+      name
+      email
+      first_last_name
+      phone
+      direction
+    }
+  }
+}
+    `;
+
+export function useParnetsQuery(options: Omit<Urql.UseQueryArgs<ParnetsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ParnetsQuery>({ query: ParnetsDocument, ...options });
 };
 export const PostDocument = gql`
     query Post($id: Int!) {

@@ -1,6 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
-import { useUsersQuery } from "../../generated/graphql";
+import { useParnetsQuery, useUsersQuery } from "../../generated/graphql";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
@@ -8,16 +8,16 @@ import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout
 import { FeedHeader } from "../../ui/FeedHeader";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../modules/auth/useIsAuth";
-import { isServer } from "../../utils/isServer";
 
 const Dashboard: React.FC<{}> = ({}) => {
   useIsAuth();
   const [roomModal, setRoomModal] = useState(false);
 
-  const [{ data }] = useUsersQuery({
-    pause: isServer(),
+  const [{ data }] = useParnetsQuery({
+    variables: {
+      limit: 10,
+    },
   });
-
   return (
     <>
       <HeaderController embed={{}} title="Dasboard" />
@@ -35,7 +35,7 @@ const Dashboard: React.FC<{}> = ({}) => {
             <div className="flex flex-1 flex-col mb-7" data-testid="feed">
               <div className="flex flex-col space-y-4">
                 {data ? (
-                  data.users.map((user, key) => (
+                  data.parnets.people.map((user, key) => (
                     <div className="flex" key={key}>
                       <div
                         className={`p-4 w-full text-base bg-primary-800 rounded-lg flex flex-col text-primary-100`}

@@ -110,6 +110,7 @@ export class PartnerResolver {
       json_build_object(
         'id', u.id,
         'email', u.email,
+        'second_last_name',u.second_last_name,
         'first_last_name', u.first_last_name,
         'phone',u.phone,
         'direction',u.direction,
