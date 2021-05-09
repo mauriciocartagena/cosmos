@@ -2,6 +2,7 @@ query Parnets($limit: Int!, $cursor: String) {
   parnets(cursor: $cursor, limit: $limit) {
     hasMore
     people {
+      createdAt
       id
       second_last_name
       name

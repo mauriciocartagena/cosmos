@@ -4,9 +4,9 @@ import { InputField } from "../../form-fields/InputField";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
-import { toErrorMap } from "../../utils/toErrorMap";
-import { useCreateUserMutation } from "../../generated/graphql";
+import { useCreatePartnerMutation } from "../../generated/graphql";
 import { useState } from "react";
+import { toErrorMapParnert } from "../../utils/toErrorMapParnert";
 
 interface CreatePartnerModal {
   onRequestClose: () => void;
@@ -15,14 +15,12 @@ interface CreatePartnerModal {
 export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
   onRequestClose,
 }) => {
-  const [, register] = useCreateUserMutation();
+  const [, register] = useCreatePartnerMutation();
   const [loading, setLoading] = useState(false);
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
         initialValues={{
-          username: "",
-          password: "",
           name: "",
           first_last_name: "",
           second_last_name: "",
@@ -33,12 +31,12 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
 
-          const response = await register({ options: values });
-
-          if (response.data?.createUser.errors) {
-            setErrors(toErrorMap(response.data.createUser.errors));
+          const response = await register({ input: values });
+          // response.data.createPartner.errors
+          if (response.data?.createPartner.errors) {
+            setErrors(toErrorMapParnert(response.data.createPartner.errors));
             setLoading(false);
-          } else if (response.data?.createUser.user) {
+          } else if (response.data?.createPartner.people) {
             // worked
             onRequestClose();
             setLoading(false);
@@ -51,27 +49,6 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
             <p className={`text-primary-300`}>
               Por favor llene cuidadosamente los datos
             </p>
-          </div>
-          <div className={`h-full w-full col-span-2`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 h-6`}
-              name="username"
-              maxLength={60}
-              placeholder={"Usuario"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`grid items-start grid-cols-1 h-6`}>
-            <InputField
-              className={` w-full  rounded-8 bg-primary-700 h-6`}
-              name="password"
-              type="password"
-              maxLength={60}
-              placeholder={"Contraseña"}
-              autoFocus
-              autoComplete="off"
-            />
           </div>
           <div className={`h-full w-full col-span-3`}>
             <InputField

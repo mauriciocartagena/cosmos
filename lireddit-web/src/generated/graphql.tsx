@@ -410,7 +410,7 @@ export type ParnetsQuery = (
     & Pick<PaginatedPartner, 'hasMore'>
     & { people: Array<(
       { __typename?: 'People' }
-      & Pick<People, 'id' | 'second_last_name' | 'name' | 'email' | 'first_last_name' | 'phone' | 'direction'>
+      & Pick<People, 'createdAt' | 'id' | 'second_last_name' | 'name' | 'email' | 'first_last_name' | 'phone' | 'direction'>
     )> }
   ) }
 );
@@ -659,6 +659,7 @@ export const ParnetsDocument = gql`
   parnets(cursor: $cursor, limit: $limit) {
     hasMore
     people {
+      createdAt
       id
       second_last_name
       name

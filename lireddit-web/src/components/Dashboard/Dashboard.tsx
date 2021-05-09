@@ -1,6 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
-import { useParnetsQuery, useUsersQuery } from "../../generated/graphql";
+import { useParnetsQuery } from "../../generated/graphql";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
@@ -8,16 +8,29 @@ import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout
 import { FeedHeader } from "../../ui/FeedHeader";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useIsAuth } from "../../modules/auth/useIsAuth";
+import { Button } from "../../ui/Button";
+import { Flex } from "@chakra-ui/react";
 
 const Dashboard: React.FC<{}> = ({}) => {
   useIsAuth();
   const [roomModal, setRoomModal] = useState(false);
 
-  const [{ data }] = useParnetsQuery({
-    variables: {
-      limit: 10,
-    },
+  const [variables, setVariables] = useState({
+    limit: 1,
+    cursor: null as null | string,
   });
+
+  const [{ data, fetching }] = useParnetsQuery({
+    variables,
+  });
+
+  if (!fetching && !data) {
+    return <div>tienes una consulta fallida por alguna razón</div>;
+  }
+  if (fetching) {
+    return null;
+  }
+
   return (
     <>
       <HeaderController embed={{}} title="Dasboard" />
@@ -103,6 +116,25 @@ const Dashboard: React.FC<{}> = ({}) => {
             {roomModal && (
               <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
             )}
+            {data && data.parnets.hasMore ? (
+              <Flex m="auto" my={4}>
+                <Button
+                  loading={fetching}
+                  data-testid="feed-action-button"
+                  transition
+                  onClick={() => {
+                    setVariables({
+                      limit: variables.limit,
+                      cursor:
+                        data.parnets.people[data.parnets.people.length - 1]
+                          .createdAt,
+                    });
+                  }}
+                >
+                  cargar mas
+                </Button>
+              </Flex>
+            ) : null}
           </MiddlePanel>
         </DefaultDesktopLayout>
       ) : null}
