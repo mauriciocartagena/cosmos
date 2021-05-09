@@ -20,6 +20,12 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type FieldErrorParnet = {
+  __typename?: 'FieldErrorParnet';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
@@ -31,6 +37,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   updatePost?: Maybe<Post>;
   createPost: Post;
+  createPartner: PartnerResponse;
 };
 
 
@@ -86,10 +93,43 @@ export type MutationCreatePostArgs = {
   input: PostInput;
 };
 
+
+export type MutationCreatePartnerArgs = {
+  input: PartnerInput;
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
   hasMore: Scalars['Boolean'];
+};
+
+export type PartnerInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  first_last_name: Scalars['String'];
+  second_last_name: Scalars['String'];
+  phone: Scalars['Float'];
+  direction: Scalars['String'];
+};
+
+export type PartnerResponse = {
+  __typename?: 'PartnerResponse';
+  errors?: Maybe<Array<FieldErrorParnet>>;
+  people?: Maybe<People>;
+};
+
+export type People = {
+  __typename?: 'People';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name: Scalars['String'];
+  first_last_name: Scalars['String'];
+  second_last_name: Scalars['String'];
+  phone: Scalars['Float'];
+  direction: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type Post = {
@@ -203,6 +243,25 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type CreatePartnerMutationVariables = Exact<{
+  input: PartnerInput;
+}>;
+
+
+export type CreatePartnerMutation = (
+  { __typename?: 'Mutation' }
+  & { createPartner: (
+    { __typename?: 'PartnerResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorParnet' }
+      & Pick<FieldErrorParnet, 'field' | 'message'>
+    )>>, people?: Maybe<(
+      { __typename?: 'People' }
+      & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+    )> }
   ) }
 );
 
@@ -415,6 +474,28 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreatePartnerDocument = gql`
+    mutation CreatePartner($input: PartnerInput!) {
+  createPartner(input: $input) {
+    errors {
+      field
+      message
+    }
+    people {
+      name
+      first_last_name
+      second_last_name
+      phone
+      direction
+      email
+    }
+  }
+}
+    `;
+
+export function useCreatePartnerMutation() {
+  return Urql.useMutation<CreatePartnerMutation, CreatePartnerMutationVariables>(CreatePartnerDocument);
 };
 export const CreatePostDocument = gql`
     mutation CreatePost($input: PostInput!) {

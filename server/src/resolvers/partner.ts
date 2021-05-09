@@ -1,4 +1,13 @@
-import { Arg, Ctx, Field, Mutation, Resolver, ObjectType } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Field,
+  Mutation,
+  Resolver,
+  ObjectType,
+  Int,
+  Query,
+} from "type-graphql";
 import { getConnection } from "typeorm";
 import { MyContext } from "../types";
 import { People } from "../entities/People";
@@ -24,6 +33,13 @@ class PartnerResponse {
   people?: People;
 }
 
+@ObjectType()
+class PaginatedPartner {
+  @Field(() => [People])
+  people: People[];
+  @Field()
+  hasMore: boolean;
+}
 @Resolver(People)
 export class PartnerResolver {
   // Hello
@@ -40,8 +56,6 @@ export class PartnerResolver {
     if (errors) {
       return { errors };
     }
-
-    console.log("erros::::::", errors);
 
     let people;
 
@@ -73,5 +87,46 @@ export class PartnerResolver {
     }
 
     return { people };
+  }
+
+  @Query(() => PaginatedPartner)
+  async parnets(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<PaginatedPartner> {
+    // 15 -> 16
+    const realLimit = Math.min(50, limit);
+    const realLimitPlusOne = realLimit + 1;
+
+    const replacements: any[] = [realLimitPlusOne];
+
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+    }
+
+    const parnets = await getConnection().query(
+      `
+      select u.*, 
+      json_build_object(
+        'id', u.id,
+        'email', u.email,
+        'first_last_name', u.first_last_name,
+        'phone',u.phone,
+        'direction',u.direction,
+        'name',u.name
+        ) creator
+      from partner p
+      inner join public.people u on u.id = p."creatorId"
+      ${cursor ? ` where u."createdAt" < $2 ` : ""}
+      order by u."createdAt" DESC
+      limit $1
+    `,
+      replacements
+    );
+
+    return {
+      people: parnets.slice(0, realLimit),
+      hasMore: parnets.length === realLimitPlusOne,
+    };
   }
 }
