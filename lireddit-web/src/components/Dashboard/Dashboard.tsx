@@ -21,15 +21,12 @@ const Dashboard: React.FC<{}> = ({}) => {
 
   const [roomModal, setRoomModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-
   const [_id, set_id] = useState(0);
+  const [, deletePartner] = useDeletePartnerMutation();
 
   const [{ data: partner, fetching: fetchingPartner }] = usePartnerQuery({
-    variables: {
-      id: _id,
-    },
+    variables: { id: _id },
   });
-  const [, deletePartner] = useDeletePartnerMutation();
 
   const [variables, setVariables] = useState({
     limit: 10,
@@ -128,7 +125,7 @@ const Dashboard: React.FC<{}> = ({}) => {
                                   style={{ marginRight: "0px" }}
                                   size="small"
                                   onClick={() => (
-                                    setEditModal(true), set_id(user.id)
+                                    set_id(user.id), setEditModal(true)
                                   )}
                                 >
                                   Editar

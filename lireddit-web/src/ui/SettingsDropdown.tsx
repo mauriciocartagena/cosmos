@@ -40,7 +40,7 @@ export const SettingsDropdown: React.FC<{
             </div>
             <SettingsIcon
               icon={<SvgSolidSettings />}
-              label={"Editar Pefil"}
+              label={"Editar Perfil"}
               onClick={onActionToFetch}
               transition
             />
