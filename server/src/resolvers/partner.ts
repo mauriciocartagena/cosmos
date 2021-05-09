@@ -1,61 +1,77 @@
-import {
-  Arg,
-  Ctx,
-  Field,
-  InputType,
-  Mutation,
-  Resolver,
-  UseMiddleware,
-} from "type-graphql";
-import { Partner } from "../entities/Partner";
+import { Arg, Ctx, Field, Mutation, Resolver, ObjectType } from "type-graphql";
+import { getConnection } from "typeorm";
 import { MyContext } from "../types";
 import { People } from "../entities/People";
-import { getConnection } from "typeorm";
+import { validateRegisterPartner } from "../utils/validateRegisterPartner";
+import { PartnerInput } from "./PartnetInput";
+import { Partner } from "../entities/Partner";
 
-@InputType()
-class PartnerInput {
+@ObjectType()
+class FieldErrorParnet {
   @Field()
-  email: string;
-
-  @Field()
-  name: string;
-
-  @Field()
-  first_last_name: string;
+  field: string;
 
   @Field()
-  second_last_name: string;
+  message: string;
+}
 
-  @Field()
-  phone: number;
+@ObjectType()
+class PartnerResponse {
+  @Field(() => [FieldErrorParnet], { nullable: true })
+  errors?: FieldErrorParnet[];
 
-  @Field()
-  direction: string;
+  @Field(() => People, { nullable: true })
+  people?: People;
 }
 
 @Resolver(People)
 export class PartnerResolver {
-  @Mutation(() => People)
+  // Hello
+
+  @Mutation(() => PartnerResponse)
   async createPartner(
-    @Arg("input") input: PartnerInput,
-    @Ctx() { req }: MyContext
-  ) {
-    const people = new People();
-    people.createdAt = new Date();
-    people.email = "mc@gmail.com";
-    people.name = "";
-    people.first_last_name = "";
-    people.second_last_name = "";
-    people.phone = 444;
-    people.direction = "";
+    @Arg("input")
+    input: PartnerInput,
+    @Ctx()
+    { req }: MyContext
+  ): Promise<PartnerResponse> {
+    const errors = validateRegisterPartner(input);
 
-    const partner = new Partner();
-    partner.creator = people;
+    if (errors) {
+      return { errors };
+    }
 
-    await getConnection().manager.save(people);
+    console.log("erros::::::", errors);
 
-    await getConnection().manager.save(partner);
+    let people;
 
-    return people;
+    try {
+      const peopleNew = new People();
+      peopleNew.email = input.email;
+      peopleNew.name = input.name;
+      peopleNew.first_last_name = input.first_last_name;
+      peopleNew.second_last_name = input.second_last_name;
+      peopleNew.phone = input.phone;
+      peopleNew.direction = input.direction;
+
+      const partner = new Partner();
+      partner.creator = peopleNew;
+
+      const response = await getConnection().manager.save(peopleNew);
+      people = response;
+
+      await getConnection().manager.save(partner);
+    } catch (error) {
+      return {
+        errors: [
+          {
+            field: "Error",
+            message: "Algo salio mal vuelva a intentarlo",
+          },
+        ],
+      };
+    }
+
+    return { people };
   }
 }

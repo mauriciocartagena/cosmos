@@ -26,7 +26,7 @@ export class People extends BaseEntity {
   updatedAt: Date = new Date();
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: false })
   name!: string;
 
   @Field(() => String)
@@ -38,17 +38,17 @@ export class People extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  second_last_name!: string;
+  second_last_name: string;
 
   @Field(() => Number)
   @Column({ nullable: true })
-  phone!: number;
+  phone: number;
 
   @Field(() => String)
   @Column()
-  direction!: string;
+  direction: string;
 
   @Field(() => String)
   @Column()
-  email!: string;
+  email: string;
 }
