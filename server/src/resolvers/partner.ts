@@ -7,6 +7,7 @@ import {
   ObjectType,
   Int,
   Query,
+  UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { MyContext } from "../types";
@@ -14,6 +15,7 @@ import { People } from "../entities/People";
 import { validateRegisterPartner } from "../utils/validateRegisterPartner";
 import { PartnerInput } from "./PartnetInput";
 import { Partner } from "../entities/Partner";
+import { isAuth } from "../middleware/isAuth";
 
 @ObjectType()
 class FieldErrorParnet {
@@ -175,47 +177,25 @@ export class PartnerResolver {
 
     return { people };
   }
-  @Query(() => Partner, { nullable: true })
-  async partner(
-    @Arg("id", () => Int) id: number
-  ): Promise<Partner | undefined> {
-    const replacements: any[] = [id];
 
-    const partner = await getConnection().query(
-      `
-      select u.*, 
-      json_build_object(
-        'id', u.id,
-        'email', u.email,
-        'second_last_name',u.second_last_name,
-        'first_last_name', u.first_last_name,
-        'phone',u.phone,
-        'direction',u.direction,
-        'name',u.name
-        ) creator
-      from partner p
-      inner join public.people u on u.id = p."creatorId"
-      ${id ? ` where u."id" = $1` : ""}`,
-      replacements
-    );
+  @Query(() => People, { nullable: true })
+  partner(@Arg("id", () => Int) id: number): Promise<People | undefined> {
+    return People.findOne(id);
+  }
 
-    // select u.*,
-    //   json_build_object(
-    //     'id', u.id,
-    //     'email', u.email,
-    //     'second_last_name',u.second_last_name,
-    //     'first_last_name', u.first_last_name,
-    //     'phone',u.phone,
-    //     'direction',u.direction,
-    //     'name',u.name
-    //     ) creator
-    //   from partner p
-    //   inner join public.people u on u.id = p."creatorId"
-    //   ${cursor ? ` where u."createdAt" < $2 ` : ""}
-    //   order by u."createdAt" DESC
-    //   limit $1
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deletePartner(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    await getConnection()
+      .createQueryBuilder()
+      .delete()
+      .from(Partner)
+      .where("creatorId = :id", { id: id })
+      .execute();
 
-    console.log(partner);
-    return partner[0];
+    return true;
   }
 }

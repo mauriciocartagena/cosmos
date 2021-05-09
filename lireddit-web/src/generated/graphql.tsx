@@ -116,11 +116,6 @@ export type PaginatedPosts = {
   hasMore: Scalars['Boolean'];
 };
 
-export type Partner = {
-  __typename?: 'Partner';
-  creator: People;
-};
-
 export type PartnerInput = {
   email: Scalars['String'];
   name: Scalars['String'];
@@ -179,7 +174,7 @@ export type Query = {
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   parnets: PaginatedPartner;
-  partner?: Maybe<Partner>;
+  partner?: Maybe<People>;
 };
 
 
@@ -422,11 +417,8 @@ export type PartnerQueryVariables = Exact<{
 export type PartnerQuery = (
   { __typename?: 'Query' }
   & { partner?: Maybe<(
-    { __typename?: 'Partner' }
-    & { creator: (
-      { __typename?: 'People' }
-      & Pick<People, 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name' | 'email'>
-    ) }
+    { __typename?: 'People' }
+    & Pick<People, 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name' | 'email'>
   )> }
 );
 
@@ -690,14 +682,12 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 export const PartnerDocument = gql`
     query Partner($id: Int!) {
   partner(id: $id) {
-    creator {
-      direction
-      phone
-      name
-      second_last_name
-      first_last_name
-      email
-    }
+    direction
+    phone
+    name
+    second_last_name
+    first_last_name
+    email
   }
 }
     `;

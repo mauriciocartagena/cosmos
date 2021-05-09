@@ -153,12 +153,12 @@ const Dashboard: React.FC<{}> = ({}) => {
             {editModal && !fetchingPartner ? (
               <EditPartnerModal
                 onRequestClose={() => setEditModal(false)}
-                name={partner?.partner?.creator.name!}
-                first_last_name={partner?.partner?.creator.first_last_name!}
-                second_last_name={partner?.partner?.creator.second_last_name!}
-                email={partner?.partner?.creator.email!}
-                phone={partner?.partner?.creator.phone!}
-                direction={partner?.partner?.creator.direction!}
+                name={partner?.partner?.name!}
+                first_last_name={partner?.partner?.first_last_name!}
+                second_last_name={partner?.partner?.second_last_name!}
+                email={partner?.partner?.email!}
+                phone={partner?.partner?.phone!}
+                direction={partner?.partner?.direction!}
               />
             ) : null}
             {data && data.parnets.hasMore ? (

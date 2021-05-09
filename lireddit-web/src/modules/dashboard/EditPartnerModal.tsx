@@ -96,6 +96,7 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
               name="phone"
               placeholder="Celular"
               maxLength={60}
+              autoComplete="off"
               type="tel"
             />
           </div>
@@ -116,6 +117,7 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
               name="direction"
               placeholder="Dirección"
               rows={3}
+              autoComplete="off"
               maxLength={500}
               textarea
             />
