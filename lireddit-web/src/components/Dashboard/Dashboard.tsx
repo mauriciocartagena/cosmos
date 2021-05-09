@@ -16,7 +16,7 @@ const Dashboard: React.FC<{}> = ({}) => {
   const [roomModal, setRoomModal] = useState(false);
 
   const [variables, setVariables] = useState({
-    limit: 1,
+    limit: 10,
     cursor: null as null | string,
   });
 
@@ -71,6 +71,7 @@ const Dashboard: React.FC<{}> = ({}) => {
                             </div>
                           </div>
                         </div>
+
                         <div className={`flex justify-between`}>
                           <div className="flex flex-col">
                             <div className={`relative inline-flex mb-4`}>
@@ -102,6 +103,26 @@ const Dashboard: React.FC<{}> = ({}) => {
                                   {user.direction}
                                 </span>
                               </div>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <div className={`inline break-all`}>
+                              <span className="text-accent">
+                                <Button
+                                  style={{ marginRight: "0px" }}
+                                  size="small"
+                                  onClick={() => {}}
+                                >
+                                  Editar
+                                </Button>
+                              </span>
+                            </div>
+                            <div className={`inline break-all`}>
+                              <span className="text-accent">
+                                <Button size="small" onClick={() => {}}>
+                                  Elimnar
+                                </Button>
+                              </span>
                             </div>
                           </div>
                         </div>

@@ -23,7 +23,6 @@ const errorExchange: Exchange = ({ forward }) => (ops$) => {
 };
 
 import { stringifyVariables } from "@urql/core";
-import { Query, PaginatedPosts } from "../generated/graphql";
 
 export type MergeMode = "before" | "after";
 
