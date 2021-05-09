@@ -39,6 +39,7 @@ export type Mutation = {
   createPost: Post;
   createPartner: PartnerResponse;
   updatedPartner: PartnerResponse;
+  deletePartner: Scalars['Boolean'];
 };
 
 
@@ -102,6 +103,11 @@ export type MutationCreatePartnerArgs = {
 
 export type MutationUpdatedPartnerArgs = {
   input: PartnerInput;
+};
+
+
+export type MutationDeletePartnerArgs = {
+  id: Scalars['Int'];
 };
 
 export type PaginatedPartner = {
@@ -301,6 +307,16 @@ export type CreatePostMutation = (
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'title' | 'subtitle' | 'url' | 'type' | 'description' | 'creatorId'>
   ) }
+);
+
+export type DeletePartnerMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeletePartnerMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePartner'>
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -569,6 +585,15 @@ export const CreatePostDocument = gql`
 
 export function useCreatePostMutation() {
   return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument);
+};
+export const DeletePartnerDocument = gql`
+    mutation DeletePartner($id: Int!) {
+  deletePartner(id: $id)
+}
+    `;
+
+export function useDeletePartnerMutation() {
+  return Urql.useMutation<DeletePartnerMutation, DeletePartnerMutationVariables>(DeletePartnerDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {

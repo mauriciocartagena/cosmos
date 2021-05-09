@@ -1,6 +1,10 @@
 import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
-import { useParnetsQuery, usePartnerQuery } from "../../generated/graphql";
+import {
+  useParnetsQuery,
+  usePartnerQuery,
+  useDeletePartnerMutation,
+} from "../../generated/graphql";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
@@ -25,6 +29,7 @@ const Dashboard: React.FC<{}> = ({}) => {
       id: _id,
     },
   });
+  const [, deletePartner] = useDeletePartnerMutation();
 
   const [variables, setVariables] = useState({
     limit: 10,
@@ -132,7 +137,14 @@ const Dashboard: React.FC<{}> = ({}) => {
                             </div>
                             <div className={`inline break-all`}>
                               <span className="text-accent">
-                                <Button size="small" onClick={() => {}}>
+                                <Button
+                                  size="small"
+                                  onClick={() => {
+                                    deletePartner({
+                                      id: user.id,
+                                    });
+                                  }}
+                                >
                                   Elimnar
                                 </Button>
                               </span>
