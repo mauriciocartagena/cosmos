@@ -16,6 +16,7 @@ import { validateRegisterPartner } from "../utils/validateRegisterPartner";
 import { PartnerInput } from "./PartnetInput";
 import { Partner } from "../entities/Partner";
 import { isAuth } from "../middleware/isAuth";
+import session from "express-session";
 
 @ObjectType()
 class FieldErrorParnet {
