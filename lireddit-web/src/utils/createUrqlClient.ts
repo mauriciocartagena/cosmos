@@ -142,6 +142,42 @@ export const createUrqlClient = (ssrExchange: any) => ({
               cache.invalidate("Query", "posts", fi.arguments || {});
             });
           },
+          createPartner: (_result, args, cache, info) => {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "parnets"
+            );
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "parnets", fi.arguments || {});
+            });
+          },
+          updatedPartner: (_result, args, cache, info) => {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "parnets"
+            );
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "parnets", fi.arguments || {});
+            });
+          },
+          updatePost: (_result, args, cache, info) => {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "posts"
+            );
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "posts", fi.arguments || {});
+            });
+          },
+          deletePartner: (_result, args, cache, info) => {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "parnets"
+            );
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "parnets", fi.arguments || {});
+            });
+          },
           CreateUser: (_result, args, cache, info) => {
             cache.invalidate("Query", "users", {
               limit: 5,
