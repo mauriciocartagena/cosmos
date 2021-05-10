@@ -7,6 +7,7 @@ import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
+import { withApollo } from "../../utils/withApollo";
 
 interface ModalCreatePost {
   onRequestClose: () => void;
@@ -27,7 +28,12 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
           url: "",
         }}
         onSubmit={async (values) => {
-          const { errors } = await createPost({ variables: { input: values } });
+          const { errors } = await createPost({
+            variables: { input: values },
+            update: (cache) => {
+              cache.evict({ fieldName: "posts:{}" });
+            },
+          });
 
           if (!errors) {
             onRequestClose();
@@ -114,4 +120,4 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
   );
 };
 
-export default ModalCreatePost;
+export default withApollo({ ssr: false })(ModalCreatePost);

@@ -6,6 +6,7 @@ import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
+import { withApollo } from "../../utils/withApollo";
 import { Button } from "../Button";
 import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
 import { SingleUser } from "../UserAvatar/SingleUser";
@@ -68,4 +69,4 @@ const Account: React.FC<{}> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Account as any);
+export default withApollo({ ssr: false })(Account);

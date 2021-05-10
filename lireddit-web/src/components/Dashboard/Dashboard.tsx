@@ -15,6 +15,7 @@ import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { Button } from "../../ui/Button";
 import { Flex } from "@chakra-ui/react";
 import { EditPartnerModal } from "../../modules/dashboard/EditPartnerModal";
+import { withApollo } from "../../utils/withApollo";
 
 const Dashboard: React.FC<{}> = ({}) => {
   useIsAuth();
@@ -197,6 +198,4 @@ const Dashboard: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(
-  Dashboard as any
-);
+export default withApollo({ ssr: false })(Dashboard);

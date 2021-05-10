@@ -1,11 +1,7 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Img } from "react-image";
-import {
-  usePostQuery,
-  usePostsQuery,
-  PostQuery,
-} from "../../generated/graphql";
+import { usePostQuery, usePostsQuery } from "../../generated/graphql";
 import SolidCompass from "../../icons/SolidCompass";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
@@ -16,7 +12,7 @@ import { FeedHeader } from "../../ui/FeedHeader";
 import { useIsAuth } from "../../utils/useIsAuth";
 import ModalCreatePost from "./ModalCreatePost";
 import ModalEditPost from "./ModalEditPost";
-import { PostsQuery } from "../../generated/graphql";
+import { withApollo } from "../../utils/withApollo";
 
 interface PostProps {}
 
@@ -253,4 +249,4 @@ const Post: React.FC<PostProps> = ({}) => {
   );
 };
 
-export default Post;
+export default withApollo({ ssr: true })(Post);

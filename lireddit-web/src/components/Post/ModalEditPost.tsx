@@ -9,6 +9,7 @@ import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useUpdatePostMutation } from "../../generated/graphql";
+import { withApollo } from "../../utils/withApollo";
 
 interface ModalEditPost {
   onRequestClose: () => void;
@@ -133,4 +134,4 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
   );
 };
 
-export default withUrqlClient(createUrqlClient)(ModalEditPost as any);
+export default withApollo({ ssr: false })(ModalEditPost);

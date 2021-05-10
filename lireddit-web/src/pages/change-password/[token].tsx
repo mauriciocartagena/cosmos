@@ -1,7 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Button } from "../../form-fields/Button";
@@ -10,8 +9,8 @@ import { useChangePasswordMutation } from "../../generated/graphql";
 import SvgSolidLogo from "../../icons/SvgSolidLogo";
 import { FooterController } from "../../modules/display/FooterController";
 import { HeaderController } from "../../modules/display/HeaderController";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { toErrorMap } from "../../utils/toErrorMap";
+import { withApollo } from "../../utils/withApollo";
 
 const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();
@@ -129,4 +128,4 @@ ChangePassword.getInitialProps = ({ query }) => {
   };
 };
 
-export default ChangePassword;
+export default withApollo({ ssr: false })(ChangePassword);

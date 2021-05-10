@@ -1,6 +1,5 @@
 import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import router from "next/router";
 import React from "react";
@@ -10,13 +9,13 @@ import { useLoginMutation } from "../generated/graphql";
 import SvgSolidLogo from "../icons/SvgSolidLogo";
 import { FooterController } from "../modules/display/FooterController";
 import { HeaderController } from "../modules/display/HeaderController";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
+import { withApollo } from "../utils/withApollo";
 
 interface LoginButtonProps {}
 
 const Login: React.FC<LoginButtonProps> = ({}) => {
-  const [, login] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   return (
     <div
@@ -42,7 +41,7 @@ const Login: React.FC<LoginButtonProps> = ({}) => {
                 password: "",
               }}
               onSubmit={async (values, { setErrors }) => {
-                const response = await login(values);
+                const response = await login({ variables: values });
 
                 if (response.data?.login.errors) {
                   setErrors(toErrorMap(response.data.login.errors));
@@ -96,4 +95,4 @@ const Login: React.FC<LoginButtonProps> = ({}) => {
     </div>
   );
 };
-export default withUrqlClient(createUrqlClient)(Login);
+export default withApollo({ ssr: false })(Login);
