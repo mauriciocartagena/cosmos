@@ -28,7 +28,7 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
   direction,
   email,
 }) => {
-  const [, updatedPartner] = useUpdatedPartnerMutation();
+  const [updatedPartner] = useUpdatedPartnerMutation();
 
   const [loading, setLoading] = useState(false);
   return (
@@ -45,7 +45,9 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
 
-          const response = await updatedPartner({ id: id, input: values });
+          const response = await updatedPartner({
+            variables: { id: id, input: values },
+          });
           response.data?.updatedPartner.errors;
           if (response.data?.updatedPartner.errors) {
             setErrors(toErrorMapParnert(response.data?.updatedPartner.errors));

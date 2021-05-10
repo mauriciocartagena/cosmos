@@ -22,9 +22,9 @@ const Dashboard: React.FC<{}> = ({}) => {
   const [roomModal, setRoomModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [_id, set_id] = useState(0);
-  const [, deletePartner] = useDeletePartnerMutation();
+  const [deletePartner] = useDeletePartnerMutation();
 
-  const [{ data: partner, fetching: fetchingPartner }] = usePartnerQuery({
+  const { data: partner, loading: fetchingPartner } = usePartnerQuery({
     variables: { id: _id },
   });
 
@@ -33,7 +33,7 @@ const Dashboard: React.FC<{}> = ({}) => {
     cursor: null as null | string,
   });
 
-  const [{ data, fetching }] = useParnetsQuery({
+  const { data, loading: fetching } = useParnetsQuery({
     variables,
   });
 
@@ -138,7 +138,7 @@ const Dashboard: React.FC<{}> = ({}) => {
                                   size="small"
                                   onClick={() => {
                                     deletePartner({
-                                      id: user.id,
+                                      variables: { id: user.id },
                                     });
                                   }}
                                 >

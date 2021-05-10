@@ -1,5 +1,4 @@
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import React from "react";
 import { Button } from "../../form-fields/Button";
 import { InputField } from "../../form-fields/InputField";
@@ -8,7 +7,6 @@ import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 
 interface ModalCreatePost {
   onRequestClose: () => void;
@@ -16,7 +14,7 @@ interface ModalCreatePost {
 
 const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
   useIsAuth();
-  const [, createPost] = useCreatePostMutation();
+  const [createPost] = useCreatePostMutation();
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -29,9 +27,9 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
           url: "",
         }}
         onSubmit={async (values) => {
-          const { error } = await createPost({ input: values });
+          const { errors } = await createPost({ variables: { input: values } });
 
-          if (!error) {
+          if (!errors) {
             onRequestClose();
           }
         }}
@@ -116,4 +114,4 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(ModalCreatePost as any);
+export default ModalCreatePost;

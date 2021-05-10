@@ -31,7 +31,7 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
 }) => {
   useIsAuth();
 
-  const [, updatedPost] = useUpdatePostMutation();
+  const [updatedPost] = useUpdatePostMutation();
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -45,8 +45,10 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
         }}
         onSubmit={async (values) => {
           await updatedPost({
-            id: id,
-            ...values,
+            variables: {
+              id: id,
+              ...values,
+            },
           });
           onRequestClose();
         }}

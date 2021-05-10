@@ -15,7 +15,7 @@ interface CreatePartnerModal {
 export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
   onRequestClose,
 }) => {
-  const [, register] = useCreatePartnerMutation();
+  const [register] = useCreatePartnerMutation();
   const [loading, setLoading] = useState(false);
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -31,7 +31,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
 
-          const response = await register({ input: values });
+          const response = await register({ variables: { input: values } });
           // response.data.createPartner.errors
           if (response.data?.createPartner.errors) {
             setErrors(toErrorMapParnert(response.data.createPartner.errors));

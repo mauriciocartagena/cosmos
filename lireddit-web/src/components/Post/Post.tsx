@@ -1,21 +1,22 @@
-import { Box, Grid, Flex } from "@chakra-ui/react";
-import React from "react";
+import { Box, Flex, Grid } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Img } from "react-image";
+import {
+  usePostQuery,
+  usePostsQuery,
+  PostQuery,
+} from "../../generated/graphql";
+import SolidCompass from "../../icons/SolidCompass";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
 import { MiddlePanel } from "../../modules/layouts/GridPanels";
 import { useScreenType } from "../../shared-hooks/useScreenType";
-import { FeedHeader } from "../../ui/FeedHeader";
-import { Img } from "react-image";
-
-import { usePostsQuery, usePostQuery } from "../../generated/graphql";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useIsAuth } from "../../utils/useIsAuth";
-import { useState } from "react";
-import ModalCreatePost from "./ModalCreatePost";
 import { Button } from "../../ui/Button";
+import { FeedHeader } from "../../ui/FeedHeader";
+import { useIsAuth } from "../../utils/useIsAuth";
+import ModalCreatePost from "./ModalCreatePost";
 import ModalEditPost from "./ModalEditPost";
-import SolidCompass from "../../icons/SolidCompass";
+import { PostsQuery } from "../../generated/graphql";
 
 interface PostProps {}
 
@@ -26,16 +27,15 @@ const Post: React.FC<PostProps> = ({}) => {
 
   const [_id, set_id] = useState(0);
 
-  const [variables, setVariables] = useState({
-    limit: 10,
-    cursor: null as null | string,
+  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+    variables: {
+      limit: 10,
+      cursor: null,
+    },
+    notifyOnNetworkStatusChange: true,
   });
 
-  const [{ data, fetching }] = usePostsQuery({
-    variables,
-  });
-
-  const [{ data: post, fetching: fetchingPost }] = usePostQuery({
+  const { data: post, loading: fetchingPost } = usePostQuery({
     variables: {
       id: _id,
     },
@@ -47,10 +47,10 @@ const Post: React.FC<PostProps> = ({}) => {
   const IMAGE_DEFAULT_LOADING =
     "https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif";
 
-  if (!fetching && !data) {
+  if (!loading && !data) {
     return <div>tienes una consulta fallida por alguna razón</div>;
   }
-  if (fetching) {
+  if (loading) {
     return null;
   }
 
@@ -75,7 +75,7 @@ const Post: React.FC<PostProps> = ({}) => {
                   templateColumns={"repeat(2, 1fr)"}
                   gap={20}
                 >
-                  {!data && fetching ? (
+                  {!data && loading ? (
                     <div>cargando ...</div>
                   ) : (
                     data!.posts.posts.map((post, key) => (
@@ -133,7 +133,7 @@ const Post: React.FC<PostProps> = ({}) => {
                   templateColumns={"repeat(3, 1fr)"}
                   gap={20}
                 >
-                  {!data && fetching ? (
+                  {!data && loading ? (
                     <div>cargando ...</div>
                   ) : (
                     data!.posts.posts.map((post, key) => (
@@ -191,15 +191,38 @@ const Post: React.FC<PostProps> = ({}) => {
               {data && data.posts.hasMore ? (
                 <Flex m="auto" my={4}>
                   <Button
-                    loading={fetching}
+                    loading={loading}
                     data-testid="feed-action-button"
                     transition
                     onClick={() => {
-                      setVariables({
-                        limit: variables.limit,
-                        cursor:
-                          data.posts.posts[data.posts.posts.length - 1]
-                            .createdAt,
+                      fetchMore({
+                        variables: {
+                          limit: variables?.limit,
+                          cursor:
+                            data.posts.posts[data.posts.posts.length - 1]
+                              .createdAt,
+                        },
+                        // updateQuery: (
+                        //   previousValue,
+                        //   { fetchMoreResult }
+                        // ): PostsQuery => {
+                        //   if (!fetchMoreResult) {
+                        //     return previousValue as PostsQuery;
+                        //   }
+
+                        //   return {
+                        //     __typename: "Query",
+                        //     posts: {
+                        //       __typename: "PaginatedPosts",
+                        //       hasMore: (fetchMoreResult as PostsQuery).posts
+                        //         .hasMore,
+                        //       posts: [
+                        //         ...(previousValue as PostsQuery).posts.posts,
+                        //         ...(fetchMoreResult as PostsQuery).posts.posts,
+                        //       ],
+                        //     },
+                        //   };
+                        // },
                       });
                     }}
                   >
@@ -209,10 +232,7 @@ const Post: React.FC<PostProps> = ({}) => {
               ) : null}
             </div>
             {createModal && (
-              <ModalCreatePost
-                pageProps={() => setCreateModal(false)}
-                onRequestClose={() => setCreateModal(false)}
-              />
+              <ModalCreatePost onRequestClose={() => setCreateModal(false)} />
             )}
             {editModal && !fetchingPost ? (
               <ModalEditPost
@@ -233,4 +253,4 @@ const Post: React.FC<PostProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Post);
+export default Post;

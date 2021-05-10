@@ -24,13 +24,13 @@ export interface RightHeaderProps {
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({}) => {
-  const [_, logout] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const [editModal, setEditModal] = useState(false);
 
-  const [{ data }] = useMeQuery({
-    pause: isServer(),
+  const { data } = useMeQuery({
+    skip: isServer(),
   });
-  const [{ data: user }, fetchUser] = useFetchUserMutation();
+  const [fetchUser, { data: user }] = useFetchUserMutation();
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
       <DropdownController
@@ -46,7 +46,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
             onCloseDropdown={close}
             onActionToFetch={async () => {
               await fetchUser({
-                id: !data?.me ? "" : data.me.id.toString(),
+                variables: {
+                  id: !data?.me ? "" : data.me.id.toString(),
+                },
               }),
                 setEditModal(true);
             }}

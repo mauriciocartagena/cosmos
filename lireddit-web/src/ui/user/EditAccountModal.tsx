@@ -27,7 +27,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
   phone,
   second_last_name,
 }) => {
-  const [, updatedUser] = useUpdateUserMutation();
+  const [updatedUser] = useUpdateUserMutation();
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -43,8 +43,10 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
         onSubmit={async (values) => {
           try {
             await updatedUser({
-              id: id,
-              ...values,
+              variables: {
+                id: id,
+                ...values,
+              },
             });
             onRequestClose();
           } catch (error) {

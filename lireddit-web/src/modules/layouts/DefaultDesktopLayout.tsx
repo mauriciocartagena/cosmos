@@ -10,16 +10,18 @@ interface DefaultDesktopLayoutProps {}
 export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
   children,
 }) => {
-  const [{ data: user }] = useMeQuery({
-    pause: isServer(),
+  const { data: user } = useMeQuery({
+    skip: isServer(),
   });
 
-  const [{ data }, fetchUser] = useFetchUserMutation();
+  const [fetchUser, { data }] = useFetchUserMutation();
 
   useEffect(() => {
     if (user?.me) {
       fetchUser({
-        id: user?.me?.id.toString(),
+        variables: {
+          id: user.me.id.toString(),
+        },
       });
     }
   }, []);
