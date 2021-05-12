@@ -50,6 +50,9 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
               id: id,
               ...values,
             },
+            update: (cache) => {
+              cache.evict({ id: "Post:" + id });
+            },
           });
           onRequestClose();
         }}

@@ -44,9 +44,13 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
         }}
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
-
           const response = await updatedPartner({
             variables: { id: id, input: values },
+            update(cache) {
+              cache.evict({
+                fieldName: "parnets:{}",
+              });
+            },
           });
           response.data?.updatedPartner.errors;
           if (response.data?.updatedPartner.errors) {

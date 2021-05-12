@@ -1,28 +1,31 @@
-import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
+import { stringifyVariables } from "@urql/core";
+import { Cache, cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import router from "next/router";
 import { dedupExchange, Exchange, fetchExchange } from "urql";
 import { pipe, tap } from "wonka";
 import {
   CreateUserMutation,
+  DeletePartnerMutationVariables,
   LoginMutation,
   LogoutMutation,
   MeDocument,
   MeQuery,
+  UpdatePostMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
-const errorExchange: Exchange = ({ forward }) => (ops$) => {
-  return pipe(
-    forward(ops$),
-    tap(({ error }) => {
-      if (error?.message.includes("not authenticated")) {
-        router.replace("/login");
-      }
-    })
-  );
-};
-
-import { stringifyVariables } from "@urql/core";
+const errorExchange: Exchange =
+  ({ forward }) =>
+  (ops$) => {
+    return pipe(
+      forward(ops$),
+      tap(({ error }) => {
+        if (error?.message.includes("not authenticated")) {
+          router.replace("/login");
+        }
+      })
+    );
+  };
 
 export type MergeMode = "before" | "after";
 
@@ -153,8 +156,16 @@ export const createUrqlClient = (ssrExchange: any) => ({
             const fieldInfos = allFields.filter(
               (info) => info.fieldName === "parnets"
             );
+
+            console.log(fieldInfos);
             fieldInfos.forEach((fi) => {
               cache.invalidate("Query", "parnets", fi.arguments || {});
+            });
+          },
+          deletePartner: (_result, args, cache, info) => {
+            cache.invalidate({
+              __typename: "People",
+              id: (args as DeletePartnerMutationVariables).id,
             });
           },
           updatePost: (_result, args, cache, info) => {
@@ -166,15 +177,35 @@ export const createUrqlClient = (ssrExchange: any) => ({
               cache.invalidate("Query", "posts", fi.arguments || {});
             });
           },
-          deletePartner: (_result, args, cache, info) => {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (info) => info.fieldName === "parnets"
+          updatedAccount: (_result, args, cache, info) => {
+            betterUpdateQuery<LoginMutation, MeQuery>(
+              cache,
+              {
+                query: MeDocument,
+              },
+              _result,
+
+              (result, query) => {
+                if (result.login.errors) {
+                  return query;
+                } else {
+                  console.log(_result);
+                  return {
+                    me: result.login.user,
+                  };
+                }
+              }
             );
-            fieldInfos.forEach((fi) => {
-              cache.invalidate("Query", "parnets", fi.arguments || {});
+            invalidateAllPosts(cache);
+          },
+
+          updatedPost: (_result, args, cache, info) => {
+            cache.invalidate({
+              __typename: "Post",
+              id: (args as UpdatePostMutationVariables).id,
             });
           },
+
           CreateUser: (_result, args, cache, info) => {
             cache.invalidate("Query", "users", {
               limit: 5,

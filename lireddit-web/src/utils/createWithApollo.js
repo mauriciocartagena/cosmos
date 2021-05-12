@@ -22,7 +22,7 @@ export const initOnContext = (ac, ctx) => {
     if (inAppContext) {
       console.warn(
         "Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n" +
-          "Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n"
+        "Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n"
       );
     }
   }

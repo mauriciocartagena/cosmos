@@ -1,6 +1,6 @@
 import { createWithApollo } from "./createWithApollo";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { PaginatedPosts } from "../generated/graphql";
+import { PaginatedPosts, PaginatedPartner } from "../generated/graphql";
 import { NextPageContext } from "next";
 
 const createClient = (ctx: NextPageContext) =>
@@ -8,8 +8,9 @@ const createClient = (ctx: NextPageContext) =>
     uri: "http://localhost:5000/graphql",
     headers: {
       cookie:
-        (typeof window === "undefined" ? ctx.req?.headers.cookie : undefined) ||
-        "",
+        (typeof window === "undefined"
+          ? ctx?.req?.headers.cookie
+          : undefined) || "",
     },
     credentials: "include",
     cache: new InMemoryCache({
@@ -25,6 +26,18 @@ const createClient = (ctx: NextPageContext) =>
                 return {
                   ...incoming,
                   posts: [...(existing?.posts || []), ...incoming.posts],
+                };
+              },
+            },
+            parnets: {
+              keyArgs: [],
+              merge(
+                existing: PaginatedPartner | undefined,
+                incoming: PaginatedPartner
+              ): PaginatedPartner {
+                return {
+                  ...incoming,
+                  people: [...(existing?.people || []), ...incoming.people],
                 };
               },
             },

@@ -135,6 +135,7 @@ export class PartnerResolver {
   }
 
   @Mutation(() => PartnerResponse)
+  @UseMiddleware(isAuth)
   async updatedPartner(
     @Arg("id", () => Int) id: number,
     @Arg("input")

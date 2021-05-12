@@ -47,6 +47,9 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
                 id: id,
                 ...values,
               },
+              update: (cache) => {
+                cache.evict({ fieldName: "updatedAccount" });
+              },
             });
             onRequestClose();
           } catch (error) {

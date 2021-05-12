@@ -1,20 +1,18 @@
-import { withUrqlClient } from "next-urql";
+import { Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
+  useDeletePartnerMutation,
   useParnetsQuery,
   usePartnerQuery,
-  useDeletePartnerMutation,
 } from "../../generated/graphql";
+import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
+import { EditPartnerModal } from "../../modules/dashboard/EditPartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
-import { FeedHeader } from "../../ui/FeedHeader";
-import { createUrqlClient } from "../../utils/createUrqlClient";
-import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { Button } from "../../ui/Button";
-import { Flex } from "@chakra-ui/react";
-import { EditPartnerModal } from "../../modules/dashboard/EditPartnerModal";
+import { FeedHeader } from "../../ui/FeedHeader";
 import { withApollo } from "../../utils/withApollo";
 
 const Dashboard: React.FC<{}> = ({}) => {
@@ -23,19 +21,25 @@ const Dashboard: React.FC<{}> = ({}) => {
   const [roomModal, setRoomModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [_id, set_id] = useState(0);
+
   const [deletePartner] = useDeletePartnerMutation();
 
   const { data: partner, loading: fetchingPartner } = usePartnerQuery({
     variables: { id: _id },
+    notifyOnNetworkStatusChange: true,
   });
 
-  const [variables, setVariables] = useState({
-    limit: 10,
-    cursor: null as null | string,
-  });
-
-  const { data, loading: fetching } = useParnetsQuery({
+  const {
+    data,
+    error,
+    loading: fetching,
+    fetchMore,
     variables,
+  } = useParnetsQuery({
+    variables: {
+      limit: 10,
+      cursor: null,
+    },
   });
 
   if (!fetching && !data) {
@@ -137,9 +141,14 @@ const Dashboard: React.FC<{}> = ({}) => {
                               <span className="text-accent">
                                 <Button
                                   size="small"
-                                  onClick={() => {
-                                    deletePartner({
+                                  onClick={async () => {
+                                    await deletePartner({
                                       variables: { id: user.id },
+                                      update: (cache) => {
+                                        cache.evict({
+                                          id: "People:" + user.id,
+                                        });
+                                      },
                                     });
                                   }}
                                 >
@@ -179,11 +188,13 @@ const Dashboard: React.FC<{}> = ({}) => {
                   data-testid="feed-action-button"
                   transition
                   onClick={() => {
-                    setVariables({
-                      limit: variables.limit,
-                      cursor:
-                        data.parnets.people[data.parnets.people.length - 1]
-                          .createdAt,
+                    fetchMore({
+                      variables: {
+                        limit: variables?.limit,
+                        cursor:
+                          data.parnets.people[data.parnets.people.length - 1]
+                            .createdAt,
+                      },
                     });
                   }}
                 >

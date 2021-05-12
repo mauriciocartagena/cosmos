@@ -31,7 +31,12 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
 
-          const response = await register({ variables: { input: values } });
+          const response = await register({
+            variables: { input: values },
+            update: (cache) => {
+              cache.evict({ fieldName: "parnets:{}" });
+            },
+          });
           // response.data.createPartner.errors
           if (response.data?.createPartner.errors) {
             setErrors(toErrorMapParnert(response.data.createPartner.errors));
