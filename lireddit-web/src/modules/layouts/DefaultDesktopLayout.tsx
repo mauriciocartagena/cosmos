@@ -12,9 +12,12 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
 }) => {
   const { data: user } = useMeQuery({
     skip: isServer(),
+    notifyOnNetworkStatusChange: true,
   });
 
-  const [fetchUser, { data }] = useFetchUserMutation();
+  const [fetchUser, { data }] = useFetchUserMutation({
+    notifyOnNetworkStatusChange: true,
+  });
 
   useEffect(() => {
     if (user?.me) {
@@ -43,7 +46,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
         </div>
       }
       rightPanel={
-        data && (
+        data ? (
           <ProfileBlock
             top={
               <div className="flex flex-col rounded-8 bg-primary-800 p-4 w-full">
@@ -119,6 +122,8 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
               </div>
             }
           />
+        ) : (
+          <div>Cargando ...</div>
         )
       }
     >

@@ -178,25 +178,13 @@ export const createUrqlClient = (ssrExchange: any) => ({
             });
           },
           updatedAccount: (_result, args, cache, info) => {
-            betterUpdateQuery<LoginMutation, MeQuery>(
-              cache,
-              {
-                query: MeDocument,
-              },
-              _result,
-
-              (result, query) => {
-                if (result.login.errors) {
-                  return query;
-                } else {
-                  console.log(_result);
-                  return {
-                    me: result.login.user,
-                  };
-                }
-              }
+            const allFields = cache.inspectFields("Mutation");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "User"
             );
-            invalidateAllPosts(cache);
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Mutation", "User", fi.arguments || {});
+            });
           },
 
           updatedPost: (_result, args, cache, info) => {
