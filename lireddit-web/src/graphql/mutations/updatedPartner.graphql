@@ -10,7 +10,6 @@ mutation UpdatedPartner($id: Int!, $input: PartnerInput!) {
       second_last_name
       phone
       direction
-      email
     }
   }
 }

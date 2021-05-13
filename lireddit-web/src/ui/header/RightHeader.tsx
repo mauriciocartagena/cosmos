@@ -47,7 +47,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
             onActionToFetch={async () => {
               await fetchUser({
                 variables: {
-                  id: !data?.me ? "" : data.me.id.toString(),
+                  id: !data?.me ? "" : data.me.peopleId.toString(),
                 },
               }),
                 setEditModal(true);
@@ -61,9 +61,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
           src="https://avatars.githubusercontent.com/u/51917913?v=4"
         />
       </DropdownController>
-      {editModal && (
+      {/* {editModal && (
         <EditAccountModal
-          id={!data?.me ? 0 : data.me.id}
+          id={!data?.me ? 0 : data.me.peopleId}
           direction={!user ? "" : user.fetchUser.direction}
           email={!user ? "" : user.fetchUser.email}
           first_last_name={!user ? "" : user.fetchUser.first_last_name}
@@ -72,7 +72,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
           second_last_name={!user ? "" : user.fetchUser.second_last_name}
           onRequestClose={() => setEditModal(false)}
         />
-      )}
+      )} */}
     </div>
   );
 };

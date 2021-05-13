@@ -1,11 +1,7 @@
 query Users {
   users {
-    id
-    name
-    first_last_name
-    second_last_name
+    peopleId
+    username
     email
-    direction
-    phone
   }
 }

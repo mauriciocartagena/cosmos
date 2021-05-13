@@ -24,9 +24,8 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           name: "",
           first_last_name: "",
           second_last_name: "",
-          phone: 87,
           direction: "",
-          email: "",
+          phone: "",
         }}
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
@@ -48,83 +47,76 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           }
         }}
       >
-        <Form className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}>
-          <div className={`col-span-3 block`}>
-            <h4 className={`mb-2 text-primary-100`}>Registrar Socio</h4>
-            <p className={`text-primary-300`}>
-              Por favor llene cuidadosamente los datos
-            </p>
-          </div>
-          <div className={`h-full w-full col-span-3`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
-              name="name"
-              maxLength={60}
-              placeholder={"Nombre"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`flex h-full w-full col-span-2`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
-              name="first_last_name"
-              maxLength={60}
-              placeholder={"Primer apellido"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`grid items-start grid-cols-1 h-6`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 px-4 h-6`}
-              name="second_last_name"
-              maxLength={60}
-              placeholder={"Segundo apellido"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`flex h-full w-full col-span-2`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 h-6`}
-              name="phone"
-              placeholder="Celular"
-              maxLength={60}
-              type="tel"
-            />
-          </div>
-          <div className={`grid items-start grid-cols-1 h-6`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 h-6`}
-              name="email"
-              type="email"
-              maxLength={60}
-              placeholder={"Email"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
-            <InputField
-              className={`h-11 col-span-3 w-full`}
-              name="direction"
-              placeholder="Dirección"
-              rows={3}
-              maxLength={500}
-              textarea
-            />
-          </div>
-
-          <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-            <Button loading={loading} type="submit" className={`mr-3`}>
-              Registrar
-            </Button>
-            <ButtonLink type="button" onClick={onRequestClose}>
-              Cancelar
-            </ButtonLink>
-          </div>
-        </Form>
+        {(props) => (
+          <Form
+            className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}
+            onSubmit={props.handleSubmit}
+          >
+            <div className={`col-span-3 block`}>
+              <h4 className={`mb-2 text-primary-100`}>Registrar Socio</h4>
+              <p className={`text-primary-300`}>
+                Por favor llene cuidadosamente los datos
+              </p>
+            </div>
+            <div className={`flex h-full w-full col-span-2`}>
+              <InputField
+                className={`rounded-8 bg-primary-700 px-4 h-6`}
+                name="name"
+                maxLength={60}
+                placeholder={"Nombre"}
+                autoFocus
+                autoComplete="off"
+              />
+            </div>
+            <div className={`grid items-start grid-cols-1 h-6`}>
+              <InputField
+                className={`rounded-8 bg-primary-700 px-4 h-6`}
+                name="first_last_name"
+                maxLength={60}
+                placeholder={"Primer apellido"}
+                autoFocus
+                autoComplete="off"
+              />
+            </div>
+            <div className={`flex h-full w-full col-span-2`}>
+              <InputField
+                className={`rounded-8 bg-primary-700 px-4 h-6`}
+                name="second_last_name"
+                maxLength={60}
+                placeholder={"Segundo apellido"}
+                autoFocus
+                autoComplete="off"
+              />
+            </div>
+            <div className={`grid items-start grid-cols-1 h-6`}>
+              <InputField
+                className={`rounded-8 bg-primary-700 px-4 h-6`}
+                name="phone"
+                placeholder={"Celular"}
+                autoFocus
+                autoComplete="off"
+              />
+            </div>
+            <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
+              <InputField
+                className={`h-11 col-span-3 w-full`}
+                name="direction"
+                placeholder="Dirección"
+                rows={3}
+                maxLength={500}
+                textarea
+              />
+            </div>
+            <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
+              <Button loading={loading} type="submit" className={`mr-3`}>
+                Registrar
+              </Button>
+              <ButtonLink type="button" onClick={onRequestClose}>
+                Cancelar
+              </ButtonLink>
+            </div>
+          </Form>
+        )}
       </Formik>
     </Modal>
   );

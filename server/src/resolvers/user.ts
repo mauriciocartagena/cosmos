@@ -15,12 +15,13 @@ import { MyContext } from "../types";
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
-import { validateRegister } from "../utils/validateRegister";
-import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
 import { isAuth } from "../middleware/isAuth";
+import { People } from "../entities/People";
 import { getConnection } from "typeorm";
+import { UsernamePasswordInput } from "./UsernamePasswordInput";
+import { validateUser } from "../utils/validateUser";
 
 @ObjectType()
 class FieldError {
@@ -45,7 +46,7 @@ export class UserResolver {
   @FieldResolver(() => String)
   email(@Root() user: User, @Ctx() { req }: MyContext) {
     // Este sera el usuario actual y esta bien mostrarle su propio correo
-    if (req.session.userId === user.id) {
+    if (req.session.userId === user.peopleId) {
       return user.email;
     }
 
@@ -103,7 +104,7 @@ export class UserResolver {
     user.password = await argon2.hash(newPassword);
 
     await User.update(
-      { id: userIdNum },
+      { peopleId: userIdNum },
       {
         password: await argon2.hash(newPassword),
       }
@@ -111,11 +112,10 @@ export class UserResolver {
 
     await redis.del(key);
 
-    req.session.userId = user.id;
+    req.session.userId = user.creator.id;
 
     return { user };
   }
-
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
@@ -132,11 +132,10 @@ export class UserResolver {
 
     await redis.set(
       FORGET_PASSWORD_PREFIX + token,
-      user.id,
+      user.creator.id,
       "ex",
       1000 * 60 * 60 * 24 * 3
     ); //3 days
-
     await sendEmail(
       email,
       `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
@@ -153,7 +152,7 @@ export class UserResolver {
       // the email is not in the db
       return null;
     }
-
+    console.log(user);
     return user;
   }
   @Query(() => User, { nullable: true })
@@ -176,76 +175,91 @@ export class UserResolver {
     @Arg("options")
     options: UsernamePasswordInput,
     @Ctx()
-    { req }: MyContext
+    {}: MyContext
   ): Promise<UserResponse> {
-    const errors = validateRegister(options);
+    const errors = validateUser(options);
     if (errors) {
       return { errors };
     }
-
+    // creatorId: req.session.userId
     const hashedPassword = await argon2.hash(options.password);
 
-    let user;
+    const getEmail = await getConnection()
+      .getRepository(User)
+      .createQueryBuilder("user")
+      .where("user.email = :email", { email: options.email })
+      .getOne();
 
-    try {
-      // User.create({}).save()
+    const getUser = await getConnection()
+      .getRepository(User)
+      .createQueryBuilder("user")
+      .where("user.username = :username", { username: options.username })
+      .getOne();
 
-      const result = await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({
-          username: options.username,
-          password: hashedPassword,
-          name: options.name,
-          first_last_name: options.first_last_name,
-          second_last_name: options.second_last_name,
-          phone: options.phone,
-          direction: options.direction,
-          email: options.email,
-        })
-        .returning("*")
-        .execute();
-
-      user = result.raw[0];
-    } catch (err) {
-      if (err.code === "23505") {
-        return {
-          errors: [
-            {
-              field: "username",
-              message: "El usuario ya existe",
-            },
-          ],
-        };
-      }
+    if (!!getUser) {
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "El usuario ya existe",
+          },
+        ],
+      };
+    }
+    if (!!getEmail) {
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "El email ya existe",
+          },
+        ],
+      };
     }
 
-    // req.session.userId = user.id;
+    const peopleNew = new People();
+    peopleNew.name = options.name;
+    peopleNew.first_last_name = options.first_last_name;
+    peopleNew.second_last_name = options.second_last_name;
+    peopleNew.phone = options.phone;
+    peopleNew.direction = options.direction;
+
+    await getConnection().manager.save(peopleNew);
+
+    const createrUser = new User();
+    createrUser.username = options.username;
+    createrUser.password = hashedPassword;
+    createrUser.email = options.email;
+    createrUser.peopleId = peopleNew.id;
+    createrUser.creator = peopleNew;
+
+    const resp = await getConnection().manager.save(createrUser);
+
+    let user = resp;
+
     return { user };
   }
+  // req.session.userId = user.id;
 
-  @Mutation(() => User)
+  @Mutation(() => People)
   @UseMiddleware(isAuth)
   async updatedUser(
     @Arg("id", () => Int) id: number,
     @Arg("name") name: string,
     @Arg("first_last_name") first_last_name: string,
     @Arg("second_last_name") second_last_name: string,
-    @Arg("phone", () => Int) phone: number,
-    @Arg("direction") direction: string,
-    @Arg("email") email: string
+    @Arg("phone") phone: string,
+    @Arg("direction") direction: string
   ) {
     const result = await getConnection()
       .createQueryBuilder()
-      .update(User)
+      .update(People)
       .set({
         name: name,
         first_last_name: first_last_name,
         second_last_name: second_last_name,
         phone: phone,
         direction: direction,
-        email: email,
       })
       .where("id = :id", { id: id })
       .returning("*")
@@ -254,14 +268,14 @@ export class UserResolver {
     return result.raw[0];
   }
 
-  // @Mutation(() => Boolean)
-  // async deletePost(
-  //   @Arg("id") id: number,
-  //   @Ctx() { em }: MyContext
-  // ): Promise<boolean> {
-  //   await em.nativeDelete(Post, { id });
-  //   return true;
-  // }
+  // // @Mutation(() => Boolean)
+  // // async deletePost(
+  // //   @Arg("id") id: number,
+  // //   @Ctx() { em }: MyContext
+  // // ): Promise<boolean> {
+  // //   await em.nativeDelete(Post, { id });
+  // //   return true;
+  // // }
 
   @Mutation(() => UserResponse)
   async login(
@@ -299,11 +313,11 @@ export class UserResolver {
       };
     }
 
-    req.session.userId = user.id;
+    req.session.userId = user.peopleId;
 
-    return {
-      user,
-    };
+    console.log({ user });
+
+    return { user };
   }
 
   @Mutation(() => Boolean)

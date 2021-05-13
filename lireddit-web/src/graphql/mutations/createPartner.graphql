@@ -10,7 +10,6 @@ mutation CreatePartner($input: PartnerInput!) {
       second_last_name
       phone
       direction
-      email
     }
   }
 }

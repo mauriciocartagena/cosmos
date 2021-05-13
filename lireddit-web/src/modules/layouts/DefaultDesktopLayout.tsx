@@ -23,7 +23,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
     if (user?.me) {
       fetchUser({
         variables: {
-          id: user.me.id.toString(),
+          id: user.me.peopleId.toString(),
         },
       });
     }
@@ -67,7 +67,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
                   <div className="flex mt-2">
                     <div className="flex flex-col ml-3">
                       <span className="text-primary-100 font-bold overflow-hidden break-all text-left">
-                        {data?.fetchUser.name}
+                        {data?.fetchUser.email}
                       </span>
                       <span className="text-primary-300 text-left break-all">
                         {data?.fetchUser.username}
@@ -103,21 +103,21 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
                   <div className="flex font-bold text-primary-100 text-sm uppercase">
                     Primer Apellido
                   </div>
-                  <CardHeading text={`${data?.fetchUser.first_last_name}`} />
+                  <CardHeading text={`${data?.fetchUser.email}`} />
 
                   <div className="flex font-bold text-primary-100  text-sm uppercase">
                     Segundo Apellido
                   </div>
-                  <CardHeading text={`${data?.fetchUser.second_last_name}`} />
+                  <CardHeading text={`${data?.fetchUser.email}`} />
 
                   <div className="flex font-bold text-primary-100 text-sm uppercase">
                     Celular
                   </div>
-                  <CardHeading text={`${data?.fetchUser.phone}`} />
+                  <CardHeading text={`${data?.fetchUser.email}`} />
                   <div className="flex font-bold text-primary-100 text-sm uppercase">
                     Dirección
                   </div>
-                  <CardHeading text={`${data?.fetchUser.direction}`} />
+                  <CardHeading text={`${data?.fetchUser.email}`} />
                 </button>
               </div>
             }

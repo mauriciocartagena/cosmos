@@ -1,5 +1,6 @@
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field, Int } from "type-graphql";
 import { Partner } from "./Partner";
+import { User } from "./User";
 import {
   Column,
   CreateDateColumn,
@@ -36,19 +37,18 @@ export class People extends BaseEntity {
   @OneToMany(() => Partner, (partner) => partner.creator)
   partner: Partner[];
 
+  @OneToMany(() => User, (user) => user.creator)
+  user: User[];
+
   @Field(() => String)
-  @Column()
+  @Column({ nullable: true })
   second_last_name: string;
 
-  @Field(() => Number)
+  @Field(() => String)
   @Column({ nullable: true })
-  phone: number;
+  phone: string;
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: true })
   direction: string;
-
-  @Field(() => String)
-  @Column()
-  email: string;
 }

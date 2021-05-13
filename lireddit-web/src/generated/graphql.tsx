@@ -32,7 +32,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   fetchUser: User;
   createUser: UserResponse;
-  updatedUser: User;
+  updatedUser: People;
   login: UserResponse;
   logout: Scalars['Boolean'];
   updatePost?: Maybe<Post>;
@@ -65,9 +65,8 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationUpdatedUserArgs = {
-  email: Scalars['String'];
   direction: Scalars['String'];
-  phone: Scalars['Int'];
+  phone: Scalars['String'];
   second_last_name: Scalars['String'];
   first_last_name: Scalars['String'];
   name: Scalars['String'];
@@ -124,11 +123,10 @@ export type PaginatedPosts = {
 };
 
 export type PartnerInput = {
-  email: Scalars['String'];
   name: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
-  phone: Scalars['Float'];
+  phone: Scalars['String'];
   direction: Scalars['String'];
 };
 
@@ -146,9 +144,8 @@ export type People = {
   name: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
-  phone: Scalars['Float'];
+  phone: Scalars['String'];
   direction: Scalars['String'];
-  email: Scalars['String'];
 };
 
 export type Post = {
@@ -208,16 +205,12 @@ export type QueryPartnerArgs = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['Float'];
+  creator: People;
   createdAt: Scalars['String'];
+  peopleId: Scalars['Float'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
-  name: Scalars['String'];
-  first_last_name: Scalars['String'];
-  second_last_name: Scalars['String'];
-  phone: Scalars['Float'];
-  direction: Scalars['String'];
   email: Scalars['String'];
 };
 
@@ -232,9 +225,10 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
   name: Scalars['String'];
+  type: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
-  phone: Scalars['Float'];
+  phone: Scalars['String'];
   direction: Scalars['String'];
 };
 
@@ -245,12 +239,12 @@ export type RegularErrorFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
+  & Pick<User, 'username' | 'peopleId' | 'email'>
 );
 
 export type RegularUserFindOneUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email' | 'username'>
+  & Pick<User, 'email' | 'username'>
 );
 
 export type RegularUserResponseFragment = (
@@ -292,7 +286,7 @@ export type CreatePartnerMutation = (
       & Pick<FieldErrorParnet, 'field' | 'message'>
     )>>, people?: Maybe<(
       { __typename?: 'People' }
-      & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+      & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
     )> }
   ) }
 );
@@ -380,7 +374,7 @@ export type UpdatedPartnerMutation = (
       & Pick<FieldErrorParnet, 'field' | 'message'>
     )>>, people?: Maybe<(
       { __typename?: 'People' }
-      & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+      & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
     )> }
   ) }
 );
@@ -408,17 +402,16 @@ export type UpdateUserMutationVariables = Exact<{
   name: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
-  phone: Scalars['Int'];
+  phone: Scalars['String'];
   direction: Scalars['String'];
-  email: Scalars['String'];
 }>;
 
 
 export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
   & { updatedUser: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction' | 'email'>
+    { __typename?: 'People' }
+    & Pick<People, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
   ) }
 );
 
@@ -455,7 +448,7 @@ export type PartnerQuery = (
   { __typename?: 'Query' }
   & { partner?: Maybe<(
     { __typename?: 'People' }
-    & Pick<People, 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name' | 'email'>
+    & Pick<People, 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name'>
   )> }
 );
 
@@ -472,7 +465,7 @@ export type ParnetsQuery = (
     & Pick<PaginatedPartner, 'hasMore'>
     & { people: Array<(
       { __typename?: 'People' }
-      & Pick<People, 'createdAt' | 'id' | 'second_last_name' | 'name' | 'email' | 'first_last_name' | 'phone' | 'direction'>
+      & Pick<People, 'createdAt' | 'id' | 'second_last_name' | 'name' | 'first_last_name' | 'phone' | 'direction'>
     )> }
   ) }
 );
@@ -489,7 +482,7 @@ export type PostQuery = (
     & Pick<Post, 'id' | 'subtitle' | 'description' | 'title' | 'url' | 'type' | 'createdAt'>
     & { creator: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
+      & Pick<User, 'username' | 'peopleId'>
     ) }
   )> }
 );
@@ -519,17 +512,12 @@ export type UsersQuery = (
   { __typename?: 'Query' }
   & { users: Array<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'email' | 'direction' | 'phone'>
+    & Pick<User, 'peopleId' | 'username' | 'email'>
   )> }
 );
 
 export const RegularUserFindOneUserFragmentDoc = gql`
     fragment RegularUserFindOneUser on User {
-  name
-  first_last_name
-  second_last_name
-  phone
-  direction
   email
   username
 }
@@ -542,8 +530,9 @@ export const RegularErrorFragmentDoc = gql`
     `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
-  id
   username
+  peopleId
+  email
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -604,7 +593,6 @@ export const CreatePartnerDocument = gql`
       second_last_name
       phone
       direction
-      email
     }
   }
 }
@@ -846,7 +834,6 @@ export const UpdatedPartnerDocument = gql`
       second_last_name
       phone
       direction
-      email
     }
   }
 }
@@ -928,7 +915,7 @@ export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutati
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($id: Int!, $name: String!, $first_last_name: String!, $second_last_name: String!, $phone: Int!, $direction: String!, $email: String!) {
+    mutation UpdateUser($id: Int!, $name: String!, $first_last_name: String!, $second_last_name: String!, $phone: String!, $direction: String!) {
   updatedUser(
     id: $id
     name: $name
@@ -936,7 +923,6 @@ export const UpdateUserDocument = gql`
     second_last_name: $second_last_name
     phone: $phone
     direction: $direction
-    email: $email
   ) {
     id
     name
@@ -944,7 +930,6 @@ export const UpdateUserDocument = gql`
     second_last_name
     phone
     direction
-    email
   }
 }
     `;
@@ -969,7 +954,6 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      second_last_name: // value for 'second_last_name'
  *      phone: // value for 'phone'
  *      direction: // value for 'direction'
- *      email: // value for 'email'
  *   },
  * });
  */
@@ -1055,7 +1039,6 @@ export const PartnerDocument = gql`
     name
     second_last_name
     first_last_name
-    email
   }
 }
     `;
@@ -1096,7 +1079,6 @@ export const ParnetsDocument = gql`
       id
       second_last_name
       name
-      email
       first_last_name
       phone
       direction
@@ -1144,8 +1126,8 @@ export const PostDocument = gql`
     type
     createdAt
     creator {
-      id
       username
+      peopleId
     }
   }
 }
@@ -1225,13 +1207,9 @@ export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariable
 export const UsersDocument = gql`
     query Users {
   users {
-    id
-    name
-    first_last_name
-    second_last_name
+    peopleId
+    username
     email
-    direction
-    phone
   }
 }
     `;

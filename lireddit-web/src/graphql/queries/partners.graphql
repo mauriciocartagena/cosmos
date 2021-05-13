@@ -6,7 +6,6 @@ query Parnets($limit: Int!, $cursor: String) {
       id
       second_last_name
       name
-      email
       first_last_name
       phone
       direction

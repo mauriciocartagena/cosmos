@@ -3,9 +3,6 @@ import { Field, InputType } from "type-graphql";
 @InputType()
 export class PartnerInput {
   @Field()
-  email: string;
-
-  @Field()
   name: string;
 
   @Field()
@@ -15,7 +12,7 @@ export class PartnerInput {
   second_last_name: string;
 
   @Field()
-  phone: number;
+  phone: string;
 
   @Field()
   direction: string;

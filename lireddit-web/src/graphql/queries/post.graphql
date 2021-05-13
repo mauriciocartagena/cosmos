@@ -8,8 +8,8 @@ query Post($id: Int!) {
     type
     createdAt
     creator {
-      id
       username
+      peopleId
     }
   }
 }

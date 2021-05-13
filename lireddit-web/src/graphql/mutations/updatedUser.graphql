@@ -3,9 +3,8 @@ mutation UpdateUser(
   $name: String!
   $first_last_name: String!
   $second_last_name: String!
-  $phone: Int!
+  $phone: String!
   $direction: String!
-  $email: String!
 ) {
   updatedUser(
     id: $id
@@ -14,7 +13,6 @@ mutation UpdateUser(
     second_last_name: $second_last_name
     phone: $phone
     direction: $direction
-    email: $email
   ) {
     id
     name
@@ -22,6 +20,5 @@ mutation UpdateUser(
     second_last_name
     phone
     direction
-    email
   }
 }

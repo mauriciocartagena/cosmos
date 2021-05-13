@@ -15,13 +15,16 @@ export class UsernamePasswordInput {
   name: string;
 
   @Field()
+  type: string;
+
+  @Field()
   first_last_name: string;
 
   @Field()
   second_last_name: string;
 
   @Field()
-  phone: number;
+  phone: string;
 
   @Field()
   direction: string;

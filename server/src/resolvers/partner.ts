@@ -16,7 +16,6 @@ import { validateRegisterPartner } from "../utils/validateRegisterPartner";
 import { PartnerInput } from "./PartnetInput";
 import { Partner } from "../entities/Partner";
 import { isAuth } from "../middleware/isAuth";
-import session from "express-session";
 
 @ObjectType()
 class FieldErrorParnet {
@@ -64,7 +63,6 @@ export class PartnerResolver {
 
     try {
       const peopleNew = new People();
-      peopleNew.email = input.email;
       peopleNew.name = input.name;
       peopleNew.first_last_name = input.first_last_name;
       peopleNew.second_last_name = input.second_last_name;
@@ -112,7 +110,6 @@ export class PartnerResolver {
       select u.*, 
       json_build_object(
         'id', u.id,
-        'email', u.email,
         'second_last_name',u.second_last_name,
         'first_last_name', u.first_last_name,
         'phone',u.phone,

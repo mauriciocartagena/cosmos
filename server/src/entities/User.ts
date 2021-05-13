@@ -4,22 +4,29 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
+  ManyToOne,
 } from "typeorm";
+import { People } from "./People";
 
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @Field(() => People)
+  @ManyToOne(() => People, (people) => people.user, {
+    primary: true,
+  })
+  creator: People;
 
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;
+
+  @Field()
+  @Column()
+  peopleId: number;
 
   @Field(() => String)
   @UpdateDateColumn()
@@ -34,29 +41,9 @@ export class User extends BaseEntity {
   password: string;
 
   @Field(() => String)
-  @Column()
-  name: string;
-
-  @Field(() => String)
-  @Column()
-  first_last_name: string;
-
-  @Field(() => String)
-  @Column()
-  second_last_name!: string;
-
-  @Field(() => Number)
-  @Column()
-  phone!: number;
+  @Column({ unique: true })
+  email: string;
 
   @OneToMany(() => Post, (post) => post.creator)
   posts: Post[];
-
-  @Field(() => String)
-  @Column()
-  direction!: string;
-
-  @Field(() => String)
-  @Column({ unique: true, nullable: true })
-  email!: string;
 }
