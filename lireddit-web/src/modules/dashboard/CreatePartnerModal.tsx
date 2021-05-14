@@ -7,7 +7,7 @@ import { Modal } from "../../ui/Modal";
 import { useCreatePartnerMutation } from "../../generated/graphql";
 import { useState } from "react";
 import { toErrorMapParnert } from "../../utils/toErrorMapParnert";
-
+import PhoneInput from "react-phone-input-2";
 interface CreatePartnerModal {
   onRequestClose: () => void;
 }
@@ -17,6 +17,8 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
 }) => {
   const [register] = useCreatePartnerMutation();
   const [loading, setLoading] = useState(false);
+  const [changePhone, setChangePhone] = useState("");
+
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
@@ -51,6 +53,9 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           <Form
             className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}
             onSubmit={props.handleSubmit}
+            onChange={() => {
+              props.values.phone = changePhone;
+            }}
           >
             <div className={`col-span-3 block`}>
               <h4 className={`mb-2 text-primary-100`}>Registrar Socio</h4>
@@ -89,14 +94,29 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               />
             </div>
             <div className={`grid items-start grid-cols-1 h-6`}>
-              <InputField
-                className={`rounded-8 bg-primary-700 px-4 h-6`}
-                name="phone"
-                placeholder={"Celular"}
-                autoFocus
-                autoComplete="off"
+              <PhoneInput
+                onChange={(e) => {
+                  setChangePhone(`+ ${e}`);
+                }}
+                inputClass="w-full py-2 px-4 rounded-8  placeholder-primary-300 text-primary-100 focus:outline-none bg-primary-700  rounded-8 bg-primary-700 px-4 h-6"
+                inputStyle={{
+                  backgroundColor: "var(--color-primary-700)",
+                  border: "none",
+                }}
+                dropdownClass="rounded-8 phone placeholder-primary-300 text-primary-100 focus:outline-none bg-primary-700  rounded-8 bg-primary-700"
+                dropdownStyle={{
+                  backgroundColor: "var(--color-primary-800)",
+                  borderColor: "gray",
+                  border: "none",
+                }}
+                country="bo"
+                specialLabel=""
+                inputProps={{
+                  FocusEvent: "outline-none",
+                }}
               />
             </div>
+
             <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
               <InputField
                 className={`h-11 col-span-3 w-full`}

@@ -74,11 +74,7 @@ const Dashboard: React.FC<{}> = ({}) => {
                         <div className={`flex justify-between`}>
                           <div className="flex w-full">
                             <div className="flex flex-1 font-bold text-ellipsis overflow-hidden break-all mb-4">
-                              {user.name +
-                                " " +
-                                user.first_last_name +
-                                " " +
-                                user.second_last_name}
+                              {user.name}
                             </div>
                             <div className="flex gap-2">
                               <div className={`inline break-all`}>
@@ -103,7 +99,9 @@ const Dashboard: React.FC<{}> = ({}) => {
                               >
                                 <div className="w-full mt-2 flex">
                                   <div className="text-left break-all truncate whitespace-pre-wrap line-clamp-2 text-primary-300">
-                                    {user.email}
+                                    {user.first_last_name +
+                                      " " +
+                                      user.second_last_name}
                                   </div>
                                 </div>
                               </div>
@@ -176,7 +174,6 @@ const Dashboard: React.FC<{}> = ({}) => {
                 name={partner?.partner?.name!}
                 first_last_name={partner?.partner?.first_last_name!}
                 second_last_name={partner?.partner?.second_last_name!}
-                email={partner?.partner?.email!}
                 phone={partner?.partner?.phone!}
                 direction={partner?.partner?.direction!}
               />

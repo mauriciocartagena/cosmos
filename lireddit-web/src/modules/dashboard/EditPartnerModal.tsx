@@ -13,9 +13,8 @@ interface EditPartnerModal {
   name: string;
   first_last_name: string;
   second_last_name: string;
-  phone: number;
+  phone: string;
   direction: string;
-  email: string;
 }
 
 export const EditPartnerModal: React.FC<EditPartnerModal> = ({
@@ -26,7 +25,6 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
   second_last_name,
   phone,
   direction,
-  email,
 }) => {
   const [updatedPartner] = useUpdatedPartnerMutation();
 
@@ -40,7 +38,6 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
           second_last_name: second_last_name,
           phone: phone,
           direction: direction,
-          email: email,
         }}
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
@@ -108,17 +105,6 @@ export const EditPartnerModal: React.FC<EditPartnerModal> = ({
               maxLength={60}
               autoComplete="off"
               type="tel"
-            />
-          </div>
-          <div className={`grid items-start grid-cols-1 h-6`}>
-            <InputField
-              className={`rounded-8 bg-primary-700 h-6`}
-              name="email"
-              type="email"
-              maxLength={60}
-              placeholder={"Email"}
-              autoFocus
-              autoComplete="off"
             />
           </div>
           <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
