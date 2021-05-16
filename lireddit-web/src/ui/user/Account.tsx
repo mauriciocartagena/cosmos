@@ -10,6 +10,7 @@ import { withApollo } from "../../utils/withApollo";
 import { Button } from "../Button";
 import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
 import { SingleUser } from "../UserAvatar/SingleUser";
+import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 
 const Account: React.FC<{}> = () => {
   useIsAuth();
@@ -20,7 +21,7 @@ const Account: React.FC<{}> = () => {
   }, 100);
 
   return (
-    <>
+    <WaitForWsAndAuth>
       <HeaderController embed={{}} title="Account" />
 
       {data ? (
@@ -65,7 +66,7 @@ const Account: React.FC<{}> = () => {
       ) : (
         <div>Loading ...</div>
       )}
-    </>
+    </WaitForWsAndAuth>
   );
 };
 

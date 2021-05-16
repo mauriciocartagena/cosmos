@@ -5,7 +5,6 @@ import {
   usePartnersQuery,
   usePartnerQuery,
 } from "../../generated/graphql";
-import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import EditPartnerModal from "../../modules/dashboard/EditPartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
@@ -14,11 +13,10 @@ import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout
 import { Button } from "../../ui/Button";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { withApollo } from "../../utils/withApollo";
+import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 
 interface DasboardProps {}
 const Dashboard: React.FC<DasboardProps> = ({}) => {
-  useIsAuth();
-
   const [roomModal, setRoomModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [_id, set_id] = useState(0);
@@ -45,7 +43,7 @@ const Dashboard: React.FC<DasboardProps> = ({}) => {
     return null;
   }
   return (
-    <>
+    <WaitForWsAndAuth>
       <HeaderController embed={{}} title="Dasboard" />
       {data ? (
         <DefaultDesktopLayout>
@@ -198,7 +196,7 @@ const Dashboard: React.FC<DasboardProps> = ({}) => {
           direction={partner?.partner?.direction}
         />
       ) : null}
-    </>
+    </WaitForWsAndAuth>
   );
 };
 export default withApollo({ ssr: true })(Dashboard);

@@ -9,15 +9,14 @@ import { MiddlePanel } from "../../modules/layouts/GridPanels";
 import { useScreenType } from "../../shared-hooks/useScreenType";
 import { Button } from "../../ui/Button";
 import { FeedHeader } from "../../ui/FeedHeader";
-import { useIsAuth } from "../../utils/useIsAuth";
 import ModalCreatePost from "./ModalCreatePost";
 import ModalEditPost from "./ModalEditPost";
 import { withApollo } from "../../utils/withApollo";
+import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 
 interface PostProps {}
 
 const Post: React.FC<PostProps> = ({}) => {
-  useIsAuth();
   const screenType = useScreenType();
   const [editModal, setEditModal] = useState(false);
 
@@ -39,9 +38,8 @@ const Post: React.FC<PostProps> = ({}) => {
 
   const [createModal, setCreateModal] = useState(false);
 
-  const IMAGE_DEFAULT = "https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg";
-  const IMAGE_DEFAULT_LOADING =
-    "https://i.pinimg.com/originals/90/80/60/9080607321ab98fa3e70dd24b2513a20.gif";
+  const IMAGE_DEFAULT =
+    "https://fotos.perfil.com//2019/11/22/900/0/tesla-cybertruck-807820.jpg";
 
   if (!loading && !data) {
     return <div>tienes una consulta fallida por alguna razón</div>;
@@ -51,7 +49,7 @@ const Post: React.FC<PostProps> = ({}) => {
   }
 
   return (
-    <>
+    <WaitForWsAndAuth>
       <HeaderController embed={{}} title="Post" />
       <DefaultDesktopLayout>
         <MiddlePanel
@@ -78,11 +76,11 @@ const Post: React.FC<PostProps> = ({}) => {
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
                           src={post.url}
-                          defaultValue="https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg"
-                          loading="lazy"
-                          unloader={<Img src={IMAGE_DEFAULT} />}
-                          loader={<Img src={IMAGE_DEFAULT_LOADING} />}
-                          onError={(err) => console.log(err)}
+                          loading="eager"
+                          unloader={
+                            <Img src={IMAGE_DEFAULT} alt={post.description} />
+                          }
+                          alt={post.description}
                         />
                         <div className={`flex justify-between`}>
                           <div className="flex w-full">
@@ -136,11 +134,11 @@ const Post: React.FC<PostProps> = ({}) => {
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
                         <Img
                           src={post.url}
-                          defaultValue="https://i.blogs.es/f069a7/mandalorian1/450_1000.jpeg"
-                          loading="lazy"
-                          unloader={<Img src={IMAGE_DEFAULT} />}
-                          loader={<Img src={IMAGE_DEFAULT_LOADING} />}
-                          onError={(err) => console.log(err)}
+                          loading="eager"
+                          unloader={
+                            <Img src={IMAGE_DEFAULT} alt={post.description} />
+                          }
+                          alt={post.description}
                         />
 
                         <div className={`flex justify-between`}>
@@ -245,7 +243,7 @@ const Post: React.FC<PostProps> = ({}) => {
           </div>
         </MiddlePanel>
       </DefaultDesktopLayout>
-    </>
+    </WaitForWsAndAuth>
   );
 };
 

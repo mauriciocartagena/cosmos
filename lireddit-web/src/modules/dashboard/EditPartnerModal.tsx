@@ -49,7 +49,6 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
           const response = await updatedPartner({
             variables: { id: id, input: values },
             update: (cache) => {
-              // cache.evict({ id: "People:" + id });
               cache.evict({ fieldName: "partners:{}" });
             },
           });
