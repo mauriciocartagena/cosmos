@@ -29,6 +29,8 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
     }
   }, []);
 
+  console.log(data);
+
   return (
     <DesktopLayout
       leftPanel={

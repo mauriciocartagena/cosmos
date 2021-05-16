@@ -1,20 +1,16 @@
-import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
 import SolidCompass from "../../icons/SolidCompass";
 import { useIsAuth } from "../../modules/auth/useIsAuth";
+import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { withApollo } from "../../utils/withApollo";
 import { Button } from "../Button";
 import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
 import { SingleUser } from "../UserAvatar/SingleUser";
-import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 
 const Account: React.FC<{}> = () => {
-  useIsAuth();
-
   const [data, setData] = useState(false);
   setTimeout(() => {
     setData(true);

@@ -146,13 +146,28 @@ export class UserResolver {
 
   @Mutation(() => User)
   async fetchUser(@Arg("id") id: string): Promise<User | null> {
-    const user = await User.findOne(parseInt(id));
+    // const user = await User.findOne(parseInt(id));
+    const replacements: any[] = [id];
 
-    if (!user) {
-      // the email is not in the db
-      return null;
-    }
-    console.log(user);
+    let user;
+
+    const result = await getConnection().query(
+      `select u.*, 
+          json_build_object(
+            'name', p.name,
+            'first_last_name', p.first_last_name,
+            'second_last_name',p.second_last_name,
+            'phone',p.phone,
+            'direction', p.direction
+            ) creator
+      from "people" p
+      inner join public.user u on u."creatorId"  = p."id"
+      where p."id" = $1 `,
+      replacements
+    );
+
+    user = result[0];
+
     return user;
   }
   @Query(() => User, { nullable: true })
