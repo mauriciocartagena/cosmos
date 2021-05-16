@@ -91,7 +91,7 @@ export class PartnerResolver {
   }
 
   @Query(() => PaginatedPartner)
-  async parnets(
+  async partners(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null
   ): Promise<PaginatedPartner> {
@@ -105,7 +105,7 @@ export class PartnerResolver {
       replacements.push(new Date(parseInt(cursor)));
     }
 
-    const parnets = await getConnection().query(
+    const partners = await getConnection().query(
       `
       select u.*, 
       json_build_object(
@@ -126,8 +126,8 @@ export class PartnerResolver {
     );
 
     return {
-      people: parnets.slice(0, realLimit),
-      hasMore: parnets.length === realLimitPlusOne,
+      people: partners.slice(0, realLimit),
+      hasMore: partners.length === realLimitPlusOne,
     };
   }
 

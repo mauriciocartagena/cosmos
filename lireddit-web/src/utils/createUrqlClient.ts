@@ -10,9 +10,11 @@ import {
   LogoutMutation,
   MeDocument,
   MeQuery,
-  UpdatePostMutationVariables,
+  UpdatedPartnerMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+
+console.log(Cache);
 
 const errorExchange: Exchange =
   ({ forward }) =>
@@ -103,6 +105,7 @@ const cursorPaginationPartner = (): Resolver => {
 
       results.push(...data);
     });
+
     return {
       __typename: "PaginatedPartner",
       hasMore,
@@ -134,47 +137,33 @@ export const createUrqlClient = (ssrExchange: any) => ({
       resolvers: {
         Query: {
           posts: cursorPagination(),
-          parnets: cursorPaginationPartner(),
+          partners: cursorPaginationPartner(),
         },
       },
       updates: {
         Mutation: {
-          createPost: (_result, args, cache, info) => {
-            invalidateAllPosts(cache);
-          },
-          createPartner: (_result, args, cache, info) => {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (info) => info.fieldName === "parnets"
-            );
-            fieldInfos.forEach((fi) => {
-              cache.invalidate("Query", "parnets", fi.arguments || {});
-            });
-          },
-          updatedPartner: (_result, args, cache, info) => {
-            const allFields = cache.inspectFields("Query");
-            const fieldInfos = allFields.filter(
-              (info) => info.fieldName === "parnets"
-            );
-
-            console.log(fieldInfos);
-            fieldInfos.forEach((fi) => {
-              cache.invalidate("Query", "parnets", fi.arguments || {});
-            });
-          },
           deletePartner: (_result, args, cache, info) => {
             cache.invalidate({
               __typename: "People",
               id: (args as DeletePartnerMutationVariables).id,
             });
           },
-          updatePost: (_result, args, cache, info) => {
+          createPost: (_result, args, cache, info) => {
+            invalidateAllPosts(cache);
+          },
+          createPartner: (_result, args, cache, info) => {
             const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(
-              (info) => info.fieldName === "posts"
+              (info) => info.fieldName === "partners"
             );
             fieldInfos.forEach((fi) => {
-              cache.invalidate("Query", "posts", fi.arguments || {});
+              cache.invalidate("Query", "partners", fi.arguments || {});
+            });
+          },
+          updatedPartner: (_result, args, cache, info) => {
+            cache.invalidate({
+              __typename: "People",
+              id: (args as UpdatedPartnerMutationVariables).id,
             });
           },
           updatedAccount: (_result, args, cache, info) => {
@@ -187,12 +176,12 @@ export const createUrqlClient = (ssrExchange: any) => ({
             });
           },
 
-          updatedPost: (_result, args, cache, info) => {
-            cache.invalidate({
-              __typename: "Post",
-              id: (args as UpdatePostMutationVariables).id,
-            });
-          },
+          // updatedPost: (_result, args, cache, info) => {
+          //   cache.invalidate({
+          //     __typename: "Post",
+          //     id: (args as UpdatePostMutationVariables).id,
+          //   });
+          // },
 
           CreateUser: (_result, args, cache, info) => {
             cache.invalidate("Query", "users", {

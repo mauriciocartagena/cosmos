@@ -30,7 +30,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
         onSubmit={async (values) => {
           const { errors } = await createPost({
             variables: { input: values },
-            update: (cache) => {
+            update: (cache, data) => {
               cache.evict({ fieldName: "posts:{}" });
             },
           });

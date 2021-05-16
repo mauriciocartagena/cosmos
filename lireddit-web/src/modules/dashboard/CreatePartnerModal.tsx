@@ -34,8 +34,9 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
 
           const response = await register({
             variables: { input: values },
-            update: (cache) => {
-              cache.evict({ fieldName: "parnets:{}" });
+            update: (cache, data) => {
+              console.log(data);
+              cache.evict({ fieldName: "partners:{}" });
             },
           });
           // response.data.createPartner.errors

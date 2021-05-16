@@ -29,7 +29,7 @@ const createClient = (ctx: NextPageContext) =>
                 };
               },
             },
-            parnets: {
+            partners: {
               keyArgs: [],
               merge(
                 existing: PaginatedPartner | undefined,

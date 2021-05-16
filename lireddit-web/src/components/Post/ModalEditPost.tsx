@@ -7,7 +7,6 @@ import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useUpdatePostMutation } from "../../generated/graphql";
 import { withApollo } from "../../utils/withApollo";
 

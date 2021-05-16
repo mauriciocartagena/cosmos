@@ -177,7 +177,7 @@ export type Query = {
   users: Array<User>;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
-  parnets: PaginatedPartner;
+  partners: PaginatedPartner;
   partner?: Maybe<People>;
 };
 
@@ -193,7 +193,7 @@ export type QueryPostArgs = {
 };
 
 
-export type QueryParnetsArgs = {
+export type QueryPartnersArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
 };
@@ -448,19 +448,19 @@ export type PartnerQuery = (
   { __typename?: 'Query' }
   & { partner?: Maybe<(
     { __typename?: 'People' }
-    & Pick<People, 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name'>
+    & Pick<People, 'id' | 'direction' | 'phone' | 'name' | 'second_last_name' | 'first_last_name'>
   )> }
 );
 
-export type ParnetsQueryVariables = Exact<{
+export type PartnersQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
 }>;
 
 
-export type ParnetsQuery = (
+export type PartnersQuery = (
   { __typename?: 'Query' }
-  & { parnets: (
+  & { partners: (
     { __typename?: 'PaginatedPartner' }
     & Pick<PaginatedPartner, 'hasMore'>
     & { people: Array<(
@@ -1034,6 +1034,7 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const PartnerDocument = gql`
     query Partner($id: Int!) {
   partner(id: $id) {
+    id
     direction
     phone
     name
@@ -1070,9 +1071,9 @@ export function usePartnerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pa
 export type PartnerQueryHookResult = ReturnType<typeof usePartnerQuery>;
 export type PartnerLazyQueryHookResult = ReturnType<typeof usePartnerLazyQuery>;
 export type PartnerQueryResult = Apollo.QueryResult<PartnerQuery, PartnerQueryVariables>;
-export const ParnetsDocument = gql`
-    query Parnets($limit: Int!, $cursor: String) {
-  parnets(cursor: $cursor, limit: $limit) {
+export const PartnersDocument = gql`
+    query Partners($limit: Int!, $cursor: String) {
+  partners(cursor: $cursor, limit: $limit) {
     hasMore
     people {
       createdAt
@@ -1088,33 +1089,33 @@ export const ParnetsDocument = gql`
     `;
 
 /**
- * __useParnetsQuery__
+ * __usePartnersQuery__
  *
- * To run a query within a React component, call `useParnetsQuery` and pass it any options that fit your needs.
- * When your component renders, `useParnetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePartnersQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePartnersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useParnetsQuery({
+ * const { data, loading, error } = usePartnersQuery({
  *   variables: {
  *      limit: // value for 'limit'
  *      cursor: // value for 'cursor'
  *   },
  * });
  */
-export function useParnetsQuery(baseOptions: Apollo.QueryHookOptions<ParnetsQuery, ParnetsQueryVariables>) {
+export function usePartnersQuery(baseOptions: Apollo.QueryHookOptions<PartnersQuery, PartnersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ParnetsQuery, ParnetsQueryVariables>(ParnetsDocument, options);
+        return Apollo.useQuery<PartnersQuery, PartnersQueryVariables>(PartnersDocument, options);
       }
-export function useParnetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ParnetsQuery, ParnetsQueryVariables>) {
+export function usePartnersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PartnersQuery, PartnersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ParnetsQuery, ParnetsQueryVariables>(ParnetsDocument, options);
+          return Apollo.useLazyQuery<PartnersQuery, PartnersQueryVariables>(PartnersDocument, options);
         }
-export type ParnetsQueryHookResult = ReturnType<typeof useParnetsQuery>;
-export type ParnetsLazyQueryHookResult = ReturnType<typeof useParnetsLazyQuery>;
-export type ParnetsQueryResult = Apollo.QueryResult<ParnetsQuery, ParnetsQueryVariables>;
+export type PartnersQueryHookResult = ReturnType<typeof usePartnersQuery>;
+export type PartnersLazyQueryHookResult = ReturnType<typeof usePartnersLazyQuery>;
+export type PartnersQueryResult = Apollo.QueryResult<PartnersQuery, PartnersQueryVariables>;
 export const PostDocument = gql`
     query Post($id: Int!) {
   post(id: $id) {

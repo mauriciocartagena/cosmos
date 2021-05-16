@@ -1,5 +1,5 @@
-query Parnets($limit: Int!, $cursor: String) {
-  parnets(cursor: $cursor, limit: $limit) {
+query Partners($limit: Int!, $cursor: String) {
+  partners(cursor: $cursor, limit: $limit) {
     hasMore
     people {
       createdAt

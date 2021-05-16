@@ -1,5 +1,6 @@
 query Partner($id: Int!) {
   partner(id: $id) {
+    id
     direction
     phone
     name

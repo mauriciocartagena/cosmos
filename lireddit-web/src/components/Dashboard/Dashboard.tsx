@@ -2,12 +2,12 @@ import { Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
   useDeletePartnerMutation,
-  useParnetsQuery,
+  usePartnersQuery,
   usePartnerQuery,
 } from "../../generated/graphql";
 import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
-import { EditPartnerModal } from "../../modules/dashboard/EditPartnerModal";
+import EditPartnerModal from "../../modules/dashboard/EditPartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";
 import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
@@ -15,7 +15,8 @@ import { Button } from "../../ui/Button";
 import { FeedHeader } from "../../ui/FeedHeader";
 import { withApollo } from "../../utils/withApollo";
 
-const Dashboard: React.FC<{}> = ({}) => {
+interface DasboardProps {}
+const Dashboard: React.FC<DasboardProps> = ({}) => {
   useIsAuth();
 
   const [roomModal, setRoomModal] = useState(false);
@@ -24,31 +25,25 @@ const Dashboard: React.FC<{}> = ({}) => {
 
   const [deletePartner] = useDeletePartnerMutation();
 
-  const { data: partner, loading: fetchingPartner } = usePartnerQuery({
-    variables: { id: _id },
-    notifyOnNetworkStatusChange: true,
-  });
-
-  const {
-    data,
-    error,
-    loading: fetching,
-    fetchMore,
-    variables,
-  } = useParnetsQuery({
+  const { data, error, loading, fetchMore, variables } = usePartnersQuery({
     variables: {
       limit: 10,
       cursor: null,
     },
   });
 
-  if (!fetching && !data) {
+  const { data: partner, loading: fetchingPartner } = usePartnerQuery({
+    variables: {
+      id: _id,
+    },
+  });
+
+  if (!loading && !data) {
     return <div>tienes una consulta fallida por alguna razón</div>;
   }
-  if (fetching) {
+  if (loading) {
     return null;
   }
-
   return (
     <>
       <HeaderController embed={{}} title="Dasboard" />
@@ -65,8 +60,10 @@ const Dashboard: React.FC<{}> = ({}) => {
           >
             <div className="flex flex-1 flex-col mb-7" data-testid="feed">
               <div className="flex flex-col space-y-4">
-                {data ? (
-                  data.parnets.people.map((user, key) => (
+                {!data && loading ? (
+                  <div>cargando ...</div>
+                ) : (
+                  data!.partners.people.map((user, key) => (
                     <div className="flex" key={key}>
                       <div
                         className={`p-4 w-full text-base bg-primary-800 rounded-lg flex flex-col text-primary-100`}
@@ -127,8 +124,8 @@ const Dashboard: React.FC<{}> = ({}) => {
                                 <Button
                                   style={{ marginRight: "0px" }}
                                   size="small"
-                                  onClick={() => (
-                                    set_id(user.id), setEditModal(true)
+                                  onClickCapture={() => (
+                                    setEditModal(true), set_id(user.id)
                                   )}
                                 >
                                   Editar
@@ -144,7 +141,7 @@ const Dashboard: React.FC<{}> = ({}) => {
                                       variables: { id: user.id },
                                       update: (cache) => {
                                         cache.evict({
-                                          id: "People:" + user.id,
+                                          fieldName: "partners:{}",
                                         });
                                       },
                                     });
@@ -159,29 +156,13 @@ const Dashboard: React.FC<{}> = ({}) => {
                       </div>
                     </div>
                   ))
-                ) : (
-                  <div>Loading ...</div>
                 )}
               </div>
             </div>
-            {roomModal && (
-              <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
-            )}
-            {editModal && !fetchingPartner ? (
-              <EditPartnerModal
-                onRequestClose={() => setEditModal(false)}
-                id={_id}
-                name={partner?.partner?.name!}
-                first_last_name={partner?.partner?.first_last_name!}
-                second_last_name={partner?.partner?.second_last_name!}
-                phone={partner?.partner?.phone!}
-                direction={partner?.partner?.direction!}
-              />
-            ) : null}
-            {data && data.parnets.hasMore ? (
+            {data && data.partners.hasMore ? (
               <Flex m="auto" my={4}>
                 <Button
-                  loading={fetching}
+                  loading={loading}
                   data-testid="feed-action-button"
                   transition
                   onClick={() => {
@@ -189,7 +170,7 @@ const Dashboard: React.FC<{}> = ({}) => {
                       variables: {
                         limit: variables?.limit,
                         cursor:
-                          data.parnets.people[data.parnets.people.length - 1]
+                          data.partners.people[data.partners.people.length - 1]
                             .createdAt,
                       },
                     });
@@ -202,8 +183,22 @@ const Dashboard: React.FC<{}> = ({}) => {
           </MiddlePanel>
         </DefaultDesktopLayout>
       ) : null}
+
+      {roomModal && (
+        <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
+      )}
+      {editModal && !fetchingPartner ? (
+        <EditPartnerModal
+          onRequestClose={() => setEditModal(false)}
+          id={_id}
+          name={partner?.partner?.name}
+          first_last_name={partner?.partner?.first_last_name}
+          second_last_name={partner?.partner?.second_last_name}
+          phone={partner?.partner?.phone}
+          direction={partner?.partner?.direction}
+        />
+      ) : null}
     </>
   );
 };
-
-export default withApollo({ ssr: false })(Dashboard);
+export default withApollo({ ssr: true })(Dashboard);
