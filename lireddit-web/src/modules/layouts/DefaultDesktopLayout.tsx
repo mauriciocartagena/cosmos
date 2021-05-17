@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CardHeading } from "../../ui/CardHeading";
 import { ProfileBlock } from "../../ui/ProfileBlock";
 import { SingleUser } from "../../ui/UserAvatar/SingleUser";
 import { DesktopLayout } from "./DesktopLayout";
-import { useMeQuery, useFetchUserMutation } from "../../generated/graphql";
+import { useMeQuery, useFetchUserQuery } from "../../generated/graphql";
 import { isServer } from "../../utils/isServer";
 
 interface DefaultDesktopLayoutProps {}
@@ -14,22 +14,11 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
     skip: isServer(),
     notifyOnNetworkStatusChange: true,
   });
-
-  const [fetchUser, { data }] = useFetchUserMutation({
-    notifyOnNetworkStatusChange: true,
+  const { data, loading, fetchMore } = useFetchUserQuery({
+    variables: {
+      id: user?.me ? user.me.peopleId.toString() : "",
+    },
   });
-
-  useEffect(() => {
-    if (user?.me) {
-      fetchUser({
-        variables: {
-          id: user.me.peopleId.toString(),
-        },
-      });
-    }
-  }, []);
-
-  console.log(data);
 
   return (
     <DesktopLayout
@@ -48,7 +37,9 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
         </div>
       }
       rightPanel={
-        data ? (
+        !data && loading ? (
+          <div>cargando ...</div>
+        ) : (
           <ProfileBlock
             top={
               <div className="flex flex-col rounded-8 bg-primary-800 p-4 w-full">
@@ -69,7 +60,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
                   <div className="flex mt-2">
                     <div className="flex flex-col ml-3">
                       <span className="text-primary-100 font-bold overflow-hidden break-all text-left">
-                        {data?.fetchUser.email}
+                        {data?.fetchUser.creator.name}
                       </span>
                       <span className="text-primary-300 text-left break-all">
                         {data?.fetchUser.username}
@@ -105,27 +96,29 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
                   <div className="flex font-bold text-primary-100 text-sm uppercase">
                     Primer Apellido
                   </div>
-                  <CardHeading text={`${data?.fetchUser.email}`} />
+                  <CardHeading
+                    text={`${data?.fetchUser.creator.first_last_name}`}
+                  />
 
                   <div className="flex font-bold text-primary-100  text-sm uppercase">
                     Segundo Apellido
                   </div>
-                  <CardHeading text={`${data?.fetchUser.email}`} />
+                  <CardHeading
+                    text={`${data?.fetchUser.creator.second_last_name}`}
+                  />
 
                   <div className="flex font-bold text-primary-100 text-sm uppercase">
                     Celular
                   </div>
-                  <CardHeading text={`${data?.fetchUser.email}`} />
+                  <CardHeading text={`${data?.fetchUser.creator.phone}`} />
                   <div className="flex font-bold text-primary-100 text-sm uppercase">
                     Dirección
                   </div>
-                  <CardHeading text={`${data?.fetchUser.email}`} />
+                  <CardHeading text={`${data?.fetchUser.creator.direction}`} />
                 </button>
               </div>
             }
           />
-        ) : (
-          <div>Cargando ...</div>
         )
       }
     >

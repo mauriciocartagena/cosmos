@@ -13,6 +13,7 @@ import {
   UpdatedPartnerMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+import { UpdateUserMutationVariables, User } from "../generated/graphql";
 
 console.log(Cache);
 
@@ -167,12 +168,13 @@ export const createUrqlClient = (ssrExchange: any) => ({
             });
           },
           updatedAccount: (_result, args, cache, info) => {
-            const allFields = cache.inspectFields("Mutation");
+            const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(
-              (info) => info.fieldName === "User"
+              (info) => info.fieldName === "User" || "People"
             );
             fieldInfos.forEach((fi) => {
-              cache.invalidate("Mutation", "User", fi.arguments || {});
+              cache.invalidate("Query", "user", fi.arguments || {}),
+                cache.invalidate("Query", "People", fi.arguments || {});
             });
           },
 

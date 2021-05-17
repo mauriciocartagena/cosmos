@@ -30,7 +30,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
-  fetchUser: User;
   createUser: UserResponse;
   updatedUser: People;
   login: UserResponse;
@@ -51,11 +50,6 @@ export type MutationChangePasswordArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
-};
-
-
-export type MutationFetchUserArgs = {
-  id: Scalars['String'];
 };
 
 
@@ -173,12 +167,18 @@ export type PostInput = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
+  fetchUser: User;
   me?: Maybe<User>;
   users: Array<User>;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   partners: PaginatedPartner;
   partner?: Maybe<People>;
+};
+
+
+export type QueryFetchUserArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -244,7 +244,11 @@ export type RegularUserFragment = (
 
 export type RegularUserFindOneUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'email' | 'username'>
+  & Pick<User, 'peopleId' | 'username' | 'email'>
+  & { creator: (
+    { __typename?: 'People' }
+    & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
+  ) }
 );
 
 export type RegularUserResponseFragment = (
@@ -415,19 +419,6 @@ export type UpdateUserMutation = (
   ) }
 );
 
-export type FetchUserMutationVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-
-export type FetchUserMutation = (
-  { __typename?: 'Mutation' }
-  & { fetchUser: (
-    { __typename?: 'User' }
-    & RegularUserFindOneUserFragment
-  ) }
-);
-
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -505,6 +496,19 @@ export type PostsQuery = (
   ) }
 );
 
+export type FetchUserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FetchUserQuery = (
+  { __typename?: 'Query' }
+  & { fetchUser: (
+    { __typename?: 'User' }
+    & RegularUserFindOneUserFragment
+  ) }
+);
+
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -518,8 +522,16 @@ export type UsersQuery = (
 
 export const RegularUserFindOneUserFragmentDoc = gql`
     fragment RegularUserFindOneUser on User {
-  email
+  peopleId
   username
+  email
+  creator {
+    name
+    first_last_name
+    second_last_name
+    phone
+    direction
+  }
 }
     `;
 export const RegularErrorFragmentDoc = gql`
@@ -964,39 +976,6 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const FetchUserDocument = gql`
-    mutation FetchUser($id: String!) {
-  fetchUser(id: $id) {
-    ...RegularUserFindOneUser
-  }
-}
-    ${RegularUserFindOneUserFragmentDoc}`;
-export type FetchUserMutationFn = Apollo.MutationFunction<FetchUserMutation, FetchUserMutationVariables>;
-
-/**
- * __useFetchUserMutation__
- *
- * To run a mutation, you first call `useFetchUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFetchUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fetchUserMutation, { data, loading, error }] = useFetchUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useFetchUserMutation(baseOptions?: Apollo.MutationHookOptions<FetchUserMutation, FetchUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<FetchUserMutation, FetchUserMutationVariables>(FetchUserDocument, options);
-      }
-export type FetchUserMutationHookResult = ReturnType<typeof useFetchUserMutation>;
-export type FetchUserMutationResult = Apollo.MutationResult<FetchUserMutation>;
-export type FetchUserMutationOptions = Apollo.BaseMutationOptions<FetchUserMutation, FetchUserMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -1205,6 +1184,41 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const FetchUserDocument = gql`
+    query FetchUser($id: String!) {
+  fetchUser(id: $id) {
+    ...RegularUserFindOneUser
+  }
+}
+    ${RegularUserFindOneUserFragmentDoc}`;
+
+/**
+ * __useFetchUserQuery__
+ *
+ * To run a query within a React component, call `useFetchUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFetchUserQuery(baseOptions: Apollo.QueryHookOptions<FetchUserQuery, FetchUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchUserQuery, FetchUserQueryVariables>(FetchUserDocument, options);
+      }
+export function useFetchUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchUserQuery, FetchUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchUserQuery, FetchUserQueryVariables>(FetchUserDocument, options);
+        }
+export type FetchUserQueryHookResult = ReturnType<typeof useFetchUserQuery>;
+export type FetchUserLazyQueryHookResult = ReturnType<typeof useFetchUserLazyQuery>;
+export type FetchUserQueryResult = Apollo.QueryResult<FetchUserQuery, FetchUserQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

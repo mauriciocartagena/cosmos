@@ -1,4 +1,4 @@
-mutation FetchUser($id: String!) {
+query FetchUser($id: String!) {
   fetchUser(id: $id) {
     ...RegularUserFindOneUser
   }

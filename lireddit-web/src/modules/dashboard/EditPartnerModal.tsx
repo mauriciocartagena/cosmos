@@ -41,7 +41,7 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
           name: name,
           first_last_name: first_last_name,
           second_last_name: second_last_name,
-          phone: phone,
+          phone: changePhone,
           direction: direction,
         }}
         onSubmit={async (values, { setErrors }) => {
@@ -49,6 +49,7 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
           const response = await updatedPartner({
             variables: { id: id, input: values },
             update: (cache) => {
+              // cache.evict({ id: "People:" + id });
               cache.evict({ fieldName: "partners:{}" });
             },
           });
@@ -67,8 +68,8 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
           <Form
             className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}
             onSubmit={props.handleSubmit}
-            onChange={() => {
-              props.values.phone = changePhone;
+            onChange={(e) => {
+              props.values.phone = e.target.value;
             }}
           >
             <div className={`col-span-3 block`}>
@@ -109,9 +110,6 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
             </div>
             <div className={`grid items-start grid-cols-1 h-6`}>
               <PhoneInput
-                onChange={(e) => {
-                  setChangePhone(`+ ${e}`);
-                }}
                 inputClass="w-full py-2 px-4 rounded-8  placeholder-primary-300 text-primary-100 focus:outline-none bg-primary-700  rounded-8 bg-primary-700 px-4 h-6"
                 inputStyle={{
                   backgroundColor: "var(--color-primary-700)",
@@ -123,7 +121,7 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
                   borderColor: "gray",
                   border: "none",
                 }}
-                value={phone}
+                value={`${phone}`}
                 country="bo"
                 specialLabel=""
                 inputProps={{

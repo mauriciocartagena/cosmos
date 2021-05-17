@@ -144,7 +144,7 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => User)
+  @Query(() => User)
   async fetchUser(@Arg("id") id: string): Promise<User | null> {
     // const user = await User.findOne(parseInt(id));
     const replacements: any[] = [id];

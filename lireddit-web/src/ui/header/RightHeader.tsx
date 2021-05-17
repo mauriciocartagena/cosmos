@@ -3,7 +3,7 @@ import { SettingsDropdown } from "../SettingsDropdown";
 import { DropdownController } from "../DropdownController";
 import { SingleUser } from "../UserAvatar/SingleUser";
 import {
-  useFetchUserMutation,
+  useFetchUserQuery,
   useLogoutMutation,
   useMeQuery,
 } from "../../generated/graphql";
@@ -30,7 +30,13 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
   const { data } = useMeQuery({
     skip: isServer(),
   });
-  const [fetchUser, { data: user }] = useFetchUserMutation();
+
+  const { data: user, fetchMore } = useFetchUserQuery({
+    variables: {
+      id: data?.me ? data?.me?.peopleId.toString() : "",
+    },
+  });
+
   return (
     <div className="flex space-x-4 items-center justify-end focus:outline-no-chrome w-full">
       <DropdownController
@@ -45,7 +51,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
             }}
             onCloseDropdown={close}
             onActionToFetch={async () => {
-              await fetchUser({
+              await fetchMore({
                 variables: {
                   id: !data?.me ? "" : data.me.peopleId.toString(),
                 },
@@ -61,18 +67,20 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
           src="https://avatars.githubusercontent.com/u/51917913?v=4"
         />
       </DropdownController>
-      {/* {editModal && (
+      {editModal && (
         <EditAccountModal
           id={!data?.me ? 0 : data.me.peopleId}
-          direction={!user ? "" : user.fetchUser.direction}
+          direction={!user ? "" : user.fetchUser.creator.direction}
           email={!user ? "" : user.fetchUser.email}
-          first_last_name={!user ? "" : user.fetchUser.first_last_name}
-          name={!user ? "" : user.fetchUser.name}
-          phone={!user ? 0 : user.fetchUser.phone}
-          second_last_name={!user ? "" : user.fetchUser.second_last_name}
+          first_last_name={!user ? "" : user.fetchUser.creator.first_last_name}
+          name={!user ? "" : user.fetchUser.creator.name}
+          phone={!user ? "" : user.fetchUser.creator.phone}
+          second_last_name={
+            !user ? "" : user.fetchUser.creator.second_last_name
+          }
           onRequestClose={() => setEditModal(false)}
         />
-      )} */}
+      )}
     </div>
   );
 };

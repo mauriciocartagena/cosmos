@@ -1,4 +1,12 @@
 fragment RegularUserFindOneUser on User {
-  email
+  peopleId
   username
+  email
+  creator {
+    name
+    first_last_name
+    second_last_name
+    phone
+    direction
+  }
 }
