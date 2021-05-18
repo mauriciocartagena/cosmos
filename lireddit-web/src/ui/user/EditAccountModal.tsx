@@ -1,11 +1,12 @@
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import PhoneInput from "react-phone-input-2";
 import { InputField } from "../../form-fields/InputField";
 import { useUpdateUserMutation } from "../../generated/graphql";
 import { Button } from "../Button";
 import { ButtonLink } from "../ButtonLink";
 import { Modal } from "../Modal";
+import { useState } from "react";
 
 interface EditAccountModal {
   onRequestClose: () => void;
@@ -29,6 +30,8 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
   second_last_name,
 }) => {
   const [updatedAccount] = useUpdateUserMutation();
+
+  const [numberValue, setNumberValue] = useState("");
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -65,9 +68,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           <Form
             className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}
             onSubmit={props.handleSubmit}
-            onChange={(e) => {
-              props.values.phone = e.target.value;
-            }}
+            onChange={() => (props.values.phone = `${numberValue}`)}
           >
             <div className={`col-span-3 block`}>
               <h4 className={`mb-2 text-primary-100`}>Editar Perfil</h4>
@@ -112,6 +113,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
                   backgroundColor: "var(--color-primary-700)",
                   border: "none",
                 }}
+                onChange={(e) => setNumberValue(e)}
                 value={phone}
                 dropdownClass="rounded-8 phone placeholder-primary-300 text-primary-100 focus:outline-none bg-primary-700  rounded-8 bg-primary-700"
                 dropdownStyle={{

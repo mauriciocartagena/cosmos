@@ -41,8 +41,8 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
           name: name,
           first_last_name: first_last_name,
           second_last_name: second_last_name,
-          phone: changePhone,
           direction: direction,
+          phone: phone,
         }}
         onSubmit={async (values, { setErrors }) => {
           setLoading(true);
