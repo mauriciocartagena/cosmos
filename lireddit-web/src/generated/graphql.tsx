@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type FieldError = {
@@ -28,17 +30,54 @@ export type FieldErrorParnet = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createPartner: PartnerResponse;
+  updatedPartner: PartnerResponse;
+  deletePartner: Scalars['Boolean'];
+  updatePost?: Maybe<Post>;
+  createPost: Post;
+  singleUpload: UploadedFileResponse;
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   createUser: UserResponse;
   updatedUser: People;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  updatePost?: Maybe<Post>;
-  createPost: Post;
-  createPartner: PartnerResponse;
-  updatedPartner: PartnerResponse;
-  deletePartner: Scalars['Boolean'];
+};
+
+
+export type MutationCreatePartnerArgs = {
+  input: PartnerInput;
+};
+
+
+export type MutationUpdatedPartnerArgs = {
+  input: PartnerInput;
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeletePartnerArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdatePostArgs = {
+  url: Scalars['String'];
+  description: Scalars['String'];
+  type: Scalars['String'];
+  subtitle: Scalars['String'];
+  title: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreatePostArgs = {
+  input: PostInput;
+};
+
+
+export type MutationSingleUploadArgs = {
+  file: Scalars['Upload'];
 };
 
 
@@ -71,37 +110,6 @@ export type MutationUpdatedUserArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   usernameOrEmail: Scalars['String'];
-};
-
-
-export type MutationUpdatePostArgs = {
-  url: Scalars['String'];
-  description: Scalars['String'];
-  type: Scalars['String'];
-  subtitle: Scalars['String'];
-  title: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationCreatePostArgs = {
-  input: PostInput;
-};
-
-
-export type MutationCreatePartnerArgs = {
-  input: PartnerInput;
-};
-
-
-export type MutationUpdatedPartnerArgs = {
-  input: PartnerInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeletePartnerArgs = {
-  id: Scalars['Int'];
 };
 
 export type PaginatedPartner = {
@@ -167,18 +175,24 @@ export type PostInput = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
+  partners: PaginatedPartner;
+  partner?: Maybe<People>;
+  posts: PaginatedPosts;
+  post?: Maybe<Post>;
   fetchUser: User;
   me?: Maybe<User>;
   users: Array<User>;
-  posts: PaginatedPosts;
-  post?: Maybe<Post>;
-  partners: PaginatedPartner;
-  partner?: Maybe<People>;
 };
 
 
-export type QueryFetchUserArgs = {
-  id: Scalars['String'];
+export type QueryPartnersArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPartnerArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -193,14 +207,17 @@ export type QueryPostArgs = {
 };
 
 
-export type QueryPartnersArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
+export type QueryFetchUserArgs = {
+  id: Scalars['String'];
 };
 
 
-export type QueryPartnerArgs = {
-  id: Scalars['Int'];
+export type UploadedFileResponse = {
+  __typename?: 'UploadedFileResponse';
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  encoding: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type User = {
@@ -416,6 +433,19 @@ export type UpdateUserMutation = (
   & { updatedUser: (
     { __typename?: 'People' }
     & Pick<People, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
+  ) }
+);
+
+export type SingleUploadMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type SingleUploadMutation = (
+  { __typename?: 'Mutation' }
+  & { singleUpload: (
+    { __typename?: 'UploadedFileResponse' }
+    & Pick<UploadedFileResponse, 'filename' | 'mimetype' | 'encoding' | 'url'>
   ) }
 );
 
@@ -976,6 +1006,42 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const SingleUploadDocument = gql`
+    mutation SingleUpload($file: Upload!) {
+  singleUpload(file: $file) {
+    filename
+    mimetype
+    encoding
+    url
+  }
+}
+    `;
+export type SingleUploadMutationFn = Apollo.MutationFunction<SingleUploadMutation, SingleUploadMutationVariables>;
+
+/**
+ * __useSingleUploadMutation__
+ *
+ * To run a mutation, you first call `useSingleUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSingleUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [singleUploadMutation, { data, loading, error }] = useSingleUploadMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useSingleUploadMutation(baseOptions?: Apollo.MutationHookOptions<SingleUploadMutation, SingleUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SingleUploadMutation, SingleUploadMutationVariables>(SingleUploadDocument, options);
+      }
+export type SingleUploadMutationHookResult = ReturnType<typeof useSingleUploadMutation>;
+export type SingleUploadMutationResult = Apollo.MutationResult<SingleUploadMutation>;
+export type SingleUploadMutationOptions = Apollo.BaseMutationOptions<SingleUploadMutation, SingleUploadMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {

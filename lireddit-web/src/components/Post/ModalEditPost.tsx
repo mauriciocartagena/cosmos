@@ -3,7 +3,6 @@ import { withUrqlClient } from "next-urql";
 import React from "react";
 import { Button } from "../../form-fields/Button";
 import { InputField } from "../../form-fields/InputField";
-import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
@@ -29,8 +28,6 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
   type,
   url,
 }) => {
-  useIsAuth();
-
   const [updatedPost] = useUpdatePostMutation();
 
   return (

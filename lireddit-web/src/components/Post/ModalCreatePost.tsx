@@ -2,20 +2,34 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { Button } from "../../form-fields/Button";
 import { InputField } from "../../form-fields/InputField";
-import { useCreatePostMutation } from "../../generated/graphql";
-import { useIsAuth } from "../../modules/auth/useIsAuth";
+import {
+  useCreatePostMutation,
+  useSingleUploadMutation,
+} from "../../generated/graphql";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
 import { withApollo } from "../../utils/withApollo";
+import { useState } from "react";
 
 interface ModalCreatePost {
   onRequestClose: () => void;
 }
 
 const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
-  useIsAuth();
+  const [dataFile, setDataFile] = useState<any>();
+
   const [createPost] = useCreatePostMutation();
+  const [loading, setLoading] = useState(false);
+
+  const [fileUpload] = useSingleUploadMutation();
+
+  const onChange = async ({
+    target: {
+      validity,
+      files: [file],
+    },
+  }: any) => validity.valid && setDataFile(file);
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -28,14 +42,28 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
           url: "",
         }}
         onSubmit={async (values) => {
+          setLoading(true);
+          const result = await fileUpload({
+            variables: {
+              file: dataFile,
+            },
+          });
           const { errors } = await createPost({
-            variables: { input: values },
-            update: (cache, data) => {
+            variables: {
+              input: {
+                title: values.title,
+                description: values.description,
+                subtitle: values.subtitle,
+                type: values.type,
+                url: result.data?.singleUpload.url!,
+              },
+            },
+            update: (cache) => {
               cache.evict({ fieldName: "posts:{}" });
             },
           });
-
           if (!errors) {
+            setLoading(true);
             onRequestClose();
           }
         }}
@@ -58,7 +86,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
             />
           </div>
           <div className={`grid items-start grid-cols-1 h-6`}>
-            <NativeSelect value={"Hola"} name="type" onChange={(e) => {}}>
+            <NativeSelect value={"Hola"} name="type">
               <option
                 value="public"
                 id="image"
@@ -90,6 +118,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
             <InputField
               className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
               name="url"
+              onChangeCapture={onChange}
               placeholder="URL de la Imagen"
               type="file"
               maxLength={60}
@@ -107,7 +136,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
           </div>
 
           <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-            <Button type="submit" className={`mr-3`}>
+            <Button type="submit" className={`mr-3`} loading={loading}>
               Crear
             </Button>
             <ButtonLink type="button" onClick={onRequestClose}>

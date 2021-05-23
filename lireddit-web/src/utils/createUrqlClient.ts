@@ -13,7 +13,6 @@ import {
   UpdatedPartnerMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
-import { UpdateUserMutationVariables, User } from "../generated/graphql";
 
 console.log(Cache);
 
@@ -209,6 +208,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
               _result,
               (result, query) => {
                 if (result.login.errors) {
+                  console.log(query);
                   return query;
                 } else {
                   return {

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SolidCompass from "../../icons/SolidCompass";
-import { useIsAuth } from "../../modules/auth/useIsAuth";
 import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { MiddlePanel } from "../../modules/GridPanels";

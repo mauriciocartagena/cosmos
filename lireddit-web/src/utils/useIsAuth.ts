@@ -1,9 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useMeQuery } from "../generated/graphql";
+import { isServer } from "./isServer";
 
 export const useIsAuth = () => {
-  const { data, loading: fetching } = useMeQuery();
+  const { data, loading: fetching } = useMeQuery({
+    skip: isServer(),
+  });
   const router = useRouter();
   useEffect(() => {
     if (!fetching && !data?.me) {
