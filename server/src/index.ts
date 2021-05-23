@@ -1,23 +1,24 @@
-import "reflect-metadata";
-
-import { __prod__, COOKIE_NAME } from "./constants";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/hello";
-import { UserResolver } from "./resolvers/user";
-import { createConnection } from "typeorm";
-import Redis from "ioredis";
-import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
-import { User } from "./entities/User";
-import { Post } from "./entities/Post";
-import { PostResolver } from "./resolvers/post";
+import "dotenv-safe/config";
+import express from "express";
+import session from "express-session";
+import { graphqlUploadExpress } from "graphql-upload";
+import Redis from "ioredis";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
+import { COOKIE_NAME, __prod__ } from "./constants";
 import { Partner } from "./entities/Partner";
 import { People } from "./entities/People";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
+import { HelloResolver } from "./resolvers/hello";
 import { PartnerResolver } from "./resolvers/partner";
-
+import { PostResolver } from "./resolvers/post";
+import { UploadFileResolver } from "./resolvers/UploadFile";
+import { UserResolver } from "./resolvers/user";
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
@@ -59,15 +60,26 @@ const main = async () => {
       saveUninitialized: false,
       secret: "mcvbmklcvbmklcmblcmvasd",
       resave: false,
-    })
+    }),
+    graphqlUploadExpress({ maxFileSize: 99999999, maxFiles: 200 })
   );
+
   // redisClient.on("error", console.error);
 
   const apolloServer = new ApolloServer({
+    uploads: false,
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver, PostResolver, PartnerResolver],
+      resolvers: [
+        HelloResolver,
+        UserResolver,
+        PostResolver,
+        PartnerResolver,
+        UploadFileResolver,
+      ],
+
       validate: false,
     }),
+
     context: ({ req, res }) => ({ req, res, redis }),
   });
 
