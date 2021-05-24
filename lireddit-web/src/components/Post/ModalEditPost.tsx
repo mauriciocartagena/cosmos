@@ -1,13 +1,18 @@
+import { Center } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import React from "react";
+import { Image } from "@chakra-ui/react";
 import { Button } from "../../form-fields/Button";
 import { InputField } from "../../form-fields/InputField";
+import {
+  useUpdatePostMutation,
+  useSingleUploadMutation,
+} from "../../generated/graphql";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { NativeSelect } from "../../ui/NativeSelect";
-import { useUpdatePostMutation } from "../../generated/graphql";
 import { withApollo } from "../../utils/withApollo";
+import { useState } from "react";
 
 interface ModalEditPost {
   onRequestClose: () => void;
@@ -16,7 +21,7 @@ interface ModalEditPost {
   subtitle: string;
   description: string;
   type: string;
-  url: string;
+  urlImage: string;
 }
 
 const ModalEditPost: React.FC<ModalEditPost> = ({
@@ -26,9 +31,24 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
   subtitle,
   description,
   type,
-  url,
+  urlImage,
 }) => {
+  const [dataFile, setDataFile] = useState<any>();
+
   const [updatedPost] = useUpdatePostMutation();
+
+  const [loading, setLoading] = useState(false);
+
+  const [fileUpload] = useSingleUploadMutation();
+
+  const onChange = async ({
+    target: {
+      validity,
+      files: [file],
+    },
+  }: any) => validity.valid && setDataFile(file);
+  const IMAGE_DEFAULT =
+    "https://fotos.perfil.com//2019/11/22/900/0/tesla-cybertruck-807820.jpg";
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -38,19 +58,49 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
           subtitle: subtitle,
           description: description,
           type: type,
-          url: url,
+          url: urlImage,
         }}
         onSubmit={async (values) => {
-          await updatedPost({
-            variables: {
-              id: id,
-              ...values,
-            },
-            update: (cache) => {
-              cache.evict({ id: "Post:" + id });
-            },
-          });
-          onRequestClose();
+          setLoading(true);
+
+          if (dataFile) {
+            const result = await fileUpload({
+              variables: {
+                file: dataFile,
+              },
+            });
+            await updatedPost({
+              variables: {
+                id: id,
+                title: values.title,
+                description: values.description,
+                subtitle: values.subtitle,
+                type: values.type,
+                url: result.data?.singleUpload.url!,
+              },
+              update: (cache) => {
+                cache.evict({ id: "Post:" + id });
+              },
+            });
+            onRequestClose();
+            setLoading(false);
+          } else {
+            await updatedPost({
+              variables: {
+                id: id,
+                title: values.title,
+                description: values.description,
+                subtitle: values.subtitle,
+                type: values.type,
+                url: urlImage,
+              },
+              update: (cache) => {
+                cache.evict({ id: "Post:" + id });
+              },
+            });
+            onRequestClose();
+            setLoading(false);
+          }
         }}
       >
         <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
@@ -89,7 +139,7 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
             </NativeSelect>
           </div>
 
-          <div className={`h-full w-full col-span-3`}>
+          <div className={`h-11 w-full col-span-3`}>
             <InputField
               className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
               name="subtitle"
@@ -99,13 +149,22 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
               autoComplete="off"
             />
           </div>
+          <div className={`h-full w-full col-span-3 rounded-8`}>
+            <Center>
+              <Image
+                fallbackSrc={IMAGE_DEFAULT}
+                style={{ height: 240 }}
+                className={`rounded-8`}
+                src={urlImage}
+              />
+            </Center>
+          </div>
           <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
-              name="url"
-              placeholder="URL de la Imagen"
+              name="urlImage"
+              onChangeCapture={onChange}
               type="file"
-              maxLength={60}
             />
           </div>
           <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
@@ -120,7 +179,7 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
           </div>
 
           <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-            <Button type="submit" className={`mr-3`}>
+            <Button type="submit" className={`mr-3`} loading={loading}>
               Editar
             </Button>
             <ButtonLink type="button" onClick={onRequestClose}>

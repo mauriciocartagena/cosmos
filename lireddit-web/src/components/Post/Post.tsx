@@ -1,6 +1,6 @@
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Img } from "react-image";
+import { Image } from "@chakra-ui/react";
 import { usePostQuery, usePostsQuery } from "../../generated/graphql";
 import SolidCompass from "../../icons/SolidCompass";
 import { HeaderController } from "../../modules/display/HeaderController";
@@ -74,13 +74,11 @@ const Post: React.FC<PostProps> = ({}) => {
                   ) : (
                     data!.posts.posts.map((post, key) => (
                       <Box w={[300, 400, 560]} bg="blue.500" key={key}>
-                        <Img
+                        <Image
+                          boxSize="180px"
                           src={post.url}
-                          loading="eager"
-                          unloader={
-                            <Img src={IMAGE_DEFAULT} alt={post.description} />
-                          }
                           alt={post.description}
+                          fallbackSrc={IMAGE_DEFAULT}
                         />
                         <div className={`flex justify-between`}>
                           <div className="flex w-full">
@@ -131,13 +129,17 @@ const Post: React.FC<PostProps> = ({}) => {
                     <div>cargando ...</div>
                   ) : (
                     data!.posts.posts.map((post, key) => (
-                      <Box w={[300, 400, 560]} bg="blue.500" key={key}>
-                        <Img
+                      <Box
+                        boxSize="sm"
+                        w={[300, 400, 560]}
+                        bg="blue.500"
+                        key={key}
+                      >
+                        <Image
+                          className="bg-primary-800 rounded-8"
+                          fallbackSrc={IMAGE_DEFAULT}
+                          boxSize="200px"
                           src={post.url}
-                          loading="eager"
-                          unloader={
-                            <Img src={IMAGE_DEFAULT} alt={post.description} />
-                          }
                           alt={post.description}
                         />
 
@@ -228,7 +230,7 @@ const Post: React.FC<PostProps> = ({}) => {
             {createModal && (
               <ModalCreatePost onRequestClose={() => setCreateModal(false)} />
             )}
-            {editModal && !fetchingPost ? (
+            {editModal && !fetchingPost && (
               <ModalEditPost
                 pageProps={() => setEditModal(false)}
                 onRequestClose={() => setEditModal(false)}
@@ -237,9 +239,9 @@ const Post: React.FC<PostProps> = ({}) => {
                 subtitle={post?.post?.subtitle}
                 description={post?.post?.description}
                 type={post?.post?.type}
-                url={post?.post?.url}
+                urlImage={post?.post?.url}
               />
-            ) : null}
+            )}
           </div>
         </MiddlePanel>
       </DefaultDesktopLayout>

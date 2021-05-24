@@ -20,6 +20,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
   const [dataFile, setDataFile] = useState<any>();
 
   const [createPost] = useCreatePostMutation();
+
   const [loading, setLoading] = useState(false);
 
   const [fileUpload] = useSingleUploadMutation();
@@ -119,9 +120,7 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
               className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
               name="url"
               onChangeCapture={onChange}
-              placeholder="URL de la Imagen"
               type="file"
-              maxLength={60}
             />
           </div>
           <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
