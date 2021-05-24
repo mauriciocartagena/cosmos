@@ -244,6 +244,7 @@ export class UserResolver {
     const createrUser = new User();
     createrUser.username = options.username;
     createrUser.password = hashedPassword;
+    createrUser.url = options.url;
     createrUser.email = options.email;
     createrUser.peopleId = peopleNew.id;
     createrUser.creator = peopleNew;

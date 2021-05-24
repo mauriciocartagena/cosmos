@@ -228,6 +228,7 @@ export type User = {
   updatedAt: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
+  url: Scalars['String'];
   email: Scalars['String'];
 };
 
@@ -256,12 +257,12 @@ export type RegularErrorFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'username' | 'peopleId' | 'email'>
+  & Pick<User, 'username' | 'peopleId' | 'email' | 'url'>
 );
 
 export type RegularUserFindOneUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'peopleId' | 'username' | 'email'>
+  & Pick<User, 'peopleId' | 'username' | 'email' | 'url'>
   & { creator: (
     { __typename?: 'People' }
     & Pick<People, 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
@@ -555,6 +556,7 @@ export const RegularUserFindOneUserFragmentDoc = gql`
   peopleId
   username
   email
+  url
   creator {
     name
     first_last_name
@@ -575,6 +577,7 @@ export const RegularUserFragmentDoc = gql`
   username
   peopleId
   email
+  url
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`

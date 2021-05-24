@@ -2,6 +2,7 @@ fragment RegularUserFindOneUser on User {
   peopleId
   username
   email
+  url
   creator {
     name
     first_last_name

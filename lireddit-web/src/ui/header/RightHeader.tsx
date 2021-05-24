@@ -64,7 +64,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
         <SingleUser
           className={"focus:outline-no-chrome"}
           size="sm"
-          src="https://avatars.githubusercontent.com/u/51917913?v=4"
+          src={data?.me?.url!}
         />
       </DropdownController>
       {editModal && (

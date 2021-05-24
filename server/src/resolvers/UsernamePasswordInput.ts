@@ -12,6 +12,9 @@ export class UsernamePasswordInput {
   password: string;
 
   @Field()
+  url: string;
+
+  @Field()
   name: string;
 
   @Field()

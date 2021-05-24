@@ -2,4 +2,5 @@ fragment RegularUser on User {
   username
   peopleId
   email
+  url
 }

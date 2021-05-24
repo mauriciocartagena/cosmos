@@ -52,9 +52,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
                     <SingleUser
                       size="default"
                       isOnline={true}
-                      src={
-                        "https://cdn.mos.cms.futurecdn.net/qDXDXaCpoLf4uy9EJM6e3n.jpg"
-                      }
+                      src={user?.me?.url!}
                     />
                   </div>
                   <div className="flex mt-2">
