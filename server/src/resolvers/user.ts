@@ -283,6 +283,28 @@ export class UserResolver {
 
     return result.raw[0];
   }
+  @Mutation(() => User)
+  @UseMiddleware(isAuth)
+  async updatedUserAccount(
+    @Arg("id", () => Int) id: number,
+    @Arg("username") username: string,
+    @Arg("email") email: string,
+    @Arg("url") url: string
+  ) {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        username: username,
+        email: email,
+        url: url,
+      })
+      .where("creatorId = :id", { id: id })
+      .returning("*")
+      .execute();
+
+    return result.raw[0];
+  }
 
   // // @Mutation(() => Boolean)
   // // async deletePost(

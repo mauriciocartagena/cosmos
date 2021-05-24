@@ -40,6 +40,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   createUser: UserResponse;
   updatedUser: People;
+  updatedUserAccount: User;
   login: UserResponse;
   logout: Scalars['Boolean'];
 };
@@ -103,6 +104,14 @@ export type MutationUpdatedUserArgs = {
   second_last_name: Scalars['String'];
   first_last_name: Scalars['String'];
   name: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdatedUserAccountArgs = {
+  url: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
   id: Scalars['Int'];
 };
 
@@ -242,6 +251,7 @@ export type UsernamePasswordInput = {
   email: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
+  url: Scalars['String'];
   name: Scalars['String'];
   type: Scalars['String'];
   first_last_name: Scalars['String'];
@@ -434,6 +444,22 @@ export type UpdateUserMutation = (
   & { updatedUser: (
     { __typename?: 'People' }
     & Pick<People, 'id' | 'name' | 'first_last_name' | 'second_last_name' | 'phone' | 'direction'>
+  ) }
+);
+
+export type UpdatedUserAccountMutationVariables = Exact<{
+  id: Scalars['Int'];
+  url: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
+}>;
+
+
+export type UpdatedUserAccountMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedUserAccount: (
+    { __typename?: 'User' }
+    & Pick<User, 'username' | 'email' | 'url'>
   ) }
 );
 
@@ -1009,6 +1035,44 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpdatedUserAccountDocument = gql`
+    mutation UpdatedUserAccount($id: Int!, $url: String!, $email: String!, $username: String!) {
+  updatedUserAccount(id: $id, url: $url, email: $email, username: $username) {
+    username
+    email
+    url
+  }
+}
+    `;
+export type UpdatedUserAccountMutationFn = Apollo.MutationFunction<UpdatedUserAccountMutation, UpdatedUserAccountMutationVariables>;
+
+/**
+ * __useUpdatedUserAccountMutation__
+ *
+ * To run a mutation, you first call `useUpdatedUserAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatedUserAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatedUserAccountMutation, { data, loading, error }] = useUpdatedUserAccountMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      url: // value for 'url'
+ *      email: // value for 'email'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useUpdatedUserAccountMutation(baseOptions?: Apollo.MutationHookOptions<UpdatedUserAccountMutation, UpdatedUserAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatedUserAccountMutation, UpdatedUserAccountMutationVariables>(UpdatedUserAccountDocument, options);
+      }
+export type UpdatedUserAccountMutationHookResult = ReturnType<typeof useUpdatedUserAccountMutation>;
+export type UpdatedUserAccountMutationResult = Apollo.MutationResult<UpdatedUserAccountMutation>;
+export type UpdatedUserAccountMutationOptions = Apollo.BaseMutationOptions<UpdatedUserAccountMutation, UpdatedUserAccountMutationVariables>;
 export const SingleUploadDocument = gql`
     mutation SingleUpload($file: Upload!) {
   singleUpload(file: $file) {

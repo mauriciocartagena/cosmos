@@ -1,0 +1,12 @@
+mutation UpdatedUserAccount(
+  $id: Int!
+  $url: String!
+  $email: String!
+  $username: String!
+) {
+  updatedUserAccount(id: $id, url: $url, email: $email, username: $username) {
+    username
+    email
+    url
+  }
+}

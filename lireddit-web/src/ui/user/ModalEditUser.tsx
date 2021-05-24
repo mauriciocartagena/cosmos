@@ -5,7 +5,7 @@ import { Image } from "@chakra-ui/react";
 import { Button } from "../../form-fields/Button";
 import { InputField } from "../../form-fields/InputField";
 import {
-  useUpdatePostMutation,
+  useUpdatedUserAccountMutation,
   useSingleUploadMutation,
 } from "../../generated/graphql";
 import { ButtonLink } from "../../ui/ButtonLink";
@@ -30,11 +30,13 @@ const ModalEditUser: React.FC<ModalEditUser> = ({
 }) => {
   const [dataFile, setDataFile] = useState<any>();
 
-  const [updatedPost] = useUpdatePostMutation();
+  const [updatedUser] = useUpdatedUserAccountMutation();
 
   const [loading, setLoading] = useState(false);
 
   const [fileUpload] = useSingleUploadMutation();
+
+  console.log(dataFile);
 
   const onChange = async ({
     target: {
@@ -49,43 +51,60 @@ const ModalEditUser: React.FC<ModalEditUser> = ({
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
         initialValues={{
-          id: id,
           username: username,
           url: urlImage,
           email: email,
         }}
         onSubmit={async (values) => {
-          // setLoading(true);
-          // if (dataFile) {
-          //   const result = await fileUpload({
-          //     variables: {
-          //       file: dataFile,
-          //     },
-          //   });
-          //   await updatedPost({
-          //     variables: {
-          //       id: id,
-          //       url: result.data?.singleUpload.url!,
-          //     },
-          //     update: (cache) => {
-          //       cache.evict({ id: "Post:" + id });
-          //     },
-          //   });
-          //   onRequestClose();
-          //   setLoading(false);
-          // } else {
-          //   await updatedPost({
-          //     variables: {
-          //       id: id,
-          //       url: urlImage,
-          //     },
-          //     update: (cache) => {
-          //       cache.evict({ id: "Post:" + id });
-          //     },
-          //   });
-          //   onRequestClose();
-          //   setLoading(false);
-          // }
+          setLoading(true);
+          if (dataFile) {
+            const result = await fileUpload({
+              variables: {
+                file: dataFile,
+              },
+            });
+            await updatedUser({
+              variables: {
+                id: id,
+                username: values.username,
+                email: values.email,
+                url: result.data?.singleUpload.url!,
+              },
+              update: (cache) => {
+                cache.evict({
+                  id: "ROOT_QUERY",
+                  fieldName: "fetchUser",
+                });
+                cache.evict({
+                  id: "ROOT_QUERY",
+                  fieldName: "me",
+                });
+              },
+            });
+            onRequestClose();
+            setLoading(false);
+          } else {
+            await updatedUser({
+              variables: {
+                id: id,
+                username: values.username,
+                email: values.email,
+                url: values.url,
+              },
+              update: (cache) => {
+                cache.evict({
+                  id: "ROOT_QUERY",
+                  fieldName: "fetchUser",
+                });
+                cache.evict({
+                  id: "ROOT_QUERY",
+                  fieldName: "me",
+                });
+              },
+            });
+            onRequestClose();
+            setLoading(false);
+          }
         }}
       >
         <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
