@@ -9,6 +9,7 @@ import {
 } from "../../generated/graphql";
 import { isServer } from "../../utils/isServer";
 import { EditAccountModal } from "../user/EditAccountModal";
+import router from "next/router";
 
 export interface RightHeaderProps {
   onAnnouncementsClick?: (
@@ -48,6 +49,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
           <SettingsDropdown
             onActionButtonClicked={() => {
               logout();
+              return router.push("/login");
             }}
             onCloseDropdown={close}
             onActionToFetch={async () => {
@@ -64,6 +66,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
         <SingleUser
           className={"focus:outline-no-chrome"}
           size="sm"
+          username={user?.fetchUser.username}
           src={data?.me?.url!}
         />
       </DropdownController>

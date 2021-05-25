@@ -30,6 +30,7 @@ const Account: React.FC<{}> = () => {
               <div className="flex mr-4 ">
                 <SingleUser
                   isOnline={true}
+                  username={data?.me?.username}
                   className="absolute flex-none -top-5.5 rounded-full shadow-outlineLg bg-primary-900"
                   src={data?.me?.url!}
                 />

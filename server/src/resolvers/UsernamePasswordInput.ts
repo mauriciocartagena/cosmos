@@ -18,9 +18,6 @@ export class UsernamePasswordInput {
   name: string;
 
   @Field()
-  type: string;
-
-  @Field()
   first_last_name: string;
 
   @Field()

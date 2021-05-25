@@ -253,6 +253,8 @@ export class UserResolver {
 
     let user = resp;
 
+    console.log(options.email);
+
     return { user };
   }
   // req.session.userId = user.id;

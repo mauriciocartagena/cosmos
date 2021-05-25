@@ -176,14 +176,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
                 cache.invalidate("Query", "People", fi.arguments || {});
             });
           },
-
-          // updatedPost: (_result, args, cache, info) => {
-          //   cache.invalidate({
-          //     __typename: "Post",
-          //     id: (args as UpdatePostMutationVariables).id,
-          //   });
-          // },
-
           CreateUser: (_result, args, cache, info) => {
             cache.invalidate("Query", "users", {
               limit: 5,
@@ -202,13 +194,10 @@ export const createUrqlClient = (ssrExchange: any) => ({
           login: (_result, args, cache, info) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,
-              {
-                query: MeDocument,
-              },
+              { query: MeDocument },
               _result,
               (result, query) => {
                 if (result.login.errors) {
-                  console.log(query);
                   return query;
                 } else {
                   return {

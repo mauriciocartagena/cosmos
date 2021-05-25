@@ -1,10 +1,14 @@
 import React from "react";
+import { useFetchUserQuery, useMeQuery } from "../../generated/graphql";
+import { SolidPlus } from "../../icons";
 import { CardHeading } from "../../ui/CardHeading";
 import { ProfileBlock } from "../../ui/ProfileBlock";
 import { SingleUser } from "../../ui/UserAvatar/SingleUser";
-import { DesktopLayout } from "./DesktopLayout";
-import { useMeQuery, useFetchUserQuery } from "../../generated/graphql";
 import { isServer } from "../../utils/isServer";
+import { BoxedIcon } from "./BoxedIcon";
+import { DesktopLayout } from "./DesktopLayout";
+import { useState } from "react";
+import ModalCreateUser from "../../components/Account/ModalCreateUser";
 
 interface DefaultDesktopLayoutProps {}
 export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
@@ -20,6 +24,8 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
     },
   });
 
+  const [modalUser, setModalUser] = useState(false);
+
   return (
     <DesktopLayout
       leftPanel={
@@ -27,13 +33,22 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
           className="pb-5 w-full flex flex-col flex-1 overflow-y-auto"
           data-testid="friends-online"
         >
-          <h4 className="text-primary-100">Hello World</h4>
-          <h6 className="text-primary-300 mt-3 text-sm font-bold uppercase">
-            Nice to meet you to.
-          </h6>
-          <div className=" font-bold text-primary-300 flex flex-col mt-3 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-700 overflow-x-hidden">
-            yes
+          <div className="w-full rounded-lg overflow-y-auto flex flex-col">
+            <div className="px-4 py-3 bg-primary-800 border-b border-primary-600 flex justify-between items-center">
+              <h4 className="text-primary-100 font-bold">Crear usuario</h4>
+              <BoxedIcon
+                onClick={() => setModalUser(true)}
+                style={{ height: "26px", width: "26px" }}
+                transition
+              >
+                <SolidPlus width={12} height={12} />
+              </BoxedIcon>
+            </div>
+            <div className="flex flex-col"></div>
           </div>
+          {modalUser && (
+            <ModalCreateUser onRequestClose={() => setModalUser(false)} />
+          )}
         </div>
       }
       rightPanel={
@@ -52,6 +67,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
                     <SingleUser
                       size="default"
                       isOnline={true}
+                      username={user?.me?.username}
                       src={user?.me?.url!}
                     />
                   </div>

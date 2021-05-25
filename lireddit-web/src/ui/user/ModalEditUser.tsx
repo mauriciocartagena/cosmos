@@ -36,8 +36,6 @@ const ModalEditUser: React.FC<ModalEditUser> = ({
 
   const [fileUpload] = useSingleUploadMutation();
 
-  console.log(dataFile);
-
   const onChange = async ({
     target: {
       validity,

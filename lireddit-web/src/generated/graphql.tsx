@@ -253,7 +253,6 @@ export type UsernamePasswordInput = {
   password: Scalars['String'];
   url: Scalars['String'];
   name: Scalars['String'];
-  type: Scalars['String'];
   first_last_name: Scalars['String'];
   second_last_name: Scalars['String'];
   phone: Scalars['String'];
