@@ -1058,3 +1058,20 @@ button:focus {
   font-size: 13px;
   white-space: nowrap;
 }
+.player-wrapper {
+  position: relative;
+  padding-top: 100%;
+}
+
+.react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.player-wrapper-edit {
+  height: 250px;
+}
+.react-player-edit {
+  top: 0;
+  left: 0;
+}

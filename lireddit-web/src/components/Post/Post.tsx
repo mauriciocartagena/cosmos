@@ -13,6 +13,7 @@ import ModalCreatePost from "./ModalCreatePost";
 import ModalEditPost from "./ModalEditPost";
 import { withApollo } from "../../utils/withApollo";
 import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
+import ReactPlayer from "react-player/lazy";
 
 interface PostProps {}
 
@@ -66,20 +67,32 @@ const Post: React.FC<PostProps> = ({}) => {
               {screenType === "fullscreen" ? (
                 <Grid
                   templateRows="repeat(, 1fr)"
-                  templateColumns={"repeat(2, 1fr)"}
+                  templateColumns={"repeat(1, 1fr)"}
                   gap={20}
                 >
                   {!data && loading ? (
                     <div>cargando ...</div>
                   ) : (
                     data!.posts.posts.map((post, key) => (
-                      <Box w={[300, 400, 560]} bg="blue.500" key={key}>
-                        <Image
-                          boxSize="180px"
-                          src={post.url}
-                          alt={post.description}
-                          fallbackSrc={IMAGE_DEFAULT}
-                        />
+                      <Box w={[300, 400, 860]} bg="blue.500" key={key}>
+                        {post.type === "video" ? (
+                          <div className="player-wrapper ">
+                            <ReactPlayer
+                              className="react-player"
+                              url={post.url}
+                              controls
+                              width="100%"
+                              height="100%"
+                            />
+                          </div>
+                        ) : (
+                          <Image
+                            width="100%"
+                            src={post.url}
+                            alt={post.description}
+                            fallbackSrc={IMAGE_DEFAULT}
+                          />
+                        )}
                         <div className={`flex justify-between`}>
                           <div className="flex w-full">
                             <div className="flex flex-1 font-bold text-ellipsis overflow-hidden break-all ">
@@ -135,13 +148,25 @@ const Post: React.FC<PostProps> = ({}) => {
                         bg="blue.500"
                         key={key}
                       >
-                        <Image
-                          className="bg-primary-800 rounded-8"
-                          fallbackSrc={IMAGE_DEFAULT}
-                          boxSize="200px"
-                          src={post.url}
-                          alt={post.description}
-                        />
+                        {post.type === "video" ? (
+                          <div className="player-wrapper ">
+                            <ReactPlayer
+                              className="react-player"
+                              url={post.url}
+                              controls
+                              width="100%"
+                              height="100%"
+                            />
+                          </div>
+                        ) : (
+                          <Image
+                            className="bg-primary-800 rounded-8"
+                            fallbackSrc={IMAGE_DEFAULT}
+                            boxSize="200px"
+                            src={post.url}
+                            alt={post.description}
+                          />
+                        )}
 
                         <div className={`flex justify-between`}>
                           <div className="flex w-full">

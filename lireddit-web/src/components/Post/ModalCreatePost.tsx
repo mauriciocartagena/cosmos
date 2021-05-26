@@ -21,8 +21,6 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
 
   const [createPost] = useCreatePostMutation();
 
-  const [loading, setLoading] = useState(false);
-
   const [fileUpload] = useSingleUploadMutation();
 
   const onChange = async ({
@@ -34,7 +32,13 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
-      <Formik
+      <Formik<{
+        title: string;
+        subtitle: string;
+        description: string;
+        type: string;
+        url: string;
+      }>
         initialValues={{
           title: "",
           subtitle: "",
@@ -43,7 +47,6 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
           url: "",
         }}
         onSubmit={async (values) => {
-          setLoading(true);
           const result = await fileUpload({
             variables: {
               file: dataFile,
@@ -64,85 +67,83 @@ const ModalCreatePost: React.FC<ModalCreatePost> = ({ onRequestClose }) => {
             },
           });
           if (!errors) {
-            setLoading(true);
             onRequestClose();
           }
         }}
       >
-        <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
-          <div className={`col-span-3 block`}>
-            <h4 className={`mb-2 text-primary-100`}>Crear nuevo post</h4>
-            <div className={`text-primary-300`}>
-              Por favor usar información verdadera
+        {({ setFieldValue, values, isSubmitting }) => (
+          <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
+            <div className={`col-span-3 block`}>
+              <h4 className={`mb-2 text-primary-100`}>Crear nuevo post</h4>
+              <div className={`text-primary-300`}>
+                Por favor usar información verdadera
+              </div>
             </div>
-          </div>
-          <div className={`flex h-full w-full col-span-2`}>
-            <InputField
-              className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
-              name="title"
-              maxLength={60}
-              placeholder={"Titulo"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`grid items-start grid-cols-1 h-6`}>
-            <NativeSelect value={"Hola"} name="type">
-              <option
-                value="public"
-                id="image"
-                className={`hover:bg-primary-900`}
+            <div className={`flex h-full w-full col-span-2`}>
+              <InputField
+                className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
+                name="title"
+                maxLength={60}
+                placeholder={"Titulo"}
+                autoFocus
+                autoComplete="off"
+              />
+            </div>
+            <div className={`grid items-start grid-cols-1 h-6`}>
+              <NativeSelect
+                value={values.type}
+                onChange={(e) => {
+                  setFieldValue("type", e.target.value);
+                }}
               >
-                Imagen
-              </option>
-              <option
-                value="private"
-                id="video"
-                className={`hover:bg-primary-900`}
-              >
-                Video
-              </option>
-            </NativeSelect>
-          </div>
+                <option value="imagen" className={`hover:bg-primary-900`}>
+                  Imagen
+                </option>
+                <option value="video" className={`hover:bg-primary-900`}>
+                  video
+                </option>
+              </NativeSelect>
+            </div>
 
-          <div className={`h-full w-full col-span-3`}>
-            <InputField
-              className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
-              name="subtitle"
-              maxLength={60}
-              placeholder={"Subtitulo"}
-              autoFocus
-              autoComplete="off"
-            />
-          </div>
-          <div className={`h-full w-full col-span-3`}>
-            <InputField
-              className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
-              name="url"
-              onChangeCapture={onChange}
-              type="file"
-            />
-          </div>
-          <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
-            <InputField
-              className={`h-11 col-span-3 w-full`}
-              name="description"
-              rows={3}
-              maxLength={600}
-              placeholder={"Descripción"}
-              textarea
-            />
-          </div>
+            <div className={`h-full w-full col-span-3`}>
+              <InputField
+                className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
+                name="subtitle"
+                maxLength={60}
+                placeholder={"Subtitulo"}
+                autoFocus
+                autoComplete="off"
+              />
+            </div>
+            <div className={`h-full w-full col-span-3`}>
+              <InputField
+                className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
+                name="url"
+                onChangeCapture={onChange}
+                type="file"
+              />
+            </div>
+            <div className={`flex col-span-3 bg-primary-700 rounded-8`}>
+              <InputField
+                className={`h-11 col-span-3 w-full`}
+                name="description"
+                rows={3}
+                maxLength={600}
+                placeholder={"Descripción"}
+                textarea
+              />
+            </div>
 
-          <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-            <Button type="submit" className={`mr-3`} loading={loading}>
-              Crear
-            </Button>
-            <ButtonLink type="button" onClick={onRequestClose}>
-              Cancelar
-            </ButtonLink>
-          </div>
-        </Form>
+            <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
+              <Button type="submit" className={`mr-3`} loading={isSubmitting}>
+                Crear
+              </Button>
+              <ButtonLink type="button" onClick={onRequestClose}>
+                Cancelar
+              </ButtonLink>
+            </div>
+          </Form>
+        )}
       </Formik>
     </Modal>
   );

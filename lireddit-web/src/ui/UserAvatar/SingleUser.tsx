@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { SolidMicrophoneOff } from "../../icons";
-import { Image } from "@chakra-ui/react";
 export const avatarSizeMap = {
   default: "80px",
   sm: "40px",
@@ -69,7 +68,6 @@ export const SingleUser: React.FC<AvatarProps> = ({
   const [isError, setError] = useState(false);
   const sizeStyle = onlineIndicatorStyleMap[size];
 
-  console.log(username);
   return (
     <div
       className={`relative inline-block ${className}`}
@@ -79,32 +77,13 @@ export const SingleUser: React.FC<AvatarProps> = ({
       }}
       data-testid="single-user-avatar"
     >
-      {/* <Image
-        fallbackSrc={IMAGE_DEFAULT}
-        className={`rounded-8`}
-        alt="avatar"
-        borderRadius="full"
-        style={{
-          boxShadow: activeSpeaker ? "0 0 0 2px var(--color-accent)" : "",
-        }}
-        onError={(error) => console.log(error)}
-        src={
-          isError
-            ? `https://ui-avatars.com/api/${
-                username ? `&name=${username}` : "&name"
-              }&rounded=true&background=B23439&bold=true&color=FFFFFF`
-            : src
-        }
-      /> */}
-
       <img
         alt="avatar"
         style={{
           boxShadow: activeSpeaker ? "0 0 0 2px var(--color-accent)" : "",
         }}
         className="rounded-full w-full h-full object-cover"
-        onError={(error) => {
-          console.log(error);
+        onError={() => {
           setError(true);
         }}
         src={

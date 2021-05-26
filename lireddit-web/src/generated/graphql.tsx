@@ -547,7 +547,7 @@ export type PostsQuery = (
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'subtitle' | 'description' | 'title' | 'url' | 'createdAt'>
+      & Pick<Post, 'id' | 'subtitle' | 'description' | 'title' | 'url' | 'createdAt' | 'type'>
     )> }
   ) }
 );
@@ -1283,6 +1283,7 @@ export const PostsDocument = gql`
       title
       url
       createdAt
+      type
     }
   }
 }
