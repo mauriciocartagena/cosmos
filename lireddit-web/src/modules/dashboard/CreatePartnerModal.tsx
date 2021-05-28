@@ -10,10 +10,12 @@ import { toErrorMapParnert } from "../../utils/toErrorMapParnert";
 import PhoneInput from "react-phone-input-2";
 interface CreatePartnerModal {
   onRequestClose: () => void;
+  title: string;
 }
 
 export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
   onRequestClose,
+  title,
 }) => {
   const [register] = useCreatePartnerMutation();
   const [loading, setLoading] = useState(false);
@@ -59,7 +61,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
             }}
           >
             <div className={`col-span-3 block`}>
-              <h4 className={`mb-2 text-primary-100`}>Registrar Socio</h4>
+              <h4 className={`mb-2 text-primary-100`}>{title}</h4>
               <p className={`text-primary-300`}>
                 Por favor llene cuidadosamente los datos
               </p>

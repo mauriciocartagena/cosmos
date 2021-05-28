@@ -8,11 +8,11 @@ import { useForgotPasswordMutation } from "../generated/graphql";
 import SvgSolidLogo from "../icons/SvgSolidLogo";
 import { FooterController } from "../modules/display/FooterController";
 import { HeaderController } from "../modules/display/HeaderController";
+import { withApollo } from "../utils/withApollo";
 
 const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
-  const [forgotPassword] = useForgotPasswordMutation();
-
+  const [sendEmail] = useForgotPasswordMutation();
   return (
     <div
       className="grid w-full h-full"
@@ -36,7 +36,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
                 email: "",
               }}
               onSubmit={async (values) => {
-                await forgotPassword({ variables: values });
+                await sendEmail({ variables: values });
                 setComplete(true);
               }}
             >
@@ -89,4 +89,4 @@ const ForgotPassword: React.FC<{}> = ({}) => {
   );
 };
 
-export default ForgotPassword;
+export default withApollo({ ssr: false })(ForgotPassword);

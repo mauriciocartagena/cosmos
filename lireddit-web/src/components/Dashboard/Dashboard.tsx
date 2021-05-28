@@ -183,7 +183,10 @@ const Dashboard: React.FC<DasboardProps> = ({}) => {
       ) : null}
 
       {roomModal && (
-        <CreatePartnerModal onRequestClose={() => setRoomModal(false)} />
+        <CreatePartnerModal
+          title={"Registrar Socio"}
+          onRequestClose={() => setRoomModal(false)}
+        />
       )}
       {editModal && !fetchingPartner ? (
         <EditPartnerModal

@@ -62,7 +62,12 @@ export const LoginPage: React.FC = () => {
             <SvgSolidUser width={20} height={20} />
             Login
           </LoginButton>
-          <LoginButton dev onClick={() => {}}>
+          <LoginButton
+            dev
+            onClick={() => {
+              router.push("/info");
+            }}
+          >
             <SvgSolidBug width={20} height={20} />
             Login Invite
           </LoginButton>
