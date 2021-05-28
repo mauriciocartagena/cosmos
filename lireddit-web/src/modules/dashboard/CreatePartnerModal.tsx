@@ -1,13 +1,12 @@
 import { Form, Formik } from "formik";
 import React from "react";
+import PhoneInput from "react-phone-input-2";
 import { InputField } from "../../form-fields/InputField";
+import { useCreatePartnerMutation } from "../../generated/graphql";
 import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
-import { useCreatePartnerMutation } from "../../generated/graphql";
-import { useState } from "react";
 import { toErrorMapParnert } from "../../utils/toErrorMapParnert";
-import PhoneInput from "react-phone-input-2";
 interface CreatePartnerModal {
   onRequestClose: () => void;
   title: string;
@@ -18,8 +17,6 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
   title,
 }) => {
   const [register] = useCreatePartnerMutation();
-  const [loading, setLoading] = useState(false);
-  const [changePhone, setChangePhone] = useState("");
 
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
@@ -32,8 +29,6 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           phone: "",
         }}
         onSubmit={async (values, { setErrors }) => {
-          setLoading(true);
-
           const response = await register({
             variables: { input: values },
             update: (cache, data) => {
@@ -44,22 +39,14 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
           // response.data.createPartner.errors
           if (response.data?.createPartner.errors) {
             setErrors(toErrorMapParnert(response.data.createPartner.errors));
-            setLoading(false);
           } else if (response.data?.createPartner.people) {
             // worked
             onRequestClose();
-            setLoading(false);
           }
         }}
       >
-        {(props) => (
-          <Form
-            className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}
-            onSubmit={props.handleSubmit}
-            onChange={() => {
-              props.values.phone = changePhone;
-            }}
-          >
+        {({ setFieldValue, values, isSubmitting }) => (
+          <Form className={`grid grid-cols-2 gap-4 focus:outline-none w-full`}>
             <div className={`col-span-3 block`}>
               <h4 className={`mb-2 text-primary-100`}>{title}</h4>
               <p className={`text-primary-300`}>
@@ -98,9 +85,10 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
             </div>
             <div className={`grid items-start grid-cols-1 h-6`}>
               <PhoneInput
-                onChange={(e) => {
-                  setChangePhone(`+ ${e}`);
+                onChange={(value) => {
+                  setFieldValue("phone", `+ ${value}`);
                 }}
+                value={values.phone}
                 inputClass="w-full py-2 px-4 rounded-8  placeholder-primary-300 text-primary-100 focus:outline-none bg-primary-700  rounded-8 bg-primary-700 px-4 h-6"
                 inputStyle={{
                   backgroundColor: "var(--color-primary-700)",
@@ -116,6 +104,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
                 specialLabel=""
                 inputProps={{
                   FocusEvent: "outline-none",
+                  name: "phone",
                 }}
               />
             </div>
@@ -131,7 +120,7 @@ export const CreatePartnerModal: React.FC<CreatePartnerModal> = ({
               />
             </div>
             <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-              <Button loading={loading} type="submit" className={`mr-3`}>
+              <Button loading={isSubmitting} type="submit" className={`mr-3`}>
                 Registrar
               </Button>
               <ButtonLink type="button" onClick={onRequestClose}>

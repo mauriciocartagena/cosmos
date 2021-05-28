@@ -6,7 +6,6 @@ import { useUpdateUserMutation } from "../../generated/graphql";
 import { Button } from "../Button";
 import { ButtonLink } from "../ButtonLink";
 import { Modal } from "../Modal";
-import { useState } from "react";
 
 interface EditAccountModal {
   onRequestClose: () => void;
@@ -31,8 +30,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
 }) => {
   const [updatedAccount] = useUpdateUserMutation();
 
-  const [numberValue, setNumberValue] = useState("");
-
   return (
     <Modal isOpen onRequestClose={onRequestClose}>
       <Formik
@@ -41,7 +38,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           first_last_name: first_last_name,
           second_last_name: second_last_name,
           direction: direction,
-          email: email,
           phone: phone,
         }}
         onSubmit={async (values) => {
@@ -64,12 +60,8 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
           }
         }}
       >
-        {(props) => (
-          <Form
-            className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}
-            onSubmit={props.handleSubmit}
-            onChange={() => (props.values.phone = `${numberValue}`)}
-          >
+        {({ setFieldValue, values, isSubmitting }) => (
+          <Form className={`grid grid-cols-1 gap-4 focus:outline-none w-full`}>
             <div className={`col-span-3 block`}>
               <h4 className={`mb-2 text-primary-100`}>Editar Perfil</h4>
               <div className={`text-primary-300`}>
@@ -113,30 +105,22 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
                   backgroundColor: "var(--color-primary-700)",
                   border: "none",
                 }}
-                onChange={(e) => setNumberValue(e)}
-                value={phone}
+                value={values.phone}
                 dropdownClass="rounded-8 phone placeholder-primary-300 text-primary-100 focus:outline-none bg-primary-700  rounded-8 bg-primary-700"
                 dropdownStyle={{
                   backgroundColor: "var(--color-primary-800)",
                   borderColor: "gray",
                   border: "none",
                 }}
+                onChange={(value) => {
+                  setFieldValue("phone", `+ ${value}`);
+                }}
                 country="bo"
                 specialLabel=""
                 inputProps={{
                   FocusEvent: "outline-none",
+                  name: "phone",
                 }}
-              />
-            </div>
-            <div className={`h-full w-full col-span-3`}>
-              <InputField
-                className={`rounded-8 bg-primary-700 px-4 h-6`}
-                name="email"
-                type="email"
-                maxLength={60}
-                placeholder={"Email"}
-                autoFocus
-                autoComplete="off"
               />
             </div>
             <div className={`col-span-3 bg-primary-700 rounded-8`}>
@@ -151,7 +135,7 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
             </div>
 
             <div className={`flex pt-2 space-x-3 col-span-full items-center`}>
-              <Button type="submit" className={`mr-3`}>
+              <Button type="submit" className={`mr-3`} loading={isSubmitting}>
                 Editar
               </Button>
               <ButtonLink type="button" onClick={onRequestClose}>
