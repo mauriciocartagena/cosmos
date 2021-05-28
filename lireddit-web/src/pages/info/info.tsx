@@ -5,6 +5,8 @@ import SvgSolidLogo from "../../icons/SvgSolidLogo";
 import { CreatePartnerModal } from "../../modules/dashboard/CreatePartnerModal";
 import { HeaderController } from "../../modules/display/HeaderController";
 import { useScreenType } from "../../shared-hooks/useScreenType";
+import { withApollo } from "../../utils/withApollo";
+import router from "next/router";
 
 interface InfoProps {}
 
@@ -14,9 +16,9 @@ const Info: React.FC<InfoProps> = ({}) => {
 
   return (
     <>
-      <HeaderController embed={{}} title="Info" />
+      <HeaderController embed={{}} title="Informatión" />
       <div className="w-full">
-        <div className="grid grid-cols-2 justify-items-center gap-4 pt-5 ">
+        <div className="grid grid-cols-3 justify-items-center gap-4 pt-5 ">
           <div>
             <SvgSolidLogo />
           </div>
@@ -29,6 +31,17 @@ const Info: React.FC<InfoProps> = ({}) => {
               <div className="flex justify-center w-full">
                 <Button onClickCapture={() => setRoomModal(true)}>
                   Volverse Socio
+                </Button>
+              </div>
+            )}
+          </div>
+          <div>
+            {screenType === "3-cols" ? (
+              <Button onClickCapture={() => router.push("/")}>Regresar</Button>
+            ) : (
+              <div className="flex justify-center w-full">
+                <Button onClickCapture={() => router.push("/")}>
+                  Regresar
                 </Button>
               </div>
             )}
@@ -150,4 +163,4 @@ const Info: React.FC<InfoProps> = ({}) => {
   );
 };
 
-export default Info;
+export default withApollo({ ssr: true })(Info);

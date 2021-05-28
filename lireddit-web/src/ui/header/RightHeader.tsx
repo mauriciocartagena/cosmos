@@ -49,7 +49,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
           <SettingsDropdown
             onActionButtonClicked={() => {
               logout();
-              return router.push("/login");
+              return router.push("/");
             }}
             onCloseDropdown={close}
             onActionToFetch={async () => {
