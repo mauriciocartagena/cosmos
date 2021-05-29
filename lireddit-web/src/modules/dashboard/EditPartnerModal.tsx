@@ -47,6 +47,10 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
             update: (cache) => {
               // cache.evict({ id: "People:" + id });
               cache.evict({ fieldName: "partners:{}" });
+              cache.evict({
+                id: "ROOT_QUERY",
+                fieldName: "partnerLastName",
+              });
             },
           });
           response.data?.updatedPartner.errors;

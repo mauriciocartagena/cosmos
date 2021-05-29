@@ -1,0 +1,12 @@
+query PartnerLastName($first_last_name: String!) {
+  partnerLastName(first_last_name: $first_last_name) {
+    peoples {
+      direction
+      phone
+      second_last_name
+      first_last_name
+      name
+      id
+    }
+  }
+}

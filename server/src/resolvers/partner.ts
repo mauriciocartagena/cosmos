@@ -42,6 +42,12 @@ class PaginatedPartner {
   @Field()
   hasMore: boolean;
 }
+
+@ObjectType()
+class Partners {
+  @Field(() => [People])
+  peoples: People[];
+}
 @Resolver(People)
 export class PartnerResolver {
   // Hello
@@ -166,6 +172,33 @@ export class PartnerResolver {
   @Query(() => People, { nullable: true })
   partner(@Arg("id", () => Int) id: number): Promise<People | undefined> {
     return People.findOne(id);
+  }
+  @Query(() => Partners)
+  async partnerLastName(
+    @Arg("first_last_name", () => String) first_last_name: string
+  ): Promise<Partners> {
+    const replacements: any[] = [`%${first_last_name}%`];
+
+    const people = await getConnection().query(
+      `select u.*,
+      json_build_object(
+        'id', u.id,
+        'second_last_name',u.second_last_name,
+        'first_last_name', u.first_last_name,
+        'phone',u.phone,
+        'direction',u.direction,
+        'name',u.name
+        ) creator
+      from partner p
+      inner join public.people u on u.id = p."creatorId"
+      ${first_last_name ? `where u."first_last_name" LIKE $1` : ""}
+    `,
+      replacements
+    );
+
+    return {
+      peoples: people,
+    };
   }
 
   @Mutation(() => Boolean)

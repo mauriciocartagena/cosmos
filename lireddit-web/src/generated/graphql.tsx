@@ -147,6 +147,11 @@ export type PartnerResponse = {
   people?: Maybe<People>;
 };
 
+export type Partners = {
+  __typename?: 'Partners';
+  peoples: Array<People>;
+};
+
 export type People = {
   __typename?: 'People';
   id: Scalars['Float'];
@@ -186,6 +191,7 @@ export type Query = {
   hello: Scalars['String'];
   partners: PaginatedPartner;
   partner?: Maybe<People>;
+  partnerLastName: Partners;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   fetchUser: User;
@@ -202,6 +208,11 @@ export type QueryPartnersArgs = {
 
 export type QueryPartnerArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryPartnerLastNameArgs = {
+  first_last_name: Scalars['String'];
 };
 
 
@@ -548,6 +559,22 @@ export type PostsQuery = (
     & { posts: Array<(
       { __typename?: 'Post' }
       & Pick<Post, 'id' | 'subtitle' | 'description' | 'title' | 'url' | 'createdAt' | 'type'>
+    )> }
+  ) }
+);
+
+export type PartnerLastNameQueryVariables = Exact<{
+  first_last_name: Scalars['String'];
+}>;
+
+
+export type PartnerLastNameQuery = (
+  { __typename?: 'Query' }
+  & { partnerLastName: (
+    { __typename?: 'Partners' }
+    & { peoples: Array<(
+      { __typename?: 'People' }
+      & Pick<People, 'direction' | 'phone' | 'second_last_name' | 'first_last_name' | 'name' | 'id'>
     )> }
   ) }
 );
@@ -1317,6 +1344,48 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const PartnerLastNameDocument = gql`
+    query PartnerLastName($first_last_name: String!) {
+  partnerLastName(first_last_name: $first_last_name) {
+    peoples {
+      direction
+      phone
+      second_last_name
+      first_last_name
+      name
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __usePartnerLastNameQuery__
+ *
+ * To run a query within a React component, call `usePartnerLastNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePartnerLastNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePartnerLastNameQuery({
+ *   variables: {
+ *      first_last_name: // value for 'first_last_name'
+ *   },
+ * });
+ */
+export function usePartnerLastNameQuery(baseOptions: Apollo.QueryHookOptions<PartnerLastNameQuery, PartnerLastNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PartnerLastNameQuery, PartnerLastNameQueryVariables>(PartnerLastNameDocument, options);
+      }
+export function usePartnerLastNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PartnerLastNameQuery, PartnerLastNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PartnerLastNameQuery, PartnerLastNameQueryVariables>(PartnerLastNameDocument, options);
+        }
+export type PartnerLastNameQueryHookResult = ReturnType<typeof usePartnerLastNameQuery>;
+export type PartnerLastNameLazyQueryHookResult = ReturnType<typeof usePartnerLastNameLazyQuery>;
+export type PartnerLastNameQueryResult = Apollo.QueryResult<PartnerLastNameQuery, PartnerLastNameQueryVariables>;
 export const FetchUserDocument = gql`
     query FetchUser($id: String!) {
   fetchUser(id: $id) {

@@ -23,7 +23,6 @@ export const EditAccountModal: React.FC<EditAccountModal> = ({
   id,
   name,
   direction,
-  email,
   first_last_name,
   phone,
   second_last_name,
