@@ -8,7 +8,6 @@ import { HeaderController } from "../../modules/display/HeaderController";
 import { useScreenType } from "../../shared-hooks/useScreenType";
 import { Button } from "../../ui/Button";
 import { withApollo } from "../../utils/withApollo";
-import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
 
 interface postsProps {}
 
@@ -32,7 +31,7 @@ const Posts: React.FC<postsProps> = ({}) => {
     return null;
   }
   return (
-    <WaitForWsAndAuth>
+    <>
       <div className="w-full">
         <HeaderController embed={{}} title="Post" />
         <div className="grid grid-cols-2 justify-items-center gap-4 pt-5 ">
@@ -206,7 +205,7 @@ const Posts: React.FC<postsProps> = ({}) => {
           ) : null}
         </div>
       </div>
-    </WaitForWsAndAuth>
+    </>
   );
 };
 

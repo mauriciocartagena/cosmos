@@ -132,7 +132,7 @@ export class UserResolver {
 
     await redis.set(
       FORGET_PASSWORD_PREFIX + token,
-      user.creator.id,
+      user.peopleId,
       "ex",
       1000 * 60 * 60 * 24 * 3
     ); //3 days

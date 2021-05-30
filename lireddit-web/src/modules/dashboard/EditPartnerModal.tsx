@@ -7,7 +7,6 @@ import { Button } from "../../ui/Button";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
 import { toErrorMapParnert } from "../../utils/toErrorMapParnert";
-import { useIsAuth } from "../../utils/useIsAuth";
 import { withApollo } from "../../utils/withApollo";
 
 interface EditPartnerModal {
@@ -28,7 +27,6 @@ const EditPartnerModal: React.FC<EditPartnerModal> = ({
   phone,
   direction,
 }) => {
-  useIsAuth();
   const [updatedPartner] = useUpdatedPartnerMutation();
 
   return (

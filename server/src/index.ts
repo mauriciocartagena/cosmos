@@ -19,6 +19,7 @@ import { PartnerResolver } from "./resolvers/partner";
 import { PostResolver } from "./resolvers/post";
 import { UploadFileResolver } from "./resolvers/UploadFile";
 import { UserResolver } from "./resolvers/user";
+
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",

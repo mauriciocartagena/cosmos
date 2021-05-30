@@ -37,11 +37,13 @@ const Info: React.FC<InfoProps> = ({}) => {
           </div>
           <div>
             {screenType === "3-cols" ? (
-              <Button onClickCapture={() => router.push("/")}>Regresar</Button>
+              <Button onClickCapture={() => router.push("/posts")}>
+                Ver posts
+              </Button>
             ) : (
               <div className="flex justify-center w-full">
-                <Button onClickCapture={() => router.push("/")}>
-                  Regresar
+                <Button onClickCapture={() => router.push("/posts")}>
+                  Ver posts
                 </Button>
               </div>
             )}

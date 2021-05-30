@@ -1,7 +1,7 @@
 import React from "react";
 import { isServer } from "../../utils/isServer";
 import { useMeQuery } from "../../generated/graphql";
-import { useIsAuth } from "../../utils/useIsAuth";
+import useIsAuth from "../../utils/useIsAuth";
 
 interface WaitForWsAndAuthProps {}
 

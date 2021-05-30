@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useMeQuery } from "../generated/graphql";
 import { isServer } from "./isServer";
 
-export const useIsAuth = () => {
+const useIsAuth = () => {
   const { data, loading } = useMeQuery({
     skip: isServer(),
   });
@@ -16,3 +16,4 @@ export const useIsAuth = () => {
     }
   }, [loading, data, router]);
 };
+export default useIsAuth;
