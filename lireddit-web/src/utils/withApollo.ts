@@ -3,12 +3,11 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { PaginatedPosts, PaginatedPartner } from "../generated/graphql";
 import { NextPageContext } from "next";
 import { createUploadLink } from "apollo-upload-client";
-import { cacheExchange } from "@urql/exchange-graphcache";
 
 const createClient = (ctx: NextPageContext) =>
   new ApolloClient({
     link: createUploadLink({
-      uri: "http://localhost:5000/graphql",
+      uri: process.env.NEXT_PUBLIC_API_URL,
       credentials: "include",
     }),
     headers: {

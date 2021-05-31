@@ -23,7 +23,7 @@ const Post: React.FC<PostProps> = ({}) => {
 
   const [_id, set_id] = useState(0);
 
-  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+  const { data, loading, fetchMore, variables } = usePostsQuery({
     variables: {
       limit: 10,
       cursor: null,

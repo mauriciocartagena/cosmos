@@ -17,7 +17,7 @@ const Posts: React.FC<postsProps> = ({}) => {
   const IMAGE_DEFAULT =
     "https://fotos.perfil.com//2019/11/22/900/0/tesla-cybertruck-807820.jpg";
 
-  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+  const { data, loading, fetchMore, variables } = usePostsQuery({
     variables: {
       limit: 10,
       cursor: null,

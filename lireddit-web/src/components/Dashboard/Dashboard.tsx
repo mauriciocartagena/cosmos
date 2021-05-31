@@ -23,7 +23,7 @@ const Dashboard: React.FC<DasboardProps> = ({}) => {
 
   const [deletePartner] = useDeletePartnerMutation();
 
-  const { data, error, loading, fetchMore, variables } = usePartnersQuery({
+  const { data, loading, fetchMore, variables } = usePartnersQuery({
     variables: {
       limit: 10,
       cursor: null,

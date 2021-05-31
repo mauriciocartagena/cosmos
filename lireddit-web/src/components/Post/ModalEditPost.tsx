@@ -101,7 +101,7 @@ const ModalEditPost: React.FC<ModalEditPost> = ({
           }
         }}
       >
-        {({ setFieldValue, values, isSubmitting }) => (
+        {({ setFieldValue, values }) => (
           <Form className={`grid grid-cols-3 gap-4 focus:outline-none w-full`}>
             <div className={`col-span-3 block`}>
               <h4 className={`mb-2 text-primary-100`}>Editar Post</h4>

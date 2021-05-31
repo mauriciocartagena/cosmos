@@ -17,27 +17,29 @@ import { User } from "./entities/User";
 import { HelloResolver } from "./resolvers/hello";
 import { PartnerResolver } from "./resolvers/partner";
 import { PostResolver } from "./resolvers/post";
+// import path from "path";
 import { UploadFileResolver } from "./resolvers/UploadFile";
 import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
-    database: "cosmos",
-    username: "user",
-    password: "password",
+    url: process.env.DATABASE_URL,
     logging: true,
     synchronize: true,
+    // migrations: [path.join(__dirname, "./migrations/*")],
     entities: [User, Post, Partner, People],
   });
 
+  await conn.runMigrations();
+
   const app = express();
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
-
+  const redis = new Redis(process.env.REDIS_URL);
+  app.set("trust proxy", 1);
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
@@ -57,9 +59,10 @@ const main = async () => {
         httpOnly: true,
         sameSite: "lax",
         secure: __prod__, // cookie only works in https
+        domain: __prod__ ? ".mentesmaestras.xyz" : undefined,
       },
       saveUninitialized: false,
-      secret: "mcvbmklcvbmklcmblcmvasd",
+      secret: process.env.SESSION_SECRET,
       resave: false,
     }),
     graphqlUploadExpress({ maxFileSize: 99999999, maxFiles: 200 })
@@ -77,10 +80,8 @@ const main = async () => {
         PartnerResolver,
         UploadFileResolver,
       ],
-
       validate: false,
     }),
-
     context: ({ req, res }) => ({ req, res, redis }),
   });
 
@@ -93,7 +94,7 @@ const main = async () => {
     res.send("hello");
   });
 
-  app.listen(5000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log("server started on localhost:5000");
   });
 

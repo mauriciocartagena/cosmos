@@ -57,7 +57,7 @@ export class PartnerResolver {
     @Arg("input")
     input: PartnerInput,
     @Ctx()
-    { req }: MyContext
+    {}: MyContext
   ): Promise<PartnerResponse> {
     const errors = validateRegisterPartner(input);
 
@@ -144,7 +144,7 @@ export class PartnerResolver {
     @Arg("input")
     input: PartnerInput,
     @Ctx()
-    { req }: MyContext
+    {}: MyContext
   ): Promise<PartnerResponse | null> {
     const errors = validateRegisterPartner(input);
 
@@ -205,7 +205,7 @@ export class PartnerResolver {
   @UseMiddleware(isAuth)
   async deletePartner(
     @Arg("id", () => Int) id: number,
-    @Ctx() { req }: MyContext
+    @Ctx() {}: MyContext
   ): Promise<boolean> {
     await getConnection()
       .createQueryBuilder()

@@ -12,7 +12,7 @@ export interface HeaderControllerProps {
 
 export const HeaderController: NextPage<HeaderControllerProps> = ({
   title,
-  description = "MentesMaestras is taking voice conversations to the moon 🚀",
+  description = "MentesMaestras ",
   owner,
   additionalKeywords = [],
   embed,
@@ -28,9 +28,7 @@ export const HeaderController: NextPage<HeaderControllerProps> = ({
       {owner ? <meta name="author" content={owner} /> : ""}
       <meta
         name="keywords"
-        content={`MentesMaestras, Doge${additionalKeywords?.map(
-          (k) => `, ${k}`
-        )}`}
+        content={`MentesMaestras, ${additionalKeywords?.map((k) => `, ${k}`)}`}
       />
       <meta name="theme-color" content={embed?.hexColor || "#EFE7DD"} />
       {embed ? (
@@ -43,10 +41,13 @@ export const HeaderController: NextPage<HeaderControllerProps> = ({
           {owner ? <meta name="music:creator" content={owner} /> : ""}
           <meta name="og:description" content={description} />
           <meta name="og:site_name" content="" />
-          <meta
+          <meta name="og:image" content={"../../../public/img/mentes.png"} />
+          {/* <meta
             name="og:image"
-            // content={`${baseUrl || "https://next.MentesMaestras.tv"}/img/doge.png`}
-          />
+            content={`${
+              baseUrl || "https://imgcosmos.s3.amazonaws.com"
+            }/logoMind.png`}
+          /> */}
         </>
       ) : (
         ""

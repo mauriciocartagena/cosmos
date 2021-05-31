@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 
 const colorMap = {
   "700": "bg-primary-700",

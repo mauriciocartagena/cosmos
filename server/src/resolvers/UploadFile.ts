@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import { FileUpload, GraphQLUpload } from "graphql-upload";
 import stream from "stream";
+import "dotenv-safe/config";
 import { Arg, Mutation } from "type-graphql";
 import { UploadedFileResponse } from "../entities/Upload";
 
@@ -45,6 +46,8 @@ export class UploadFileResolver {
     mimetype: string,
     encoding: string
   ): string {
+    mimetype;
+    encoding;
     return fileName;
   }
   @Mutation(() => UploadedFileResponse)

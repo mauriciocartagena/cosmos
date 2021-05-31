@@ -30,17 +30,7 @@ const SearchBarController: React.FC<SearchControllerProps> = ({}) => {
   return (
     <>
       <Downshift>
-        {({
-          getInputProps,
-          getItemProps,
-          getLabelProps,
-          getMenuProps,
-          isOpen,
-          inputValue,
-          highlightedIndex,
-          selectedItem,
-          getRootProps,
-        }) => (
+        {({ getInputProps, isOpen, getRootProps }) => (
           <div
             className="relative w-full z-10 flex flex-col"
             {...getInputProps()}

@@ -123,7 +123,7 @@ function invalidateAllPosts(cache: Cache) {
 }
 
 export const createUrqlClient = (ssrExchange: any) => ({
-  url: "http://localhost:5000/graphql",
+  url: process.env.NEXT_PUBLIC_API_URL,
   fetchOptions: {
     credentials: "include" as const,
   },
@@ -142,16 +142,16 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
-          deletePartner: (_result, args, cache, info) => {
+          deletePartner: (_result, args, cache) => {
             cache.invalidate({
               __typename: "People",
               id: (args as DeletePartnerMutationVariables).id,
             });
           },
-          createPost: (_result, args, cache, info) => {
+          createPost: (_result, _, cache, __) => {
             invalidateAllPosts(cache);
           },
-          createPartner: (_result, args, cache, info) => {
+          createPartner: (_result, _, cache, __) => {
             const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(
               (info) => info.fieldName === "partners"
@@ -160,13 +160,13 @@ export const createUrqlClient = (ssrExchange: any) => ({
               cache.invalidate("Query", "partners", fi.arguments || {});
             });
           },
-          updatedPartner: (_result, args, cache, info) => {
+          updatedPartner: (_result, args, cache, __) => {
             cache.invalidate({
               __typename: "People",
               id: (args as UpdatedPartnerMutationVariables).id,
             });
           },
-          updatedAccount: (_result, args, cache, info) => {
+          updatedAccount: (_result, _, cache, __) => {
             const allFields = cache.inspectFields("Query");
             const fieldInfos = allFields.filter(
               (info) => info.fieldName === "User" || "People"
@@ -176,12 +176,12 @@ export const createUrqlClient = (ssrExchange: any) => ({
                 cache.invalidate("Query", "People", fi.arguments || {});
             });
           },
-          CreateUser: (_result, args, cache, info) => {
+          CreateUser: (_result, _, cache, __) => {
             cache.invalidate("Query", "users", {
               limit: 5,
             });
           },
-          logout: (_result, args, cache, info) => {
+          logout: (_result, _, cache, __) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(
               cache,
               {
@@ -191,7 +191,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
               () => ({ me: null, router: router.push("/") })
             );
           },
-          login: (_result, args, cache, info) => {
+          login: (_result, _, cache, __) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,
               { query: MeDocument },
@@ -208,7 +208,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
             );
             invalidateAllPosts(cache);
           },
-          register: (_result, args, cache, info) => {
+          register: (_result, _, cache, __) => {
             betterUpdateQuery<CreateUserMutation, MeQuery>(
               cache,
               {

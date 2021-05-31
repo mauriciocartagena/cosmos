@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from "react";
+import React from "react";
 
 const badgeVariants = {
   "primary-700": "bg-primary-700",

@@ -18,7 +18,7 @@ export const DefaultDesktopLayout: React.FC<DefaultDesktopLayoutProps> = ({
     skip: isServer(),
     notifyOnNetworkStatusChange: true,
   });
-  const { data, loading, fetchMore } = useFetchUserQuery({
+  const { data, loading } = useFetchUserQuery({
     variables: {
       id: user?.me ? user.me.peopleId.toString() : "",
     },
