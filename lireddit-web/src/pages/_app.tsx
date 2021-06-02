@@ -3,6 +3,18 @@ import "../styles/add-to-calendar-button.css";
 import "../styles/banner-button.css";
 import "../styles/electron-header.css";
 import "../styles/globals.css";
+import ReactModal from "react-modal";
+
+import NProgress from "nprogress";
+import Router from "next/router";
+import "nprogress/nprogress.css";
+
+Router.events.on("routeChangeStart", () => {
+  NProgress.start();
+});
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
+ReactModal.setAppElement("#__next");
 
 function MyApp({ Component, pageProps }: any) {
   return (

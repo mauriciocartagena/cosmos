@@ -27,7 +27,7 @@ const Account: React.FC<{}> = () => {
             <ProfileHeaderWrapper
               coverUrl={"https://source.unsplash.com/random"}
             >
-              <div className="flex mr-4 ">
+              <div className="flex mr-4">
                 <SingleUser
                   isOnline={true}
                   username={data?.me?.username}
@@ -44,12 +44,12 @@ const Account: React.FC<{}> = () => {
                     className="text-primary-300 mr-2"
                     data-testid="profile-info-username"
                   >
-                    {`@${data.me?.email}`}
+                    {`${data.me?.email}`}
                   </p>
                 </div>
               </div>
 
-              <div className="w-3/6 ">
+              <div className="sm:w-3/6">
                 <div className="flex flex-row justify-end content-end gap-2">
                   <Button
                     size="small"
