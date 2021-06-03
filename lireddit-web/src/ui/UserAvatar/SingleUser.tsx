@@ -78,7 +78,6 @@ export const SingleUser: React.FC<AvatarProps> = ({
   deafened,
   activeSpeaker,
   username,
-  isBot,
 }) => {
   const [isError, setError] = useState(false);
   const sizeStyle = onlineIndicatorStyleMap[size];

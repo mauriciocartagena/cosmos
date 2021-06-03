@@ -36,3 +36,4 @@ export { default as SolidChatBubble } from "./SolidChatBubble";
 export { default as SolidInstagram } from "./SolidInstagram";
 export { default as SvgSolidFacebook } from "./SolidFacebook";
 export { default as SolidDeafenedOff } from "./SolidDeafenedOff";
+export { default as SolidLogOut } from "./SolidLogOut";

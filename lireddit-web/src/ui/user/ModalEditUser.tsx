@@ -10,7 +10,6 @@ import {
 } from "../../generated/graphql";
 import { ButtonLink } from "../../ui/ButtonLink";
 import { Modal } from "../../ui/Modal";
-import { withApollo } from "../../utils/withApollo";
 import { useState } from "react";
 
 interface ModalEditUser {
@@ -21,7 +20,7 @@ interface ModalEditUser {
   urlImage: string;
 }
 
-const ModalEditUser: React.FC<ModalEditUser> = ({
+export const ModalEditUser: React.FC<ModalEditUser> = ({
   onRequestClose,
   id,
   username,
@@ -165,5 +164,3 @@ const ModalEditUser: React.FC<ModalEditUser> = ({
     </Modal>
   );
 };
-
-export default withApollo({ ssr: false })(ModalEditUser);

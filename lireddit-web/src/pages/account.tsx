@@ -1,2 +1,2 @@
-import Account from "../ui/user/Account";
-export default Account;
+import UserPage from "../ui/user/UserPage";
+export default UserPage;

@@ -3,7 +3,6 @@ import React from "react";
 import { LogoIcon } from "../../icons";
 import { useScreenType } from "../../shared-hooks/useScreenType";
 import SvgSolidLogo from "../../icons/SvgSolidLogo";
-
 export interface LeftHeaderProps {}
 
 const LeftHeader: React.FC<LeftHeaderProps> = ({}) => {

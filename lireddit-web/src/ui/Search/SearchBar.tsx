@@ -6,12 +6,14 @@ export interface SearchBarProps
   extends React.ComponentPropsWithoutRef<"input"> {
   inputClassName?: string;
   mobile?: boolean;
+  isLoading?: boolean;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
   inputClassName = "",
   mobile = false,
+  isLoading = false,
   ...props
 }) => {
   return (

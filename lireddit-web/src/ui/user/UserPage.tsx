@@ -1,11 +1,23 @@
 import React from "react";
-import { MiddlePanel } from "../../modules/GridPanels";
+import { MiddlePanel } from "../../modules/layouts/GridPanels";
 import { PageComponent } from "../../types/PageComponent";
-
+import { UserProfileController } from "./UserProfileController";
+import { HeaderController } from "../../modules/display/HeaderController";
+import { DefaultDesktopLayout } from "../../modules/layouts/DefaultDesktopLayout";
+import { WaitForWsAndAuth } from "../../modules/auth/WaitForWsAndAuth";
+import { withApollo } from "../../utils/withApollo";
 interface UserPageProps {}
 
-export const UserPage: PageComponent<UserPageProps> = ({}) => {
-  return <MiddlePanel></MiddlePanel>;
+const UserPage: PageComponent<UserPageProps> = () => {
+  return (
+    <WaitForWsAndAuth>
+      <HeaderController embed={{}} title="Account" />
+      <DefaultDesktopLayout>
+        <MiddlePanel>
+          <UserProfileController />
+        </MiddlePanel>
+      </DefaultDesktopLayout>
+    </WaitForWsAndAuth>
+  );
 };
-
-UserPage.ws = true;
+export default withApollo({ ssr: false })(UserPage);

@@ -8,7 +8,10 @@ import ReactModal from "react-modal";
 import NProgress from "nprogress";
 import Router from "next/router";
 import "nprogress/nprogress.css";
+import { isServer } from "../utils/isServer";
 
+if (!isServer) {
+}
 Router.events.on("routeChangeStart", () => {
   NProgress.start();
 });

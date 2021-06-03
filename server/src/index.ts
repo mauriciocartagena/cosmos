@@ -43,6 +43,7 @@ const main = async () => {
       credentials: true,
     })
   );
+
   redis.on("error", function (error) {
     console.error(error);
   });
@@ -65,7 +66,7 @@ const main = async () => {
       secret: process.env.SESSION_SECRET,
       resave: false,
     }),
-    graphqlUploadExpress({ maxFileSize: 99999999, maxFiles: 200 })
+    graphqlUploadExpress({ maxFileSize: Infinity, maxFiles: Infinity })
   );
 
   // redisClient.on("error", console.error);
