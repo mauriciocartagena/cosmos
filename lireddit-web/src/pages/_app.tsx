@@ -17,6 +17,7 @@ Router.events.on("routeChangeStart", () => {
 });
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
+
 ReactModal.setAppElement("#__next");
 
 function MyApp({ Component, pageProps }: any) {
@@ -31,6 +32,7 @@ function MyApp({ Component, pageProps }: any) {
         <link rel="apple-touch-icon" href="/img/mentes.png"></link>
       </Head>
       <Component {...pageProps} />
+      <div>{}</div>
     </>
   );
 }

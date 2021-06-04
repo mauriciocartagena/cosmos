@@ -8,7 +8,7 @@ import { ProfileHeader } from "../../ui/mobile/MobileHeader";
 import { MobileNav } from "../../ui/mobile/MobileNav";
 import { LeftPanel, RightPanel } from "./GridPanels";
 import { useMeQuery } from "../../generated/graphql";
-
+import { isServer } from "../../utils/isServer";
 interface MainLayoutProps {
   leftPanel?: React.ReactNode;
   tabletSidebar?: React.ReactNode;
@@ -26,7 +26,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
 }) => {
   const screenType = useScreenType();
 
-  const { data, loading } = useMeQuery();
+  const { data, loading } = useMeQuery({
+    skip: isServer(),
+  });
 
   const mHeader = mobileHeader || (
     <ProfileHeader
@@ -89,9 +91,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
       middle = (
         <>
           {children}
-          <AccountOverlay />
+          {!loading ? <AccountOverlay /> : null}
         </>
       );
+      break;
   }
 
   return (
