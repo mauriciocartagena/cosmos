@@ -9,7 +9,7 @@ import {
 } from "../../generated/graphql";
 import { isServer } from "../../utils/isServer";
 import { EditAccountModal } from "../user/EditAccountModal";
-import router from "next/router";
+import { useApolloClient } from "@apollo/client";
 
 export interface RightHeaderProps {
   onAnnouncementsClick?: (
@@ -25,7 +25,10 @@ export interface RightHeaderProps {
 }
 
 const RightHeader: React.FC<RightHeaderProps> = ({}) => {
+  const apolloClient = useApolloClient();
+
   const [logout] = useLogoutMutation();
+
   const [editModal, setEditModal] = useState(false);
 
   const { data } = useMeQuery({
@@ -47,9 +50,9 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
         innerClassName="fixed  transform -translate-x-full"
         overlay={(close) => (
           <SettingsDropdown
-            onActionButtonClicked={() => {
-              logout();
-              return router.push("/");
+            onActionButtonClicked={async () => {
+              await logout();
+              await apolloClient.cache.reset();
             }}
             onCloseDropdown={close}
             onActionToFetch={async () => {
@@ -66,7 +69,7 @@ const RightHeader: React.FC<RightHeaderProps> = ({}) => {
         <SingleUser
           className={"focus:outline-no-chrome"}
           size="sm"
-          username={user?.fetchUser.username}
+          username={user?.fetchUser.username!}
           src={data?.me?.url!}
         />
       </DropdownController>

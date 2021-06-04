@@ -1,14 +1,20 @@
 import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import NextLink from "next/link";
-import router from "next/router";
-import React from "react";
+import router, { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { Button } from "../form-fields/Button";
 import { InputField } from "../form-fields/InputField";
-import { useLoginMutation } from "../generated/graphql";
 import SvgSolidLogo from "../icons/SvgSolidLogo";
+import {
+  useLoginMutation,
+  MeQuery,
+  MeDocument,
+  useMeQuery,
+} from "../generated/graphql";
 import { FooterController } from "../modules/display/FooterController";
 import { HeaderController } from "../modules/display/HeaderController";
+import { isServer } from "../utils/isServer";
 import { toErrorMap } from "../utils/toErrorMap";
 import { withApollo } from "../utils/withApollo";
 
@@ -16,6 +22,19 @@ interface LoginButtonProps {}
 
 const Login: React.FC<LoginButtonProps> = ({}) => {
   const [login] = useLoginMutation();
+  const { push } = useRouter();
+  const { data } = useMeQuery({
+    skip: isServer(),
+    notifyOnNetworkStatusChange: true,
+  });
+
+  useEffect(() => {
+    if (!!data?.me) {
+      push("/dasboard");
+    } else {
+      null;
+    }
+  }, [data, router]);
 
   return (
     <div
@@ -41,7 +60,19 @@ const Login: React.FC<LoginButtonProps> = ({}) => {
                 password: "",
               }}
               onSubmit={async (values, { setErrors }) => {
-                const response = await login({ variables: values });
+                const response = await login({
+                  variables: values,
+                  update: (cache, { data }) => {
+                    cache.writeQuery<MeQuery>({
+                      query: MeDocument,
+                      data: {
+                        __typename: "Query",
+                        me: data?.login.user!,
+                      },
+                    });
+                    cache.evict({ fieldName: "partners:{}" });
+                  },
+                });
                 if (response.data?.login.errors) {
                   setErrors(toErrorMap(response.data.login.errors));
                 } else if (response.data?.login.user) {

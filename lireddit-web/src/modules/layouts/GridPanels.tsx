@@ -52,7 +52,7 @@ export const MiddlePanel: React.FC<
 };
 
 export const RightPanel: React.FC<LeftPanelProps> = ({ children }) => {
-  const { loading } = useMeQuery();
+  const { loading } = useMeQuery({});
   return (
     <FixedGridPanel>
       <HeaderWrapper>{!loading ? <RightHeader /> : null}</HeaderWrapper>

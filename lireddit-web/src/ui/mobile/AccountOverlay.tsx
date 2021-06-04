@@ -9,12 +9,15 @@ import { useAccountOverlay } from "../global-stores/useAccountOverlay";
 import { useLogoutMutation } from "../../generated/graphql";
 import { SettingsIcon } from "../SettingsIcon";
 import { withApollo } from "../../utils/withApollo";
+import { useApolloClient } from "@apollo/client";
 
 export interface AccountOverlyProps {}
 
 const height = 380 + 40;
 
 const AccountOverlay: React.FC<AccountOverlyProps> = ({}) => {
+  const ApolloClient = useApolloClient();
+
   const { isOpen, set: setOpen } = useAccountOverlay((s) => s);
   const [{ y }, set] = useSpring(() => ({ y: height }));
   const [logout] = useLogoutMutation();
@@ -129,10 +132,10 @@ const AccountOverlay: React.FC<AccountOverlyProps> = ({}) => {
                 className="text-primary-100"
               />
             }
-            onClick={() => {
-              logout();
-              setOpen({ isOpen: false });
-              router.push("/");
+            onClick={async () => {
+              await logout();
+              await ApolloClient.cache.reset();
+              await setOpen({ isOpen: false });
             }}
           />
         </div>

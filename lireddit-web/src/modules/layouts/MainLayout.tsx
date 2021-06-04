@@ -91,7 +91,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
       middle = (
         <>
           {children}
-          {!loading ? <AccountOverlay /> : null}
+          {<AccountOverlay />}
         </>
       );
       break;

@@ -196,7 +196,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
               cache,
               { query: MeDocument },
               _result,
-              (result, query) => {
+              (result: any, query) => {
                 if (result.login.errors) {
                   return query;
                 } else {
@@ -215,7 +215,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
                 query: MeDocument,
               },
               _result,
-              (result, query) => {
+              (result: any, query) => {
                 if (result.createUser.errors) {
                   return query;
                 } else {
