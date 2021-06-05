@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useMeQuery } from "../../generated/graphql";
+import { useMeQuery, useFetchUserQuery } from "../../generated/graphql";
 import { SolidCompass } from "../../icons";
 import { Button } from "../../ui/Button";
 import { isServer } from "../../utils/isServer";
 import { ProfileHeaderWrapper } from "../ProfileHeaderWrapper";
 import { SingleUser } from "../UserAvatar/SingleUser";
 import { ModalEditUser } from "./ModalEditUser";
+import { ProfileAbout } from "./ProfileAbout";
 
 interface UserProfileControllerProps {}
 
@@ -14,6 +15,11 @@ export const UserProfileController: React.FC<UserProfileControllerProps> =
     const [editModal, setEditModal] = useState(false);
     const { data, loading } = useMeQuery({
       skip: isServer(),
+    });
+    const { data: user } = useFetchUserQuery({
+      variables: {
+        id: data?.me ? data.me.peopleId.toString() : "",
+      },
     });
 
     return (
@@ -54,6 +60,13 @@ export const UserProfileController: React.FC<UserProfileControllerProps> =
             </div>
           </div>
         </ProfileHeaderWrapper>
+        <ProfileAbout
+          name={user?.fetchUser.creator.name!}
+          first_last_name={user?.fetchUser.creator.first_last_name!}
+          second_last_name={user?.fetchUser.creator.second_last_name!}
+          phone={user?.fetchUser.creator.phone!}
+          direction={user?.fetchUser.creator.direction!}
+        />
         {editModal && !loading && (
           <ModalEditUser
             onRequestClose={() => setEditModal(false)}

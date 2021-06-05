@@ -31,7 +31,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({}) => {
               <SingleUser
                 size="default"
                 isOnline={true}
-                username={user?.me?.username}
+                username={user?.me?.username!}
                 src={user?.me?.url!}
               />
             </div>
