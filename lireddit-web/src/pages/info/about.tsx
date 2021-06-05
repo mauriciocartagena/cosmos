@@ -5,7 +5,7 @@ interface AboutProps {
   className?: string;
 }
 
-export const About: React.FC<AboutProps> = ({ className }) => {
+const About: React.FC<AboutProps> = ({ className }) => {
   return (
     <div className={`grid justify-items-center pt-8 pb-2 ${className} `}>
       <h1
@@ -96,3 +96,4 @@ export const About: React.FC<AboutProps> = ({ className }) => {
     </div>
   );
 };
+export default About;

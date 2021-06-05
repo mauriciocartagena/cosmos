@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CreatePartnerModal } from "../modules/dashboard/CreatePartnerModal";
 import Posts from "../pages/posts";
-import { About } from "../pages/info/about";
+import About from "../pages/info/about";
 
 export interface ProfileTabsProps extends React.HTMLAttributes<HTMLDivElement> {
   tabs?: {

@@ -1,10 +1,4 @@
 import React from "react";
-// import { kFormatter } from "../lib/kFormatter";
-// import { TextParser } from "../modules/display/TextParser";
-// import { ApiPreloadLink } from "../shared-components/ApiPreloadLink";
-// import { useTypeSafeTranslation } from "../shared-hooks/useTypeSafeTranslation";
-// import { UserBadgeLg, UserBadgeLgProps } from "./UserBadgeLg";
-import SolidLink from "../../icons/SolidLink";
 export interface ProfileAboutProps
   extends React.HTMLAttributes<HTMLDivElement> {
   name: string;

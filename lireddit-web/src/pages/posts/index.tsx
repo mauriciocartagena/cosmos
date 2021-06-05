@@ -1,13 +1,7 @@
-import { Box, Center, Flex, Grid, Image } from "@chakra-ui/react";
-import router from "next/router";
+import { Image } from "@chakra-ui/react";
 import React from "react";
-import { Text } from "@chakra-ui/react";
 import ReactPlayer from "react-player/lazy";
 import { usePostsQuery } from "../../generated/graphql";
-import SvgSolidLogo from "../../icons/SvgSolidLogo";
-import { HeaderController } from "../../modules/display/HeaderController";
-import { useScreenType } from "../../shared-hooks/useScreenType";
-import { Button } from "../../ui/Button";
 import { withApollo } from "../../utils/withApollo";
 
 interface postsProps {
@@ -15,12 +9,10 @@ interface postsProps {
 }
 
 const Posts: React.FC<postsProps> = ({ className }) => {
-  const screenType = useScreenType();
-
   const IMAGE_DEFAULT =
     "https://fotos.perfil.com//2019/11/22/900/0/tesla-cybertruck-807820.jpg";
 
-  const { data, loading, fetchMore, variables } = usePostsQuery({
+  const { data, loading } = usePostsQuery({
     variables: {
       limit: 10,
       cursor: null,
