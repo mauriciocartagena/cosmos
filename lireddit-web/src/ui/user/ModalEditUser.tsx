@@ -112,7 +112,7 @@ export const ModalEditUser: React.FC<ModalEditUser> = ({
             </div>
           </div>
 
-          <div className={`h-11 w-full col-span-3`}>
+          <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
               name="username"
@@ -122,7 +122,7 @@ export const ModalEditUser: React.FC<ModalEditUser> = ({
               autoComplete="off"
             />
           </div>
-          <div className={`h-11 w-full col-span-3`}>
+          <div className={`h-full w-full col-span-3`}>
             <InputField
               className={`w-full py-2 px-4 rounded-8 text-primary-100 placeholder-primary-300 focus:outline-none`}
               name="email"
