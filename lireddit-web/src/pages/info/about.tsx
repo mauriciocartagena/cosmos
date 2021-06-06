@@ -20,6 +20,7 @@ const About: React.FC<AboutProps> = ({ className }) => {
       <h2
         style={{
           fontStyle: "normal",
+          textAlign: "center",
         }}
         className="text-primary-300"
       >

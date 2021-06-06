@@ -1,6 +1,7 @@
 import React from "react";
 import { SolidSearch } from "../../icons";
 import { Input } from "../Input";
+import { Spinner } from "../Spinner";
 
 export interface SearchBarProps
   extends React.ComponentPropsWithoutRef<"input"> {
@@ -12,8 +13,8 @@ export interface SearchBarProps
 export const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
   inputClassName = "",
-  mobile = false,
   isLoading = false,
+  mobile = false,
   ...props
 }) => {
   return (
@@ -27,12 +28,21 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <SolidSearch />
         </div>
       )}
-
       <Input
+        autoFocus
         data-testid="searchbar"
         className={`${inputClassName} pl-0`}
         {...props}
       />
+      {isLoading && (
+        <div
+          className={`h-full flex items-center pointer-events-none ${
+            !mobile && "mx-4"
+          }`}
+        >
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };

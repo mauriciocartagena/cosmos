@@ -39,6 +39,7 @@ const Posts: React.FC<postsProps> = ({ className }) => {
       <h2
         style={{
           fontStyle: "normal",
+          textAlign: "center",
         }}
         className="text-primary-300"
       >

@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { Ref, useState } from "react";
 import { SearchBar } from "../../ui/Search/SearchBar";
 import { SearchOverlay } from "./SearchOverlay";
 import { usePartnerLastNameQuery } from "../../generated/graphql";
 import { withApollo } from "../../utils/withApollo";
 import { InfoText } from "../../ui/InfoText";
 import { UserSearchResult } from "./SearchResult/UserSearchResult";
-import Downshift from "downshift";
+import Downshift, { GetInputPropsOptions } from "downshift";
 import EditPartnerModal from "../dashboard/EditPartnerModal";
 
 interface SearchControllerProps {}
+interface GetInputPropsOptionsRef extends GetInputPropsOptions {
+  ref?: Ref<HTMLInputElement>;
+}
 
 const SearchBarController: React.FC<SearchControllerProps> = ({}) => {
   const [partner, setPartner] = useState("");
@@ -33,7 +36,7 @@ const SearchBarController: React.FC<SearchControllerProps> = ({}) => {
         {({ getInputProps, isOpen, getRootProps }) => (
           <div
             className="relative w-full z-10 flex flex-col"
-            {...getInputProps()}
+            {...(getInputProps() as GetInputPropsOptionsRef)}
           >
             <SearchBar
               onChange={(e) => {
