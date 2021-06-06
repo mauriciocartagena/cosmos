@@ -355,8 +355,6 @@ export class UserResolver {
 
     req.session.userId = user.peopleId;
 
-    console.log({ user });
-
     return { user };
   }
 
