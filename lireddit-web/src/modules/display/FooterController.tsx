@@ -1,7 +1,8 @@
 import React from "react";
-import { SvgSolidFacebook } from "../../icons";
-import SvgSolidInstagram from "../../icons/SolidInstagram";
+// import { SvgSolidFacebook } from "../../icons";
+// import SvgSolidInstagram from "../../icons/SolidInstagram";
 import SvgSolidLogo from "../../icons/SvgSolidLogo";
+import SvgSolidGitHub from "../../icons/SolidGitHub";
 
 interface FooterControllerProps {}
 
@@ -12,16 +13,13 @@ export const FooterController: React.FC<FooterControllerProps> = ({}) => {
         <SvgSolidLogo />
       </div>
       <div className="flex flex-row gap-6 text-primary-300">
-        <a
+        {/* <a
           href="https://youtu.be/dQw4w9WgXcQ"
           className="hover:text-primary-200"
         >
           Privacy policy
-        </a>
-        <a
-          href="https://www.youtube.com/watch?v=Soa3gO7tL-c&list=RDSoa3gO7tL-c&start_radio=1"
-          className="hover:text-primary-200"
-        >
+        </a> */}
+        <a href="mailto:mc973220@gmail.com" className="hover:text-primary-200">
           Report a bug
         </a>
         <div className="flex flex-row gap-6 sm:gap-4">
@@ -30,13 +28,13 @@ export const FooterController: React.FC<FooterControllerProps> = ({}) => {
             target="_blank"
             rel="noreferrer"
           >
-            <SvgSolidFacebook
+            <SvgSolidGitHub
               width={20}
               height={20}
               className="ml-2 cursor-pointer hover:text-primary-200"
             />
           </a>
-          <a
+          {/* <a
             href="https://github.com/mauriciocartagena"
             target="_blank"
             rel="noreferrer"
@@ -46,7 +44,7 @@ export const FooterController: React.FC<FooterControllerProps> = ({}) => {
               height={20}
               className="ml-2 hover:text-primary-200"
             />
-          </a>
+          </a> */}
         </div>
       </div>
     </div>

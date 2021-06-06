@@ -60,7 +60,7 @@ export const LoginPage: React.FC = () => {
             }}
           >
             <SvgSolidUser width={20} height={20} />
-            Login
+            Iniciar sessión
           </LoginButton>
           <LoginButton
             dev
@@ -69,7 +69,7 @@ export const LoginPage: React.FC = () => {
             }}
           >
             <SvgSolidBug width={20} height={20} />
-            Login Invite
+            Invitado
           </LoginButton>
         </div>
       </div>

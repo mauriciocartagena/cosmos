@@ -1,6 +1,8 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
-import { Center } from "@chakra-ui/react";
+import { Center, HStack } from "@chakra-ui/react";
+import { SvgSolidFacebook } from "../../icons";
+import SvgSolidInstagram from "../../icons/SolidInstagram";
 interface AboutProps {
   className?: string;
 }
@@ -58,6 +60,36 @@ const About: React.FC<AboutProps> = ({ className }) => {
               popularised in the 1960s with the release of Letraset sheets
               containing Lorem Ipsum d
             </Text>
+            <HStack>
+              <Center>
+                <div className="inline text-primary-300">
+                  <div className="flex flex-row gap-6 sm:gap-4">
+                    <a
+                      href="https://www.facebook.com/isabela.flores.3975"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <SvgSolidFacebook
+                        width={22}
+                        height={22}
+                        className="ml-2 cursor-pointer hover:text-primary-200"
+                      />
+                    </a>
+                    <a
+                      href="https://www.instagram.com/elizabeth_flores_oficial_/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <SvgSolidInstagram
+                        width={22}
+                        height={22}
+                        className="ml-2 hover:text-primary-200"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </Center>
+            </HStack>
           </div>
         </div>
         <div className="w-full sm:w-1/2 md:w-1/3 px-2">
@@ -91,6 +123,36 @@ const About: React.FC<AboutProps> = ({ className }) => {
               popularised in the 1960s with the release of Letraset sheets
               containing Lorem Ipsum d
             </Text>
+            <HStack>
+              <Center>
+                <div className="inline text-primary-300">
+                  <div className="flex flex-row gap-6 sm:gap-4">
+                    <a
+                      href="https://www.facebook.com/profile.php?id=100008473085221"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <SvgSolidFacebook
+                        width={22}
+                        height={22}
+                        className="ml-2 cursor-pointer hover:text-primary-200"
+                      />
+                    </a>
+                    <a
+                      href="https://www.instagram.com/raul_mamani_oficial/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <SvgSolidInstagram
+                        width={22}
+                        height={22}
+                        className="ml-2 hover:text-primary-200"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </Center>
+            </HStack>
           </div>
         </div>
       </div>
