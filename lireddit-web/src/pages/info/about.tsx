@@ -38,9 +38,9 @@ const About: React.FC<AboutProps> = ({ className }) => {
                 height: 350,
                 backgroundColor: "#E9D8FD",
               }}
-              src="../../img/woman.png"
+              src="../../img/photo.jpeg"
               alt="description"
-              className=" px-2 grid justify-items-center rounded-full  w-full h-full object-cover"
+              className=" grid justify-items-center rounded-full  w-full h-full object-cover"
             />
           </Center>
           <div className="px-6 py-4">
@@ -51,14 +51,10 @@ const About: React.FC<AboutProps> = ({ className }) => {
               fontFamily="Muli,Helvetica Neue,sans-serif"
               className="truncate whitespace-pre-wrap text-primary-300 p-4 pt-5"
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum d
+              Un gusto Saludarte Mi nombre es Elizabeth Flores Una joven
+              Emprendedora ,actualmente soy speakerCoach y Networking. Empeze el
+              emprendimiento desde la Universidad. Hoy en día soy Cofundadora de
+              Mentes Maestras.
             </Text>
             <HStack>
               <Center>
@@ -114,14 +110,9 @@ const About: React.FC<AboutProps> = ({ className }) => {
               fontFamily="Muli,Helvetica Neue,sans-serif"
               className="truncate whitespace-pre-wrap text-primary-300 p-4 pt-5"
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum d
+              Hola Saludos Mi nombre es Raúl Simeon Mamani Pascual . Empeze mi
+              transcurso en el MLM desde colegio. Actualmente soy fundador de
+              Mentes Maestras y líder en una compañía MLM.
             </Text>
             <HStack>
               <Center>
